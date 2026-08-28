@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>DARLING HomeOS</title>
+
+    <meta
+        name="description"
+        content="DARLING HomeOS - intelligent home management."
+    >
+
+
+    <!-- =========================================================
+         HOMEOS FONTS
+
+         We are keeping the existing shared fonts.
+
+         The futuristic look is coming from:
+         - layout
+         - lighting
+         - glass
+         - holographic effects
+         - system states
+         - motion
+
+         NOT tiny unreadable text.
+    ========================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         SHARED HOMEOS DESIGN SYSTEM
+
+         DO NOT duplicate shared buttons / toast / shell code here.
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/app.css"
+    >
+
+
+    <!-- =========================================================
+         FUTURISTIC DASHBOARD
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/dashboard.css"
+    >
+
+</head>
+
+
+<body data-page="dashboard">
+
+
+    <!-- =========================================================
+         SHARED SHELL
+
+         shell.js still owns the navigation.
+
+         dashboard.css turns THIS SAME shell into our futuristic
+         command rail on desktop.
+
+         ONE NAVIGATION.
+         ONE SHELL.
+    ========================================================== -->
+
+    <header id="appHeader"></header>
+
+
+
+    <main class="app-main dashboard-main">
+
+
+        <!-- =====================================================
+             01 // HOMEOS COMMAND DECK
+
+             This is the first thing I should see when I come home.
+
+             LEFT:
+                 Me + current time
+
+             CENTER:
+                 HomeOS visual core
+
+             RIGHT:
+                 Our mascot actually guiding the user
+        ====================================================== -->
+
+        <section class="command-deck">
+
+
+            <!-- =================================================
+                 WELCOME
+            ================================================== -->
+
+            <div class="command-welcome">
+
+
+                <div class="live-system-label">
+
+                    <span class="live-system-dot"></span>
+
+                    <span>
+                        LIVE HOMEOS STATUS
+                    </span>
+
+                </div>
+
+
+                <h1 id="dashboardGreeting">
+
+                    Good morning,<br>
+
+                    <span>
+                        Darling.
+                    </span>
+
+                </h1>
+
+
+                <p
+                    class="dashboard-datetime"
+                    id="dashboardDateTime"
+                >
+                    Loading your home time...
+                </p>
+
+
+                <p class="command-subtitle">
+
+                    Your home systems are connected.
+
+                    <strong>
+                        Everything stays in flow.
+                    </strong>
+
+                </p>
+
+
+                <div class="dashboard-actions">
+
+                    <button
+                        class="button button-primary"
+                        id="startCleaningButton"
+                        type="button"
+                    >
+
+                        <span class="button-light"></span>
+
+                        Start Cleaning
+
+                        <span>↗</span>
+
+                    </button>
+
+
+                    <button
+                        class="button button-secondary"
+                        id="selectZoneButton"
+                        type="button"
+                    >
+                        Explore Home Map
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 HOMEOS HOLOGRAPHIC CORE
+
+                 This uses the new glowing house + heart mark.
+
+                 No fake percentage here.
+
+                 The real percentage remains inside Home Pulse.
+            ================================================== -->
+
+            <div class="homeos-core-stage">
+
+                <div class="core-orbit core-orbit-one"></div>
+
+                <div class="core-orbit core-orbit-two"></div>
+
+                <div class="core-orbit core-orbit-three"></div>
+
+
+                <div class="core-beam"></div>
+
+
+                <div class="homeos-core-icon-wrap">
+
+                    <img
+                        class="homeos-core-icon"
+                        src="assets/images/branding/homeos-icon.png"
+                        alt="DARLING HomeOS"
+                    >
+
+                </div>
+
+
+                <div class="hologram-platform">
+
+                    <span></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                </div>
+
+
+                <div class="core-status">
+
+                    <span class="core-status-dot"></span>
+
+                    HOME CORE ONLINE
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 HOMEOS GUIDE
+
+                 THIS is where our mascot becomes useful.
+
+                 dashboard.js already changes:
+
+                     homeMessageTitle
+                     homeMessageText
+
+                 based on the REAL Home Pulse + priority.
+
+                 We are simply giving that intelligence a face.
+            ================================================== -->
+
+            <aside class="homeos-guide">
+
+
+                <div class="mascot-stage">
+
+                    <div class="mascot-aura"></div>
+
+
+                    <img
+                        class="homeos-mascot"
+                        src="assets/images/branding/darling-homeos-mascot.png"
+                        alt="DARLING HomeOS guide mascot"
+                    >
+
+                </div>
+
+
+                <div class="guide-message">
+
+
+                    <div class="guide-message-top">
+
+                        <span class="guide-signal">
+
+                            <span></span>
+
+                            HOMEOS GUIDE
+
+                        </span>
+
+
+                        <span class="guide-live">
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+                    <h2 id="homeMessageTitle">
+                        Your home is checking in.
+                    </h2>
+
+
+                    <p id="homeMessageText">
+
+                        HomeOS is reviewing the systems currently
+                        shaping your home.
+
+                    </p>
+
+
+                    <a
+                        href="daily.html"
+                        class="guide-action"
+                    >
+                        View Daily Rhythm
+
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             02 // HOME PULSE + TODAY'S FOCUS
+
+             The main command readout.
+        ====================================================== -->
+
+        <section class="home-command-grid">
+
+
+            <!-- =================================================
+                 HOME PULSE
+
+                 REAL HomeStore data.
+
+                 dashboard.js already owns all of these IDs.
+            ================================================== -->
+
+            <article class="system-health-card future-panel">
+
+
+                <div class="system-health-heading">
+
+                    <div>
+
+                        <span class="ui-kicker">
+                            HOME CORE // SYSTEM HEALTH
+                        </span>
+
+                        <h2>
+                            Home Pulse
+                        </h2>
+
+                    </div>
+
+
+                    <span class="live-pill">
+
+                        <span></span>
+
+                        LIVE
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="pulse-layout">
+
+
+                    <div class="home-pulse-wrap">
+
+                        <div class="pulse-orbit orbit-one"></div>
+
+                        <div class="pulse-orbit orbit-two"></div>
+
+
+                        <div
+                            class="home-pulse-ring"
+                            id="homePulseRing"
+                        >
+
+                            <div class="home-pulse-center">
+
+                                <span class="ui-kicker">
+                                    HOME HEALTH
+                                </span>
+
+
+                                <strong id="homePulseValue">
+                                    0%
+                                </strong>
+
+
+                                <span
+                                    class="home-pulse-status"
+                                    id="homePulseStatus"
+                                >
+                                    CHECKING
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="pulse-intelligence">
+
+
+                        <span class="pulse-intelligence-label">
+                            HOMEOS READOUT
+                        </span>
+
+
+                        <h3>
+                            Your home systems are connected.
+                        </h3>
+
+
+                        <p>
+
+                            Home Pulse combines Cleaning, Daily Rhythm,
+                            Laundry, Inventory and Seasonal Home Care
+                            into one live home-health signal.
+
+                        </p>
+
+
+                        <div class="system-health-footer">
+
+
+                            <div>
+
+                                <span>
+                                    Priority
+                                </span>
+
+                                <strong id="homePriority">
+                                    Checking
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Signal
+                                </span>
+
+                                <strong
+                                    class="healthy-signal"
+                                    id="homeSignal"
+                                >
+                                    Stable
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- =================================================
+                 TODAY'S FOCUS
+            ================================================== -->
+
+            <article class="focus-card future-panel">
+
+
+                <div class="focus-card-header">
+
+                    <span class="ui-kicker">
+                        TODAY // PRIORITY ENGINE
+                    </span>
+
+
+                    <span
+                        class="day-chip"
+                        id="todayDayChip"
+                    >
+                        ---
+                    </span>
+
+                </div>
+
+
+                <h2>
+                    Today's Focus
+                </h2>
+
+
+                <div
+                    class="focus-color-line"
+                    id="focusColorLine"
+                ></div>
+
+
+                <span class="focus-suggestion-label">
+                    HOMEOS SUGGESTS
+                </span>
+
+
+                <h3 id="focusZoneName">
+                    Checking your home...
+                </h3>
+
+
+                <p id="focusZoneDescription">
+
+                    HomeOS is finding the space that needs
+                    your attention.
+
+                </p>
+
+
+                <div class="focus-meta">
+
+
+                    <div>
+
+                        <span>
+                            Last Standard
+                        </span>
+
+                        <strong id="focusLastStandard">
+                            NOT TRACKED
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Suggested
+                        </span>
+
+                        <strong id="focusSuggestedLevel">
+                            STANDARD
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Clean State
+                        </span>
+
+                        <strong id="focusCleanState">
+                            0%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="focus-actions">
+
+
+                    <button
+                        class="button button-primary"
+                        id="focusStartButton"
+                        type="button"
+                    >
+
+                        Start Cleaning
+
+                        <span>↗</span>
+
+                    </button>
+
+
+                    <button
+                        class="button button-secondary"
+                        id="chooseAnotherZoneButton"
+                        type="button"
+                    >
+                        Choose Space
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             03 // SYSTEM NETWORK
+
+             Everything below is still connected to the SAME real
+             modules we already fixed.
+        ====================================================== -->
+
+        <section class="home-intelligence-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        LIVE DATA // HOUSEHOLD SYSTEMS
+                    </span>
+
+
+                    <h2>
+                        Home Intelligence
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    One home. One memory. Every system connected.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="future-system-grid">
+
+
+                <!-- =============================================
+                     DAILY RHYTHM
+                ============================================== -->
+
+                <article
+                    class="
+                        intelligence-card
+                        rhythm-system
+                        future-panel
+                    "
+                >
+
+
+                    <div class="intelligence-card-top">
+
+
+                        <div class="intelligence-title-group">
+
+                            <span class="system-icon rhythm-icon">
+                                ⌁
+                            </span>
+
+
+                            <div>
+
+                                <span class="ui-kicker">
+                                    DAILY RHYTHM
+                                </span>
+
+
+                                <h3 id="rhythmTitle">
+                                    Opening Shift
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            class="system-score rhythm-score"
+                            id="rhythmScore"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <p
+                        class="system-description"
+                        id="rhythmDescription"
+                    >
+
+                        Opening and Closing keep the house moving
+                        between cleaning days.
+
+                    </p>
+
+
+                    <!-- =========================================
+                         OPENING + CLOSING ONLY
+                    ========================================== -->
+
+                    <div
+                        class="rhythm-selector"
+                        id="rhythmSelector"
+                    >
+
+
+                        <button
+                            class="dashboard-rhythm-shift is-active"
+                            type="button"
+                            data-rhythm="opening"
+                        >
+
+                            <span class="dashboard-rhythm-shift__number">
+                                01
+                            </span>
+
+
+                            <span class="dashboard-rhythm-shift__copy">
+
+                                <strong>
+                                    Opening
+                                </strong>
+
+
+                                <small data-rhythm-count="opening">
+                                    0/0 complete
+                                </small>
+
+                            </span>
+
+
+                            <span
+                                class="dashboard-rhythm-shift__percent"
+                                data-rhythm-percent="opening"
+                            >
+                                0%
+                            </span>
+
+
+                            <span class="dashboard-rhythm-mini-track">
+
+                                <span
+                                    data-rhythm-bar="opening"
+                                    style="width: 0%;"
+                                ></span>
+
+                            </span>
+
+                        </button>
+
+
+
+                        <button
+                            class="dashboard-rhythm-shift"
+                            type="button"
+                            data-rhythm="closing"
+                        >
+
+                            <span class="dashboard-rhythm-shift__number">
+                                02
+                            </span>
+
+
+                            <span class="dashboard-rhythm-shift__copy">
+
+                                <strong>
+                                    Closing
+                                </strong>
+
+
+                                <small data-rhythm-count="closing">
+                                    0/0 complete
+                                </small>
+
+                            </span>
+
+
+                            <span
+                                class="dashboard-rhythm-shift__percent"
+                                data-rhythm-percent="closing"
+                            >
+                                0%
+                            </span>
+
+
+                            <span class="dashboard-rhythm-mini-track">
+
+                                <span
+                                    data-rhythm-bar="closing"
+                                    style="width: 0%;"
+                                ></span>
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div
+                        class="rhythm-task-grid"
+                        id="rhythmTaskGrid"
+                    ></div>
+
+
+
+                    <div class="dashboard-rhythm-footer">
+
+                        <span id="rhythmSummary">
+                            Checking today's rhythm...
+                        </span>
+
+
+                        <button
+                            class="dashboard-rhythm-open"
+                            id="openDailyRhythmButton"
+                            type="button"
+                            data-open-shift="opening"
+                        >
+                            Open Daily Rhythm →
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- =============================================
+                     LAUNDRY
+                ============================================== -->
+
+                <article
+                    class="
+                        intelligence-card
+                        laundry-system
+                        future-panel
+                    "
+                >
+
+
+                    <div class="intelligence-card-top">
+
+
+                        <div class="intelligence-title-group">
+
+                            <span class="system-icon laundry-icon">
+                                ◫
+                            </span>
+
+
+                            <div>
+
+                                <span class="ui-kicker">
+                                    LAUNDRY FLOW
+                                </span>
+
+
+                                <h3 id="laundryTitle">
+                                    Checking Laundry
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            class="system-count-pill"
+                            id="laundryActiveCount"
+                        >
+                            00 ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <p
+                        class="system-description"
+                        id="laundryDescription"
+                    >
+                        HomeOS is checking today's laundry flow.
+                    </p>
+
+
+
+                    <div class="laundry-flow-steps">
+
+
+                        <div class="laundry-step">
+
+                            <span>01</span>
+
+                            <strong>Wash</strong>
+
+                        </div>
+
+
+                        <span class="flow-arrow">›</span>
+
+
+                        <div class="laundry-step dry-step">
+
+                            <span>02</span>
+
+                            <strong>Dry</strong>
+
+                        </div>
+
+
+                        <span class="flow-arrow">›</span>
+
+
+                        <div class="laundry-step fold-step">
+
+                            <span>03</span>
+
+                            <strong>Fold</strong>
+
+                        </div>
+
+
+                        <span class="flow-arrow">›</span>
+
+
+                        <div class="laundry-step away-step">
+
+                            <span>04</span>
+
+                            <strong>Put Away</strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="dashboard-load-list"
+                        id="dashboardLoadList"
+                    ></div>
+
+
+                    <a
+                        href="laundry.html"
+                        class="system-open-link"
+                    >
+                        Open Laundry Flow
+                        <span>→</span>
+                    </a>
+
+                </article>
+
+
+
+                <!-- =============================================
+                     HOME MAP / ZONE NETWORK
+                ============================================== -->
+
+                <article
+                    class="
+                        zone-network-card
+                        future-panel
+                    "
+                >
+
+
+                    <div class="zone-network-header">
+
+
+                        <div>
+
+                            <span class="ui-kicker">
+                                HOME TOPOLOGY // 09 ZONES
+                            </span>
+
+
+                            <h2>
+                                Home Map Network
+                            </h2>
+
+
+                            <p>
+
+                                Every zone stays connected to its real
+                                Cleaning state and Home Memory.
+
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            class="small-button"
+                            id="zoneNetworkSelect"
+                            type="button"
+                        >
+                            Open Cleaning
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="zone-network-grid"
+                        id="zoneNetworkGrid"
+                    ></div>
+
+                </article>
+
+
+
+                <!-- =============================================
+                     INVENTORY
+                ============================================== -->
+
+                <article
+                    class="
+                        intelligence-card
+                        inventory-system
+                        future-panel
+                    "
+                >
+
+
+                    <div class="intelligence-card-top">
+
+
+                        <div class="intelligence-title-group">
+
+                            <span class="system-icon inventory-icon">
+                                ◇
+                            </span>
+
+
+                            <div>
+
+                                <span class="ui-kicker">
+                                    HOME INVENTORY
+                                </span>
+
+
+                                <h3 id="inventoryTitle">
+                                    Checking stock
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            class="system-score inventory-score"
+                            id="inventoryScore"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <p
+                        class="system-description"
+                        id="inventoryDescription"
+                    >
+
+                        HomeOS is checking your preferred
+                        household stock levels.
+
+                    </p>
+
+
+                    <div
+                        class="dashboard-inventory-list"
+                        id="dashboardInventoryList"
+                    ></div>
+
+
+                    <a
+                        href="inventory.html"
+                        class="system-open-link"
+                    >
+                        Open Home Inventory
+
+                        <span>→</span>
+                    </a>
+
+                </article>
+
+
+
+                <!-- =============================================
+                     SEASONAL
+                ============================================== -->
+
+                <article
+                    class="
+                        intelligence-card
+                        seasonal-system
+                        future-panel
+                    "
+                >
+
+
+                    <div class="intelligence-card-top">
+
+
+                        <div class="intelligence-title-group">
+
+                            <span class="system-icon seasonal-icon">
+                                ✦
+                            </span>
+
+
+                            <div>
+
+                                <span class="ui-kicker">
+                                    SEASONAL HOME CARE
+                                </span>
+
+
+                                <h3 id="seasonTitle">
+                                    Seasonal Home Care
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            class="system-score seasonal-score"
+                            id="seasonScore"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <p
+                        class="system-description"
+                        id="seasonDescription"
+                    >
+                        Seasonal home care is checking in.
+                    </p>
+
+
+                    <div class="season-selector">
+
+
+                        <button
+                            type="button"
+                            data-season="spring"
+                        >
+                            <span>01</span>
+                            Spring
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-season="summer"
+                        >
+                            <span>02</span>
+                            Summer
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-season="fall"
+                        >
+                            <span>03</span>
+                            Fall
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-season="winter"
+                        >
+                            <span>04</span>
+                            Winter
+                        </button>
+
+                    </div>
+
+
+                    <div class="season-rule">
+
+                        <span>
+                            HOUSE RULE
+                        </span>
+
+
+                        <strong>
+
+                            CLEAN FIRST
+
+                            <i>//</i>
+
+                            DECORATE SECOND
+
+                        </strong>
+
+                    </div>
+
+
+                    <a
+                        href="seasonal.html"
+                        class="system-open-link"
+                    >
+                        Open Seasonal Care
+
+                        <span>→</span>
+                    </a>
+
+                </article>
+
+
+
+                <!-- =============================================
+                     QUICK COMMANDS
+
+                     These are links, not another controller.
+                ============================================== -->
+
+                <article class="quick-command-panel future-panel">
+
+
+                    <div class="quick-command-heading">
+
+                        <div>
+
+                            <span class="ui-kicker">
+                                HOMEOS // QUICK COMMANDS
+                            </span>
+
+                            <h2>
+                                Quick Actions
+                            </h2>
+
+                        </div>
+
+
+                        <span class="command-ready-pill">
+                            READY
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-command-grid">
+
+
+                        <a href="daily.html">
+
+                            <span>⌁</span>
+
+                            <strong>
+                                Daily Rhythm
+                            </strong>
+
+                            <small>
+                                Opening + Closing
+                            </small>
+
+                        </a>
+
+
+                        <a href="cleaning.html">
+
+                            <span>⌂</span>
+
+                            <strong>
+                                Cleaning
+                            </strong>
+
+                            <small>
+                                Room + Zone
+                            </small>
+
+                        </a>
+
+
+                        <a href="laundry.html">
+
+                            <span>◫</span>
+
+                            <strong>
+                                Laundry
+                            </strong>
+
+                            <small>
+                                Move a load
+                            </small>
+
+                        </a>
+
+
+                        <a href="inventory.html">
+
+                            <span>◇</span>
+
+                            <strong>
+                                Inventory
+                            </strong>
+
+                            <small>
+                                Stock + Shop
+                            </small>
+
+                        </a>
+
+
+                        <a href="seasonal.html">
+
+                            <span>✦</span>
+
+                            <strong>
+                                Seasonal
+                            </strong>
+
+                            <small>
+                                Home Care
+                            </small>
+
+                        </a>
+
+                            <a
+                                href="cleaning.html"
+                                class="quick-command-button"
+                            >
+
+                            <span>⌘</span>
+
+                            <strong>
+                                Home Map
+                            </strong>
+
+                            <small>
+                                View zones
+                            </small>
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         SHARED FOOTER
+    ========================================================== -->
+
+    <footer id="appFooter"></footer>
+
+
+    <!-- =========================================================
+         SHARED TOAST
+    ========================================================== -->
+
+    <div
+        class="app-toast"
+        id="appToast"
+        aria-live="polite"
+    ></div>
+
+
+
+    <!-- =========================================================
+         SCRIPT ORDER
+
+         DO NOT CHANGE.
+
+         store.js      = memory
+         app.js        = helpers
+         shell.js      = navigation
+         dashboard.js  = this screen
+    ========================================================== -->
+
+    <script src="assets/js/store.js"></script>
+
+    <script src="assets/js/app.js"></script>
+
+    <script src="assets/js/shell.js"></script>
+
+    <script src="assets/js/dashboard.js"></script>
+
+</body>
+
+</html>

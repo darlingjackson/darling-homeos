@@ -1,0 +1,20 @@
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build files
+dist/
+
+# Logs
+*.log
+
+# Windows / Mac files
+Thumbs.db
+.DS_Store
+
+# Editor files
+.vscode/

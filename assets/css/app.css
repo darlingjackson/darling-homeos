@@ -1,0 +1,3026 @@
+/* ================================================================
+   DARLING HOMEOS
+   UNIVERSAL DESIGN SYSTEM
+================================================================ */
+
+:root {
+
+    /* ============================================================
+       SYSTEM COLORS
+    ============================================================ */
+
+    --cleaning: #8e63ff;
+    --cleaning-soft: #f1ebff;
+
+    --laundry: #22c7e9;
+    --laundry-soft: #e7faff;
+
+    --inventory: #f15fa9;
+    --inventory-soft: #fff0f7;
+
+    --seasonal: #efad3d;
+    --seasonal-soft: #fff7e6;
+
+    --success: #37d59c;
+    --success-soft: #eafaf4;
+
+    --attention: #ff667d;
+    --attention-soft: #fff0f3;
+
+    --blue: #5487ff;
+    --blue-soft: #edf2ff;
+
+    --green: #83c940;
+    --green-soft: #f0f8e7;
+
+    --orange: #ff844d;
+    --orange-soft: #fff1e9;
+
+
+    /* ============================================================
+       LIGHT THEME
+    ============================================================ */
+
+    --page-bg: #f7f7fa;
+
+    --surface: #ffffff;
+    --surface-soft: #f9f9fc;
+    --surface-muted: #f2f3f7;
+
+    --text: #23232c;
+    --text-soft: #656672;
+    --text-faint: #898a95;
+
+    --border: rgba(35, 35, 44, 0.10);
+    --border-strong: rgba(35, 35, 44, 0.16);
+
+    --header-bg: rgba(250, 250, 252, 0.88);
+
+    --shadow:
+        0 24px 60px
+        rgba(43, 44, 61, 0.08);
+
+    --shadow-soft:
+        0 12px 30px
+        rgba(43, 44, 61, 0.06);
+
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+
+    --font-body:
+        "DM Sans",
+        sans-serif;
+
+    --font-display:
+        "Playfair Display",
+        serif;
+
+    --font-ui:
+        "Manrope",
+        sans-serif;
+
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+
+    --page-width: 1480px;
+
+    --radius-xl: 38px;
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --radius-sm: 12px;
+
+}
+
+
+
+/* ================================================================
+   DARK MODE
+================================================================ */
+
+body.dark {
+
+    --page-bg: #11131a;
+
+    --surface: #191c24;
+    --surface-soft: #20242d;
+    --surface-muted: #292d37;
+
+    --text: #f5f4f8;
+    --text-soft: #b6b8c1;
+    --text-faint: #858894;
+
+    --border:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    --border-strong:
+        rgba(
+            255,
+            255,
+            255,
+            0.15
+        );
+
+    --header-bg:
+        rgba(
+            17,
+            19,
+            26,
+            0.88
+        );
+
+    --shadow:
+        0 28px 70px
+        rgba(
+            0,
+            0,
+            0,
+            0.28
+        );
+
+    --shadow-soft:
+        0 14px 34px
+        rgba(
+            0,
+            0,
+            0,
+            0.20
+        );
+
+}
+
+
+
+/* ================================================================
+   RESET
+================================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 16px;
+
+    color:
+        var(--text);
+
+    background:
+        linear-gradient(
+            rgba(91, 88, 110, 0.052)
+            1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(91, 88, 110, 0.052)
+            1px,
+            transparent 1px
+        ),
+
+        radial-gradient(
+            circle at 70% 0%,
+            rgba(142, 99, 255, 0.07),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 0% 80%,
+            rgba(34, 199, 233, 0.05),
+            transparent 25%
+        ),
+
+        var(--page-bg);
+
+    background-size:
+        56px 56px,
+        56px 56px,
+        auto,
+        auto,
+        auto;
+
+    transition:
+        color 0.25s ease,
+        background 0.25s ease;
+
+}
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+
+h1,
+h2,
+h3,
+p {
+    margin-top: 0;
+}
+
+
+
+/* ================================================================
+   SHARED LAYOUT
+================================================================ */
+
+.app-main {
+
+    width:
+        min(
+            calc(100% - 48px),
+            var(--page-width)
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        30px 0 90px;
+
+}
+
+
+.page-section {
+    margin-top: 52px;
+}
+
+
+/* ================================================================
+   DARLING HOMEOS
+   SHARED FUTURISTIC SHELL
+
+   THIS IS THE REAL HOMEOS SHELL NOW.
+
+   app.css owns:
+   - brand
+   - navigation
+   - header
+   - theme control
+   - responsive navigation
+
+   Page CSS does NOT rebuild this.
+
+   Dashboard, Rhythm, Cleaning, Laundry, Inventory and Seasonal
+   should all move through the SAME HomeOS frame.
+================================================================ */
+
+
+/* ================================================================
+   SHELL TOKENS
+   These are independent from individual page themes.
+================================================================ */
+
+:root {
+
+    --shell-pink:
+        #f255ba;
+
+    --shell-cyan:
+        #20cce5;
+
+    --shell-mint:
+        #29cfa0;
+
+    --shell-title:
+        #172139;
+
+    --shell-copy:
+        #53627a;
+
+    --shell-faint:
+        #7e8ca5;
+
+    --shell-line:
+        rgba(
+            79,
+            111,
+            166,
+            0.15
+        );
+
+    --shell-line-strong:
+        rgba(
+            76,
+            141,
+            203,
+            0.26
+        );
+
+    --shell-panel-soft:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    --shell-header:
+        rgba(
+            247,
+            250,
+            255,
+            0.94
+        );
+
+    --shell-sidebar:
+        linear-gradient(
+            180deg,
+            rgba(
+                251,
+                253,
+                255,
+                0.98
+            ),
+            rgba(
+                240,
+                246,
+                255,
+                0.97
+            )
+        );
+
+}
+
+
+body.dark {
+
+    --shell-pink:
+        #ff5ec7;
+
+    --shell-cyan:
+        #4cf5ff;
+
+    --shell-mint:
+        #55ffd0;
+
+    --shell-title:
+        #f8faff;
+
+    --shell-copy:
+        #bdc9df;
+
+    --shell-faint:
+        #91a3c2;
+
+    --shell-line:
+        rgba(
+            109,
+            185,
+            255,
+            0.19
+        );
+
+    --shell-line-strong:
+        rgba(
+            109,
+            206,
+            255,
+            0.30
+        );
+
+    --shell-panel-soft:
+        rgba(
+            25,
+            39,
+            79,
+            0.76
+        );
+
+    --shell-header:
+        rgba(
+            5,
+            8,
+            22,
+            0.96
+        );
+
+    --shell-sidebar:
+        radial-gradient(
+            circle at 50% 6%,
+            rgba(
+                255,
+                77,
+                198,
+                0.10
+            ),
+            transparent 23%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(
+                8,
+                13,
+                34,
+                0.99
+            ),
+            rgba(
+                4,
+                7,
+                20,
+                0.99
+            )
+        );
+
+}
+
+
+
+/* ================================================================
+   SHARED HEADER
+
+   Under 1280px this is our top command bar.
+
+   At 1280px+ the responsive section below turns this exact same
+   markup into the left HomeOS command rail.
+================================================================ */
+
+.app-header {
+
+    position:
+        sticky;
+
+    top:
+        0;
+
+    z-index:
+        120;
+
+    width:
+        100%;
+
+    border-bottom:
+        1px solid
+        var(--shell-line);
+
+    background:
+        var(--shell-header);
+
+    backdrop-filter:
+        blur(24px);
+
+    -webkit-backdrop-filter:
+        blur(24px);
+
+}
+
+
+.app-header-inner {
+
+    width:
+        min(
+            calc(
+                100% - 32px
+            ),
+            1500px
+        );
+
+    min-height:
+        auto;
+
+    margin:
+        0 auto;
+
+    padding:
+        13px 0 10px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    grid-template-areas:
+        "brand nav actions";
+
+    align-items:
+        center;
+
+    gap:
+        18px;
+
+}
+
+
+
+/* ================================================================
+   BRAND
+
+   Same icon.
+   Same DARLING.
+   Same HomeOS.
+
+   Every page.
+================================================================ */
+
+.app-brand {
+
+    grid-area:
+        brand;
+
+    min-width:
+        max-content;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+}
+
+
+.brand-mark {
+
+    width:
+        50px;
+
+    height:
+        50px;
+
+    flex:
+        0 0 auto;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(
+            242,
+            85,
+            186,
+            0.25
+        );
+
+    border-radius:
+        14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    box-shadow:
+        0 0 26px
+        rgba(
+            242,
+            85,
+            186,
+            0.11
+        ),
+        inset
+        0 0 20px
+        rgba(
+            32,
+            204,
+            229,
+            0.05
+        );
+
+}
+
+
+body.dark
+.brand-mark {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+}
+
+
+.brand-mark img,
+.brand-homeos-icon {
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    display:
+        block;
+
+    object-fit:
+        contain;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(
+                242,
+                85,
+                186,
+                0.25
+            )
+        );
+
+}
+
+
+body.dark
+.brand-mark img {
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(
+                255,
+                93,
+                206,
+                0.48
+            )
+        );
+
+}
+
+
+.brand-fallback {
+
+    display:
+        none;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    place-items:
+        center;
+
+    color:
+        var(--shell-pink);
+
+    font-size:
+        26px;
+
+}
+
+
+.brand-image-missing
+.brand-fallback {
+
+    display:
+        grid;
+
+}
+
+
+.brand-copy {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+.brand-name {
+
+    color:
+        var(--shell-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        16px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+    letter-spacing:
+        0.06em;
+
+}
+
+
+.brand-system {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--darling-pink);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+
+/* ================================================================
+   NAVIGATION
+
+   THIS is now the official HomeOS navigation styling.
+
+   No page-specific imitation.
+================================================================ */
+
+.app-nav {
+
+    grid-area:
+        nav;
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        4px;
+
+}
+
+
+.app-nav-link {
+
+    min-height:
+        40px;
+
+    padding:
+        0 11px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius:
+        10px;
+
+    color:
+        var(--shell-copy);
+
+    background:
+        transparent;
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+    transition:
+        color 0.22s ease,
+        background 0.22s ease,
+        border-color 0.22s ease,
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+
+}
+
+
+.app-nav-link:hover {
+
+    color:
+        var(--shell-title);
+
+    background:
+        var(--shell-panel-soft);
+
+}
+
+
+.app-nav-link.active {
+
+    color:
+        var(--shell-title);
+
+    border-color:
+        rgba(
+            242,
+            85,
+            186,
+            0.22
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(
+                242,
+                85,
+                186,
+                0.11
+            ),
+            rgba(
+                32,
+                204,
+                229,
+                0.08
+            )
+        );
+
+    box-shadow:
+        inset
+        0 -2px
+        0
+        var(--shell-pink);
+
+}
+
+
+
+/* ================================================================
+   HEADER ACTIONS
+================================================================ */
+
+.header-actions {
+
+    grid-area:
+        actions;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        8px;
+
+}
+
+
+.homeos-online {
+
+    min-height:
+        40px;
+
+    padding:
+        0 13px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    border:
+        1px solid
+        rgba(
+            41,
+            207,
+            160,
+            0.18
+        );
+
+    border-radius:
+        999px;
+
+    color:
+        var(--shell-mint);
+
+    background:
+        rgba(
+            41,
+            207,
+            160,
+            0.055
+        );
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+}
+
+
+.homeos-online-dot,
+.homeos-online > span {
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    flex:
+        0 0 auto;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--shell-mint);
+
+    box-shadow:
+        0 0 10px
+        var(--shell-mint);
+
+}
+
+
+.icon-button,
+#themeToggle {
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    min-width:
+        40px;
+
+    padding:
+        0;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--shell-line);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--shell-title);
+
+    background:
+        var(--shell-panel-soft);
+
+    box-shadow:
+        none;
+
+    font-size:
+        18px;
+
+    transition:
+        color 0.22s ease,
+        border-color 0.22s ease,
+        background 0.22s ease,
+        box-shadow 0.22s ease,
+        transform 0.22s ease;
+
+}
+
+
+#themeToggle:hover {
+
+    transform:
+        translateY(-1px);
+
+    color:
+        var(--shell-pink);
+
+    border-color:
+        rgba(
+            242,
+            85,
+            186,
+            0.30
+        );
+
+    box-shadow:
+        0 0 18px
+        rgba(
+            242,
+            85,
+            186,
+            0.10
+        );
+
+}
+
+
+/* ================================================================
+   SHARED TYPOGRAPHY
+================================================================ */
+
+.ui-kicker {
+
+    display: block;
+
+    color:
+        var(--text-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.08em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    align-items: flex-end;
+
+    margin-bottom: 25px;
+
+}
+
+
+.section-heading h2 {
+
+    margin:
+        8px 0 0;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(
+            38px,
+            4vw,
+            50px
+        );
+
+    font-weight: 500;
+
+    letter-spacing:
+        -0.025em;
+
+}
+
+
+.section-heading > p {
+
+    max-width: 470px;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--text-soft);
+
+    font-size: 16px;
+
+    line-height: 1.65;
+
+}
+
+
+/* ================================================================
+   BUTTONS
+================================================================ */
+
+.button {
+    min-height: 50px;
+    padding: 0 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    border: 1px solid transparent;
+    border-radius: 13px;
+
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* PRIMARY */
+
+.button-primary {
+    color: #ffffff;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.30);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff75b9 0%,
+            #f45fa6 48%,
+            #e94a98 100%
+        );
+
+    box-shadow:
+        0 14px 34px
+        rgba(244, 95, 166, 0.30);
+}
+
+.button-primary:hover {
+    box-shadow:
+        0 18px 42px
+        rgba(244, 95, 166, 0.38);
+}
+
+.button-primary:active {
+    transform: translateY(0);
+}
+
+
+/* SECONDARY */
+
+.button-secondary {
+    color: var(--text);
+
+    border-color:
+        rgba(244, 95, 166, 0.18);
+
+    background:
+        var(--surface);
+}
+
+.button-secondary:hover {
+    color:
+        var(--darling-pink-deep);
+
+    border-color:
+        rgba(244, 95, 166, 0.45);
+
+    background:
+        var(--darling-pink-soft);
+}
+
+
+/* BUTTON LIGHT */
+
+.button-light {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 0 12px
+        rgba(255, 255, 255, 0.95);
+}
+
+
+/* SMALL BUTTON */
+
+.small-button {
+    min-height: 42px;
+    padding: 0 14px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 11px;
+
+    color:
+        var(--text);
+
+    background:
+        var(--surface);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.small-button:hover {
+    color:
+        var(--darling-pink-deep);
+
+    border-color:
+        rgba(244, 95, 166, 0.38);
+
+    background:
+        var(--darling-pink-soft);
+}
+
+
+body.dark
+.button-secondary:hover {
+    color:
+        #ff8bc5;
+
+    background:
+        rgba(244, 95, 166, 0.10);
+}
+
+/* ================================================================
+   SHARED CARDS
+================================================================ */
+
+.surface-card {
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow-soft);
+
+}
+
+
+
+/* ================================================================
+   SHARED PROGRESS
+================================================================ */
+
+.progress-track {
+
+    width: 100%;
+
+    height: 5px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        var(--surface-muted);
+
+}
+
+
+.progress-track span {
+
+    display: block;
+
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+}
+
+
+
+/* ================================================================
+   SHARED HOMEOS FOOTER
+================================================================ */
+
+.app-footer {
+
+    width:
+        min(
+            calc(
+                100% - 32px
+            ),
+            1500px
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        30px 0 40px;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        30px;
+
+    border-top:
+        1px solid
+        var(--shell-line);
+
+    color:
+        var(--shell-faint);
+
+    background:
+        transparent;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.04em;
+
+/* ================================================================
+   DARLING HOMEOS
+   SHARED ACCENT TOKENS
+================================================================ */
+
+:root {
+    --darling-pink:
+        #f45fa6;
+
+    --darling-pink-bright:
+        #ff69b4;
+
+    --darling-pink-deep:
+        #e94a98;
+
+    --darling-pink-soft:
+        #fff0f7;
+
+    --darling-pink-glow:
+        rgba(
+            244,
+            95,
+            166,
+            0.24
+        );
+}
+
+body.dark {
+    --darling-pink-soft:
+        rgba(
+            244,
+            95,
+            166,
+            0.12
+        );
+}
+
+/* ================================================================
+   DARLING HOMEOS
+   SHARED MODULE COMPONENTS
+================================================================ */
+
+
+/* ================================================================
+   MODULE HERO
+================================================================ */
+
+.module-hero {
+
+    min-height: 460px;
+
+    padding:
+        clamp(
+            36px,
+            5vw,
+            68px
+        );
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(360px, 0.85fr);
+
+    gap: 50px;
+
+    align-items: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-xl);
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.module-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    color:
+        var(--text-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.07em;
+
+}
+
+
+.module-eyebrow-dot {
+
+    width: 9px;
+
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+}
+
+
+.module-title {
+
+    margin:
+        23px 0 17px;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(
+            55px,
+            6vw,
+            80px
+        );
+
+    font-weight: 500;
+
+    line-height: 0.98;
+
+    letter-spacing:
+        -0.045em;
+
+}
+
+
+.module-lead {
+
+    max-width: 700px;
+
+    margin: 0;
+
+    color:
+        var(--text-soft);
+
+    font-size: 17px;
+
+    line-height: 1.75;
+
+}
+
+
+.module-date {
+
+    margin-top: 28px;
+
+    color:
+        var(--text-soft);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+
+.module-hero-panel {
+
+    padding: 28px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 25px;
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow-soft);
+
+}
+
+
+/* ================================================================
+   SHARED SECTION CARD
+================================================================ */
+
+.section-card {
+
+    padding:
+        clamp(
+            24px,
+            3vw,
+            34px
+        );
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow-soft);
+
+}
+
+
+.section-card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.section-card-header h2 {
+
+    margin:
+        7px 0 7px;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(
+            31px,
+            4vw,
+            43px
+        );
+
+    font-weight: 500;
+
+}
+
+
+.section-card-header p {
+
+    max-width: 680px;
+
+    margin: 0;
+
+    color:
+        var(--text-soft);
+
+    font-size: 15px;
+
+    line-height: 1.65;
+
+}
+
+
+/* ================================================================
+   SHARED METRIC CARDS
+================================================================ */
+
+.metric-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+
+}
+
+
+.metric-card {
+
+    min-height: 145px;
+
+    padding: 21px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        18px;
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow-soft);
+
+}
+
+
+.metric-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    right: 0;
+
+    height: 3px;
+
+    background:
+        var(--metric-color);
+
+}
+
+
+.metric-card strong {
+
+    display: block;
+
+    margin-top: 13px;
+
+    color:
+        var(--metric-color);
+
+    font-family:
+        var(--font-display);
+
+    font-size: 39px;
+
+    font-weight: 500;
+
+}
+
+
+.metric-card p {
+
+    margin:
+        2px 0 0;
+
+    font-size: 14px;
+
+}
+
+
+.metric-card small {
+
+    display: block;
+
+    margin-top: 10px;
+
+    color:
+        var(--text-faint);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+}
+
+
+/* ================================================================
+   SHARED FORMS
+================================================================ */
+
+.app-input,
+.app-select {
+
+    width: 100%;
+
+    min-height: 50px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        var(--border-strong);
+
+    border-radius: 12px;
+
+    outline: none;
+
+    color:
+        var(--text);
+
+    background:
+        var(--surface-soft);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.app-input:focus,
+.app-select:focus {
+
+    border-color:
+        rgba(
+            244,
+            95,
+            166,
+            0.55
+        );
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            244,
+            95,
+            166,
+            0.09
+        );
+
+}
+
+
+.app-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.app-field label {
+
+    color:
+        var(--text-soft);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+.app-form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 15px;
+
+}
+
+
+/* ================================================================
+   SHARED STATUS PILLS
+================================================================ */
+
+.status-pill {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 34px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 999px;
+
+    color:
+        var(--text-soft);
+
+    background:
+        var(--surface-soft);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.status-pill.success {
+
+    color:
+        var(--success);
+
+    border-color:
+        rgba(
+            55,
+            213,
+            156,
+            0.34
+        );
+
+    background:
+        var(--success-soft);
+
+}
+
+
+.status-pill.attention {
+
+    color:
+        var(--attention);
+
+    border-color:
+        rgba(
+            255,
+            102,
+            125,
+            0.34
+        );
+
+    background:
+        var(--attention-soft);
+
+}
+
+
+/* ================================================================
+   SHARED EMPTY STATE
+================================================================ */
+
+.empty-state {
+
+    min-height: 160px;
+
+    padding: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    border:
+        1px dashed
+        var(--border-strong);
+
+    border-radius: 16px;
+
+    background:
+        var(--surface-soft);
+
+}
+
+
+.empty-state-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 16px;
+
+    background:
+        var(--surface);
+
+    font-size: 24px;
+
+}
+
+
+.empty-state h3 {
+
+    margin:
+        0 0 5px;
+
+    font-size: 18px;
+
+}
+
+
+.empty-state p {
+
+    margin: 0;
+
+    color:
+        var(--text-soft);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* ================================================================
+   SHARED DIALOG
+================================================================ */
+
+.app-dialog {
+
+    width:
+        min(
+            calc(100% - 28px),
+            620px
+        );
+
+    padding: 0;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 24px;
+
+    color:
+        var(--text);
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        0 30px 90px
+        rgba(
+            19,
+            20,
+            29,
+            0.25
+        );
+
+}
+
+
+.app-dialog::backdrop {
+
+    background:
+        rgba(
+            20,
+            21,
+            30,
+            0.42
+        );
+
+    backdrop-filter:
+        blur(7px);
+
+}
+
+
+.app-dialog-header {
+
+    padding:
+        26px 28px 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    align-items: flex-start;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.app-dialog-header h2 {
+
+    margin:
+        5px 0 0;
+
+    font-family:
+        var(--font-display);
+
+    font-size: 31px;
+
+    font-weight: 500;
+
+}
+
+
+.dialog-close {
+
+    width: 40px;
+
+    height: 40px;
+
+    padding: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 11px;
+
+    color:
+        var(--text);
+
+    background:
+        var(--surface-soft);
+
+    font-size: 20px;
+
+}
+
+
+.app-dialog-body {
+
+    padding:
+        25px 28px;
+
+}
+
+
+.app-dialog-footer {
+
+    padding:
+        20px 28px 26px;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+/* ================================================================
+   DARLING HOMEOS
+   SHARED RESPONSIVE SHELL
+
+   THIS is the behavior every page gets.
+
+   1280+      // left command rail
+   1100-1279  // top desktop navigation
+   761-1099   // two-row scrollable navigation
+   561-760    // mobile tablet
+   under 560  // phone
+
+   NAVIGATION NEVER RANDOMLY DISAPPEARS.
+================================================================ */
+
+
+/* ================================================================
+   FULL DESKTOP // LEFT COMMAND RAIL
+================================================================ */
+
+@media (min-width: 1280px) {
+
+    .app-header {
+
+        position:
+            fixed;
+
+        top:
+            0;
+
+        left:
+            0;
+
+        bottom:
+            0;
+
+        width:
+            246px;
+
+        border-right:
+            1px solid
+            var(--shell-line);
+
+        border-bottom:
+            0;
+
+        background:
+            var(--shell-sidebar);
+
+        box-shadow:
+            18px 0 55px
+            rgba(
+                65,
+                82,
+                120,
+                0.08
+            );
+
+    }
+
+
+    body.dark
+    .app-header {
+
+        box-shadow:
+            18px 0 60px
+            rgba(
+                0,
+                0,
+                0,
+                0.28
+            );
+
+    }
+
+
+    .app-header::after {
+
+        content:
+            "";
+
+        position:
+            absolute;
+
+        top:
+            0;
+
+        right:
+            -1px;
+
+        width:
+            1px;
+
+        height:
+            170px;
+
+        background:
+            linear-gradient(
+                to bottom,
+                var(--shell-pink),
+                var(--shell-cyan),
+                transparent
+            );
+
+        box-shadow:
+            0 0 18px
+            rgba(
+                32,
+                204,
+                229,
+                0.50
+            );
+
+    }
+
+
+    .app-header-inner {
+
+        width:
+            100%;
+
+        min-height:
+            100%;
+
+        margin:
+            0;
+
+        padding:
+            23px 16px;
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+        gap:
+            0;
+
+    }
+
+
+    .app-brand {
+
+        width:
+            100%;
+
+        padding:
+            8px 8px 24px;
+
+        gap:
+            11px;
+
+        border-bottom:
+            1px solid
+            var(--shell-line);
+
+    }
+
+
+    .brand-name {
+
+        font-size:
+            17px;
+
+    }
+
+
+    .brand-system {
+
+        margin-top:
+            2px;
+
+        font-size:
+            11px;
+
+    }
+
+
+    /* ------------------------------------------------------------
+       DESKTOP NAV
+    ------------------------------------------------------------ */
+
+    .app-nav {
+
+        width:
+            100%;
+
+        margin-top:
+            23px;
+
+        display:
+            flex !important;
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+        gap:
+            6px;
+
+    }
+
+
+    .app-nav-link {
+
+        width:
+            100%;
+
+        min-height:
+            49px;
+
+        padding:
+            0 13px 0 44px;
+
+        justify-content:
+            flex-start;
+
+        border-radius:
+            12px;
+
+        font-size:
+            13px;
+
+    }
+
+
+    .app-nav-link::before {
+
+        position:
+            absolute;
+
+        left:
+            15px;
+
+        top:
+            50%;
+
+        width:
+            18px;
+
+        transform:
+            translateY(-50%);
+
+        color:
+            var(--shell-faint);
+
+        font-size:
+            17px;
+
+        text-align:
+            center;
+
+    }
+
+
+    .app-nav-link[href="index.html"]::before {
+        content: "⌂";
+    }
+
+
+    .app-nav-link[href="daily.html"]::before {
+        content: "⌁";
+    }
+
+
+    .app-nav-link[href="cleaning.html"]::before {
+        content: "✧";
+    }
+
+
+    .app-nav-link[href="laundry.html"]::before {
+        content: "◫";
+    }
+
+
+    .app-nav-link[href="inventory.html"]::before {
+        content: "◇";
+    }
+
+
+    .app-nav-link[href="seasonal.html"]::before {
+        content: "✦";
+    }
+
+
+    .app-nav-link:hover {
+
+        transform:
+            translateX(2px);
+
+        border-color:
+            var(--shell-line);
+
+        background:
+            rgba(
+                85,
+                127,
+                207,
+                0.08
+            );
+
+    }
+
+
+    .app-nav-link.active {
+
+        box-shadow:
+            inset
+            3px 0
+            0
+            var(--shell-pink);
+
+    }
+
+
+    .app-nav-link.active::before {
+
+        color:
+            var(--shell-pink);
+
+    }
+
+
+    /* ------------------------------------------------------------
+       BOTTOM SYSTEM CONTROLS
+    ------------------------------------------------------------ */
+
+    .header-actions {
+
+        width:
+            100%;
+
+        margin-top:
+            auto;
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+        gap:
+            10px;
+
+    }
+
+
+    .homeos-online {
+
+        width:
+            100%;
+
+        min-height:
+            39px;
+
+        border-radius:
+            11px;
+
+        font-size:
+            11px;
+
+    }
+
+
+    #themeToggle {
+
+        width:
+            100%;
+
+        min-height:
+            43px;
+
+    }
+
+
+    /* ------------------------------------------------------------
+       PAGE CONTENT MOVES BESIDE THE COMMAND RAIL
+
+       This is shared now.
+       Daily Rhythm gets it too.
+    ------------------------------------------------------------ */
+
+    .app-main {
+
+        width:
+            auto;
+
+        max-width:
+            none;
+
+        margin:
+            0 0 0
+            246px;
+
+        padding:
+            24px
+            clamp(
+                22px,
+                2.4vw,
+                42px
+            )
+            88px;
+
+    }
+
+
+    .app-footer {
+
+        width:
+            auto;
+
+        margin-left:
+            246px;
+
+        margin-right:
+            0;
+
+        padding-left:
+            36px;
+
+        padding-right:
+            36px;
+
+    }
+
+}
+
+
+
+/* ================================================================
+   LAPTOP // TOP NAVIGATION
+================================================================ */
+
+@media (max-width: 1279px) {
+
+    .app-main {
+
+        width:
+            min(
+                calc(
+                    100% - 32px
+                ),
+                1500px
+            );
+
+        margin:
+            0 auto;
+
+        padding:
+            20px 0 80px;
+
+    }
+
+
+    .app-footer {
+
+        width:
+            min(
+                calc(
+                    100% - 32px
+                ),
+                1500px
+            );
+
+        margin:
+            0 auto;
+
+    }
+
+}
+
+
+
+/* ================================================================
+   TABLET // TWO-ROW HOMEOS NAVIGATION
+
+   This replaces the old "display:none".
+
+   If the screen gets tighter, navigation moves below the logo and
+   becomes horizontally scrollable.
+================================================================ */
+
+@media (max-width: 1099px) {
+
+    .app-header-inner {
+
+        grid-template-columns:
+            1fr
+            auto;
+
+        grid-template-areas:
+            "brand actions"
+            "nav nav";
+
+        row-gap:
+            9px;
+
+    }
+
+
+    .app-nav {
+
+        width:
+            100%;
+
+        display:
+            flex !important;
+
+        justify-content:
+            flex-start;
+
+        overflow-x:
+            auto;
+
+        overflow-y:
+            hidden;
+
+        gap:
+            5px;
+
+        padding-bottom:
+            2px;
+
+        scrollbar-width:
+            none;
+
+        -webkit-overflow-scrolling:
+            touch;
+
+    }
+
+
+    .app-nav::-webkit-scrollbar {
+
+        display:
+            none;
+
+    }
+
+
+    .app-nav-link {
+
+        flex:
+            0 0 auto;
+
+        min-height:
+            38px;
+
+        padding:
+            0 12px;
+
+    }
+
+}
+
+
+
+/* ================================================================
+   MOBILE TABLET
+================================================================ */
+
+@media (max-width: 760px) {
+
+    .app-main,
+    .app-header-inner,
+    .app-footer {
+
+        width:
+            min(
+                calc(
+                    100% - 24px
+                ),
+                1500px
+            );
+
+    }
+
+
+    .app-main {
+
+        padding:
+            13px 0 72px;
+
+    }
+
+
+    .brand-mark {
+
+        width:
+            45px;
+
+        height:
+            45px;
+
+    }
+
+
+    .brand-mark img {
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+    }
+
+
+    .brand-name {
+
+        font-size:
+            15px;
+
+    }
+
+
+    .brand-system {
+
+        font-size:
+            9px;
+
+    }
+
+
+    .homeos-online {
+
+        display:
+            none;
+
+    }
+
+
+    .section-heading {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            9px;
+
+    }
+
+
+    .app-footer {
+
+        flex-direction:
+            column;
+
+        gap:
+            8px;
+
+    }
+
+}
+
+
+
+/* ================================================================
+   PHONE
+================================================================ */
+
+@media (max-width: 560px) {
+
+    .app-header-inner {
+
+        column-gap:
+            10px;
+
+    }
+
+
+    .app-brand {
+
+        gap:
+            8px;
+
+    }
+
+
+    .brand-mark {
+
+        width:
+            42px;
+
+        height:
+            42px;
+
+        border-radius:
+            12px;
+
+    }
+
+
+    .brand-mark img {
+
+        width:
+            35px;
+
+        height:
+            35px;
+
+    }
+
+
+    #themeToggle {
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+        min-width:
+            38px;
+
+    }
+
+
+    .app-nav-link {
+
+        min-height:
+            36px;
+
+        padding:
+            0 11px;
+
+        font-size:
+            10px;
+
+    }
+
+}
+
+
+
+/* ================================================================
+   VERY SMALL PHONE
+================================================================ */
+
+@media (max-width: 390px) {
+
+    .brand-copy {
+
+        max-width:
+            105px;
+
+    }
+
+
+    .brand-name {
+
+        font-size:
+            13px;
+
+    }
+
+}

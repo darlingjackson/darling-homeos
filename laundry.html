@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Laundry Flow | DARLING HomeOS</title>
+
+    <meta
+        name="description"
+        content="DARLING HomeOS Laundry Flow"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/css/app.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/css/laundry.css"
+    >
+</head>
+
+
+<body data-page="laundry">
+
+    <!-- SHARED HOMEOS SHELL -->
+    <header id="appHeader"></header>
+
+
+    <main class="app-main laundry-main">
+
+        <!-- =====================================================
+             LAUNDRY COMMAND DECK
+        ====================================================== -->
+
+        <section class="laundry-command-deck">
+
+            <div class="laundry-command-copy">
+
+                <div class="laundry-system-kicker">
+
+                    <span class="laundry-live-dot"></span>
+
+                    LAUNDRY FLOW // HOUSEHOLD CYCLE ONLINE
+
+                </div>
+
+
+                <h1>
+                    Keep every load<br>
+                    <em>moving.</em>
+                </h1>
+
+
+                <p class="laundry-command-lead">
+
+                    HomeOS follows every load from Wash to Dry to Fold
+                    to Put Away, keeps your weekly rhythm on schedule,
+                    and remembers where you stopped without making you
+                    refresh the page.
+
+                </p>
+
+
+                <p
+                    class="laundry-command-time"
+                    id="laundryDateTime"
+                >
+                    Loading today's laundry rhythm...
+                </p>
+
+
+                <div class="laundry-command-actions">
+
+                    <button
+                        class="button button-primary"
+                        id="quickLoadButton"
+                        type="button"
+                    >
+
+                        <span class="button-light"></span>
+
+                        Start A Load
+
+                    </button>
+
+
+                    <button
+                        class="button button-secondary"
+                        id="addScheduleButton"
+                        type="button"
+                    >
+                        Edit Weekly Schedule
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LAUNDRY GUIDE
+            ================================================== -->
+
+            <aside class="laundry-guide-panel">
+
+                <div
+                    class="laundry-guide-scan"
+                    aria-hidden="true"
+                ></div>
+
+
+                <div class="laundry-guide-topline">
+
+                    <span>
+                        HOMEOS GUIDE
+                    </span>
+
+                    <strong id="laundryGuideStatus">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="laundry-guide-visual">
+
+                    <div
+                        class="laundry-guide-halo"
+                        aria-hidden="true"
+                    ></div>
+
+
+                    <img
+                        class="laundry-guide-mascot"
+                        src="assets/images/branding/laundry-mascot.png"
+                        alt="DARLING HomeOS laundry guide"
+                    >
+
+                </div>
+
+
+                <div class="laundry-guide-message">
+
+                    <span>
+                        LAUNDRY GUIDE // ACTIVE
+                    </span>
+
+
+                    <p id="laundryGuideMessage">
+
+                        HomeOS is checking today's laundry flow.
+
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="laundry-guide-action"
+                    id="laundryGuideAction"
+                    type="button"
+                >
+                    START A LOAD →
+                </button>
+
+            </aside>
+
+
+
+            <!-- =================================================
+                 LAUNDRY CORE
+            ================================================== -->
+
+            <aside class="laundry-core-console">
+
+                <div class="laundry-core-console-head">
+
+                    <div>
+
+                        <span class="ui-kicker">
+                            LAUNDRY CORE
+                        </span>
+
+
+                        <h2>
+                            Weekly Rhythm
+                        </h2>
+
+                    </div>
+
+
+                    <span class="laundry-online-pill">
+
+                        <i></i>
+
+                        LIVE
+
+                    </span>
+
+                </div>
+
+
+                <div class="laundry-core-progress">
+
+                    <div
+                        class="laundry-health-ring"
+                        id="laundryHealthRing"
+                    >
+
+                        <div class="laundry-health-center">
+
+                            <span class="ui-kicker">
+                                LAUNDRY HEALTH
+                            </span>
+
+
+                            <strong id="laundryHealthValue">
+                                0%
+                            </strong>
+
+
+                            <span id="laundryHealthStatus">
+                                CHECKING
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="laundry-core-footer">
+
+                    <div>
+
+                        <span>
+                            Active
+                        </span>
+
+                        <strong id="heroActiveLoads">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Week
+                        </span>
+
+                        <strong id="heroWeekProgress">
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Maintenance
+                        </span>
+
+                        <strong id="heroMaintenanceStatus">
+                            Current
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SYSTEM METRICS
+        ====================================================== -->
+
+        <section class="laundry-metrics-grid">
+
+            <article
+                class="laundry-metric-card"
+                style="--metric-color: var(--laundry-cyan);"
+            >
+
+                <span class="ui-kicker">
+                    ACTIVE LOADS
+                </span>
+
+
+                <strong id="activeLoadsMetric">
+                    0
+                </strong>
+
+
+                <p>
+                    Moving right now
+                </p>
+
+
+                <small id="activeLoadsMetricDetail">
+                    No loads are active.
+                </small>
+
+            </article>
+
+
+
+            <article
+                class="laundry-metric-card"
+                style="--metric-color: var(--laundry-pink);"
+            >
+
+                <span class="ui-kicker">
+                    TODAY'S PLAN
+                </span>
+
+
+                <strong id="todayLoadsMetric">
+                    0
+                </strong>
+
+
+                <p>
+                    Scheduled loads
+                </p>
+
+
+                <small id="todayLoadsMetricDetail">
+                    Checking today's schedule.
+                </small>
+
+            </article>
+
+
+
+            <article
+                class="laundry-metric-card"
+                style="--metric-color: var(--laundry-mint);"
+            >
+
+                <span class="ui-kicker">
+                    WEEK COMPLETE
+                </span>
+
+
+                <strong id="weekProgressMetric">
+                    0%
+                </strong>
+
+
+                <p>
+                    Weekly laundry rhythm
+                </p>
+
+
+                <small id="weekProgressMetricDetail">
+                    Building this week's history.
+                </small>
+
+            </article>
+
+
+
+            <article
+                class="laundry-metric-card"
+                style="--metric-color: var(--laundry-violet);"
+            >
+
+                <span class="ui-kicker">
+                    ROOM CARE
+                </span>
+
+
+                <strong id="maintenanceMetric">
+                    0
+                </strong>
+
+
+                <p>
+                    Maintenance needing attention
+                </p>
+
+
+                <small id="maintenanceMetricDetail">
+                    Checking laundry-room care.
+                </small>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ACTIVE FLOW
+        ====================================================== -->
+
+        <section
+            class="laundry-section laundry-flow-section"
+            id="activeLaundrySection"
+        >
+
+            <div class="laundry-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        LIVE FLOW // ACTIVE LAUNDRY
+                    </span>
+
+
+                    <h2>
+                        What's moving right now?
+                    </h2>
+
+                </div>
+
+
+                <div class="laundry-section-heading-right">
+
+                    <p>
+
+                        A load is not complete until it reaches
+                        Put Away. HomeOS remembers the stage even
+                        when you leave this page.
+
+                    </p>
+
+
+                    <button
+                        class="button button-primary"
+                        id="quickLoadButtonTwo"
+                        type="button"
+                    >
+                        + Start A Load
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FLOW LEGEND -->
+
+            <div class="laundry-stage-legend">
+
+                <div class="legend-stage wash">
+
+                    <span>
+                        01
+                    </span>
+
+                    <strong>
+                        Wash
+                    </strong>
+
+                </div>
+
+
+                <span class="legend-arrow">
+                    →
+                </span>
+
+
+                <div class="legend-stage dry">
+
+                    <span>
+                        02
+                    </span>
+
+                    <strong>
+                        Dry
+                    </strong>
+
+                </div>
+
+
+                <span class="legend-arrow">
+                    →
+                </span>
+
+
+                <div class="legend-stage fold">
+
+                    <span>
+                        03
+                    </span>
+
+                    <strong>
+                        Fold
+                    </strong>
+
+                </div>
+
+
+                <span class="legend-arrow">
+                    →
+                </span>
+
+
+                <div class="legend-stage put-away">
+
+                    <span>
+                        04
+                    </span>
+
+                    <strong>
+                        Put Away
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="active-loads-grid"
+                id="activeLoadsGrid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             WEEKLY RHYTHM
+        ====================================================== -->
+
+        <section class="laundry-section">
+
+            <div class="laundry-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        RECURRING SYSTEM // MONDAY–SUNDAY
+                    </span>
+
+
+                    <h2>
+                        Weekly Laundry Rhythm
+                    </h2>
+
+                </div>
+
+
+                <div class="laundry-section-heading-right">
+
+                    <p>
+
+                        Your recurring loads return every week.
+                        HomeOS marks the current week's occurrence
+                        complete only after the load reaches Put Away.
+
+                    </p>
+
+
+                    <button
+                        class="button button-secondary"
+                        id="addScheduleButtonTwo"
+                        type="button"
+                    >
+                        + Add Recurring Load
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="laundry-day-tabs"
+                id="laundryDayTabs"
+            ></div>
+
+
+            <div class="selected-laundry-day">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        SELECTED DAY
+                    </span>
+
+
+                    <h3 id="selectedDayTitle">
+                        Monday
+                    </h3>
+
+                </div>
+
+
+                <span
+                    class="status-pill"
+                    id="selectedDayCount"
+                >
+                    0 LOADS
+                </span>
+
+            </div>
+
+
+            <div
+                class="weekly-schedule-list"
+                id="weeklyScheduleList"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             LAUNDRY ROOM CARE
+        ====================================================== -->
+
+        <section
+            class="laundry-section"
+            id="maintenanceSection"
+        >
+
+            <div class="laundry-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        LAUNDRY ROOM // MAINTENANCE
+                    </span>
+
+
+                    <h2>
+                        Care for the system.
+                    </h2>
+
+                </div>
+
+
+                <div class="laundry-section-heading-right">
+
+                    <p>
+
+                        Washer, dryer and laundry-room care stay
+                        separate from everyday cleaning so HomeOS
+                        can track their own due dates.
+
+                    </p>
+
+
+                    <button
+                        class="button button-secondary"
+                        id="addMaintenanceButton"
+                        type="button"
+                    >
+                        + Add Maintenance
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="maintenance-grid"
+                id="maintenanceGrid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             HOME MEMORY
+        ====================================================== -->
+
+        <section class="laundry-memory-section">
+
+            <div class="laundry-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        HOME MEMORY // LAUNDRY
+                    </span>
+
+
+                    <h2>
+                        Recently Put Away
+                    </h2>
+
+                </div>
+
+
+                <p class="laundry-memory-copy">
+
+                    Completed loads become household history
+                    instead of disappearing when the day ends.
+
+                </p>
+
+            </div>
+
+
+            <div
+                class="laundry-history-list"
+                id="laundryHistoryList"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- SHARED FOOTER -->
+
+    <footer id="appFooter"></footer>
+
+
+
+    <!-- SHARED TOAST -->
+
+    <div
+        class="app-toast"
+        id="appToast"
+        aria-live="polite"
+    ></div>
+
+
+
+    <!-- =========================================================
+         START LOAD DIALOG
+    ========================================================== -->
+
+    <dialog
+        class="app-dialog laundry-dialog"
+        id="loadDialog"
+    >
+
+        <form
+            method="dialog"
+            id="loadForm"
+        >
+
+            <div class="app-dialog-header">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        LAUNDRY FLOW // NEW LOAD
+                    </span>
+
+
+                    <h2>
+                        Start a load
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="dialog-close"
+                    type="button"
+                    data-close-dialog="loadDialog"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="app-dialog-body">
+
+                <div class="app-field">
+
+                    <label for="loadNameInput">
+                        What are you washing?
+                    </label>
+
+
+                    <input
+                        class="app-input"
+                        id="loadNameInput"
+                        type="text"
+                        placeholder="Example: Kids Darks"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="app-dialog-footer">
+
+                <button
+                    class="button button-secondary"
+                    type="button"
+                    data-close-dialog="loadDialog"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="button button-primary"
+                    id="saveQuickLoad"
+                    type="submit"
+                >
+                    Start In Wash
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+
+    <!-- =========================================================
+         SCHEDULE DIALOG
+    ========================================================== -->
+
+    <dialog
+        class="app-dialog laundry-dialog"
+        id="scheduleDialog"
+    >
+
+        <form
+            method="dialog"
+            id="scheduleForm"
+        >
+
+            <input
+                id="scheduleIdInput"
+                type="hidden"
+            >
+
+
+            <div class="app-dialog-header">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        WEEKLY RHYTHM // LAUNDRY
+                    </span>
+
+
+                    <h2 id="scheduleDialogTitle">
+                        Add recurring load
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="dialog-close"
+                    type="button"
+                    data-close-dialog="scheduleDialog"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="app-dialog-body">
+
+                <div class="app-form-grid">
+
+                    <div class="app-field">
+
+                        <label for="scheduleNameInput">
+                            Load name
+                        </label>
+
+
+                        <input
+                            class="app-input"
+                            id="scheduleNameInput"
+                            type="text"
+                            placeholder="Example: Towels + Bath Linens"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="app-field">
+
+                        <label for="scheduleDayInput">
+                            Day
+                        </label>
+
+
+                        <select
+                            class="app-select"
+                            id="scheduleDayInput"
+                        >
+
+                            <option value="monday">
+                                Monday
+                            </option>
+
+                            <option value="tuesday">
+                                Tuesday
+                            </option>
+
+                            <option value="wednesday">
+                                Wednesday
+                            </option>
+
+                            <option value="thursday">
+                                Thursday
+                            </option>
+
+                            <option value="friday">
+                                Friday
+                            </option>
+
+                            <option value="saturday">
+                                Saturday
+                            </option>
+
+                            <option value="sunday">
+                                Sunday
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="app-field">
+
+                        <label for="scheduleTimeInput">
+                            Preferred start time
+                        </label>
+
+
+                        <input
+                            class="app-input"
+                            id="scheduleTimeInput"
+                            type="time"
+                            value="09:00"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="app-dialog-footer">
+
+                <button
+                    class="button button-secondary"
+                    type="button"
+                    data-close-dialog="scheduleDialog"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="button button-primary"
+                    type="submit"
+                >
+                    Save Schedule
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+
+    <!-- =========================================================
+         MAINTENANCE DIALOG
+    ========================================================== -->
+
+    <dialog
+        class="app-dialog laundry-dialog"
+        id="maintenanceDialog"
+    >
+
+        <form
+            method="dialog"
+            id="maintenanceForm"
+        >
+
+            <div class="app-dialog-header">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        LAUNDRY ROOM // SYSTEM CARE
+                    </span>
+
+
+                    <h2>
+                        Add maintenance
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="dialog-close"
+                    type="button"
+                    data-close-dialog="maintenanceDialog"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="app-dialog-body">
+
+                <div class="app-form-grid">
+
+                    <div class="app-field">
+
+                        <label for="maintenanceNameInput">
+                            Maintenance task
+                        </label>
+
+
+                        <input
+                            class="app-input"
+                            id="maintenanceNameInput"
+                            type="text"
+                            placeholder="Example: Clean washer filter"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="app-field">
+
+                        <label for="maintenanceFrequencyInput">
+                            How often?
+                        </label>
+
+
+                        <select
+                            class="app-select"
+                            id="maintenanceFrequencyInput"
+                        >
+
+                            <option value="7">
+                                Every week
+                            </option>
+
+                            <option value="14">
+                                Every 2 weeks
+                            </option>
+
+                            <option
+                                value="30"
+                                selected
+                            >
+                                Every month
+                            </option>
+
+                            <option value="60">
+                                Every 2 months
+                            </option>
+
+                            <option value="90">
+                                Every 3 months
+                            </option>
+
+                            <option value="180">
+                                Every 6 months
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="app-dialog-footer">
+
+                <button
+                    class="button button-secondary"
+                    type="button"
+                    data-close-dialog="maintenanceDialog"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="button button-primary"
+                    type="submit"
+                >
+                    Add Maintenance
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+
+    <!-- SHARED HOMEOS JS -->
+
+    <script src="assets/js/store.js"></script>
+
+    <script src="assets/js/app.js"></script>
+
+    <script src="assets/js/shell.js"></script>
+
+    <script src="assets/js/laundry.js"></script>
+
+</body>
+</html>

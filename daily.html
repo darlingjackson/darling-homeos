@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Rhythm | DARLING HomeOS</title>
+    <meta name="description" content="DARLING HomeOS Daily Rhythm">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =========================================================
+         SHARED HOMEOS
+
+         Navigation, footer, theme, buttons, inputs and the general
+         application shell stay shared in app.css + shell.js.
+
+         WE ARE NOT COPYING THE HEADER OR FOOTER INTO THIS PAGE.
+    ========================================================== -->
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <!-- Daily Rhythm only -->
+    <link rel="stylesheet" href="assets/css/daily.css">
+</head>
+
+<body data-page="daily">
+
+    <!-- shell.js builds the SAME shared HomeOS navigation here. -->
+    <header id="appHeader"></header>
+
+
+    <main class="app-main daily-main">
+
+        <!-- =====================================================
+             RHYTHM COMMAND SURFACE
+
+             One large command surface instead of a stack of cards.
+
+             LEFT   = mascot + HomeOS guidance
+             CENTER = Opening / Closing shift controller
+             RIGHT  = live status
+        ====================================================== -->
+        <section class="rhythm-command-surface">
+
+            <!-- HOMEOS GUIDE -->
+            <div class="daily-guide-zone">
+                <div class="daily-guide-copy">
+                    <span class="daily-live-label">
+                        <span></span>
+                        HOMEOS // DAILY RHYTHM
+                    </span>
+
+                    <h1 id="dailyGreeting">
+                        Good morning,<br>
+                        <strong>Darling.</strong>
+                    </h1>
+
+                    <p id="dailyGuideMessage">
+                        HomeOS is checking which shift makes the most sense right now.
+                    </p>
+
+                    <p class="daily-date" id="dailyDateTime">
+                        Loading today...
+                    </p>
+                </div>
+
+                <div class="daily-mascot-stage" aria-hidden="true">
+                    <span class="daily-mascot-orbit"></span>
+                    <span class="daily-mascot-glow"></span>
+
+                    <img
+                        class="daily-mascot"
+                        src="assets/images/branding/darling-homeos-mascot.png"
+                        alt=""
+                    >
+                </div>
+            </div>
+
+
+            <!-- SHIFT CONSOLE -->
+            <div class="daily-shift-console">
+                <div class="daily-console-heading">
+                    <div>
+                        <span class="daily-console-kicker">
+                            CHOOSE YOUR SHIFT
+                        </span>
+
+                        <h2>Today’s rhythm</h2>
+                    </div>
+
+                    <span class="daily-console-live">
+                        <span></span>
+                        LIVE
+                    </span>
+                </div>
+
+                <div class="daily-shift-switcher">
+
+                    <!-- OPENING -->
+                    <button
+                        class="daily-shift-option opening selected"
+                        id="openingShiftButton"
+                        type="button"
+                        data-daily-shift="opening"
+                    >
+                        <span class="daily-shift-icon">☼</span>
+
+                        <span class="daily-shift-option-copy">
+                            <small>01 // OPENING</small>
+                            <strong>Opening Shift</strong>
+                            <span>Start the home. Set the tone.</span>
+                        </span>
+
+                        <span class="daily-shift-score" id="openingShiftProgress">
+                            0%
+                        </span>
+
+                        <span class="daily-shift-track">
+                            <span id="openingShiftProgressBar"></span>
+                        </span>
+
+                        <small class="daily-shift-remaining" id="openingShiftRemaining">
+                            0 tasks left
+                        </small>
+                    </button>
+
+
+                    <!-- VISUAL SWITCH NODE -->
+                    <div class="daily-switch-node" aria-hidden="true">
+                        <span>⇄</span>
+                        <small>SWITCH</small>
+                    </div>
+
+
+                    <!-- CLOSING -->
+                    <button
+                        class="daily-shift-option closing"
+                        id="closingShiftButton"
+                        type="button"
+                        data-daily-shift="closing"
+                    >
+                        <span class="daily-shift-icon">☾</span>
+
+                        <span class="daily-shift-option-copy">
+                            <small>02 // CLOSING</small>
+                            <strong>Closing Shift</strong>
+                            <span>Settle the home. Close the day.</span>
+                        </span>
+
+                        <span class="daily-shift-score" id="closingShiftProgress">
+                            0%
+                        </span>
+
+                        <span class="daily-shift-track">
+                            <span id="closingShiftProgressBar"></span>
+                        </span>
+
+                        <small class="daily-shift-remaining" id="closingShiftRemaining">
+                            0 tasks left
+                        </small>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- LIVE STATUS -->
+            <aside class="daily-status-console">
+                <span class="daily-status-label">CURRENT STATUS</span>
+
+                <div class="daily-clock-row">
+                    <strong id="dailyClock">--:--</strong>
+                    <span class="daily-clock-orbit">◌</span>
+                </div>
+
+                <span class="daily-status-date" id="dailyShortDate">
+                    Loading...
+                </span>
+
+                <div class="daily-status-divider"></div>
+
+                <div class="daily-status-line">
+                    <span>YOU’RE IN</span>
+                    <strong id="selectedShiftLabel">OPENING SHIFT</strong>
+                </div>
+
+                <div class="daily-status-line">
+                    <span>SHIFT PROGRESS</span>
+                    <strong id="selectedShiftProgress">0%</strong>
+                </div>
+
+                <div class="daily-status-line">
+                    <span>STILL OPEN</span>
+                    <strong id="selectedShiftRemaining">0 TASKS</strong>
+                </div>
+
+                <div class="daily-overall-track">
+                    <span id="dailyOverallProgressBar"></span>
+                </div>
+
+                <p id="dailyOverallText">
+                    0 of 0 daily resets complete.
+                </p>
+            </aside>
+        </section>
+
+        <!-- =====================================================
+             LAUNDRY FLOW // QUICK CONTROL
+
+             Small Daily Rhythm control surface.
+             laundry.html remains the full Laundry workspace.
+        ====================================================== -->
+        <section
+            class="daily-laundry-flow"
+            id="dailyLaundryFlow"
+            data-stage="idle"
+            aria-labelledby="dailyLaundryTitle"
+        >
+            <div class="daily-laundry-machine" aria-hidden="true">
+                <span></span>
+            </div>
+
+            <div class="daily-laundry-content">
+                <div class="daily-laundry-heading">
+                    <div>
+                        <span class="daily-laundry-kicker">
+                            LAUNDRY FLOW // QUICK CONTROL
+                        </span>
+
+                        <div class="daily-laundry-title-row">
+                            <h2 id="dailyLaundryTitle">No active loads</h2>
+
+                            <span
+                                class="daily-laundry-state"
+                                id="dailyLaundryState"
+                            >
+                                IDLE
+                            </span>
+                        </div>
+                    </div>
+
+                    <span
+                        class="daily-laundry-count"
+                        id="dailyLaundryCount"
+                    >
+                        0 ACTIVE
+                    </span>
+                </div>
+
+                <p
+                    class="daily-laundry-message"
+                    id="dailyLaundryMessage"
+                >
+                    Laundry Flow is ready when you are.
+                </p>
+
+                <div
+                    class="daily-laundry-stage-track"
+                    id="dailyLaundryStageTrack"
+                    aria-label="Laundry stage progress"
+                ></div>
+            </div>
+
+            <div class="daily-laundry-actions">
+                <button
+                    class="button button-primary daily-laundry-primary"
+                    id="dailyLaundryActionButton"
+                    type="button"
+                    data-laundry-action="start"
+                >
+                    + Start A Load
+                </button>
+
+                <button
+                    class="daily-laundry-new"
+                    id="dailyLaundryNewLoadButton"
+                    type="button"
+                    hidden
+                >
+                    + New load
+                </button>
+
+                <a
+                    class="daily-laundry-open"
+                    href="laundry.html"
+                >
+                    Open Laundry →
+                </a>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             DAILY WORKSPACE
+
+             LEFT  = collapsed Upstairs / Downstairs task areas
+             RIGHT = today shopping + quick task add
+
+             The task list is NOT always staring at me.
+        ====================================================== -->
+        <section class="daily-workspace-grid">
+
+            <!-- TASKS BY AREA -->
+            <section class="daily-task-workspace">
+                <div class="daily-section-heading">
+                    <div>
+                        <span class="daily-section-kicker">
+                            TODAY // TASKS BY AREA
+                        </span>
+
+                        <h2 id="dailyWorkspaceTitle">
+                            Opening Shift
+                        </h2>
+
+                        <p id="dailyWorkspaceDescription">
+                            Choose an area when you are ready. The task list stays tucked away until you need it.
+                        </p>
+                    </div>
+
+                    <span class="daily-shift-chip" id="dailyShiftChip">
+                        OPENING
+                    </span>
+                </div>
+
+                <!-- daily.js builds Upstairs + Downstairs here. -->
+                <div class="daily-area-list" id="dailyAreaList"></div>
+            </section>
+
+
+            <!-- TODAY TOOLS -->
+            <aside class="daily-tools-panel">
+
+                <!-- QUICK SHOPPING -->
+                <section class="daily-tool-section daily-shopping-section">
+                    <div class="daily-tool-heading">
+                        <div>
+                            <span class="daily-tool-icon">◇</span>
+
+                            <div>
+                                <span class="daily-tool-kicker">
+                                    TODAY // SHOPPING
+                                </span>
+
+                                <h2>Quick Shopping List</h2>
+                            </div>
+                        </div>
+
+                        <span class="daily-count-pill" id="dailyShoppingCount">
+                            0 ITEMS
+                        </span>
+                    </div>
+
+                    <p class="daily-tool-description">
+                        Add things as they come up. Anything you do not get today automatically stays for tomorrow.
+                    </p>
+
+                    <div class="daily-shopping-list" id="dailyShoppingList"></div>
+
+                    <div class="daily-inline-add">
+                        <input
+                            class="app-input"
+                            id="newShoppingItem"
+                            type="text"
+                            maxlength="100"
+                            placeholder="What do you need to pick up?"
+                        >
+
+                        <button
+                            class="button button-primary"
+                            id="addShoppingItemButton"
+                            type="button"
+                        >
+                            + Add
+                        </button>
+                    </div>
+                </section>
+
+
+                <div class="daily-tool-divider"></div>
+
+
+                <!-- QUICK TASK ADD -->
+                <section class="daily-tool-section daily-add-section">
+                    <div class="daily-tool-heading">
+                        <div>
+                            <span class="daily-tool-icon task-icon">＋</span>
+
+                            <div>
+                                <span class="daily-tool-kicker">
+                                    ADD TO THIS SHIFT
+                                </span>
+
+                                <h2>Add a Daily Task</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="daily-tool-description">
+                        Add something to Upstairs or Downstairs without changing the rest of your system.
+                    </p>
+
+                    <div class="daily-add-task-form">
+                        <input
+                            class="app-input"
+                            id="newDailyTask"
+                            type="text"
+                            maxlength="100"
+                            placeholder="What needs to get done?"
+                        >
+
+                        <select
+                            class="app-select"
+                            id="newDailyTaskArea"
+                            aria-label="Choose task area"
+                        >
+                            <option value="upstairs">Upstairs</option>
+                            <option value="downstairs">Downstairs</option>
+                        </select>
+
+                        <label class="daily-repeat-option">
+                            <input
+                                id="newDailyTaskRecurring"
+                                type="checkbox"
+                            >
+
+                            <span>
+                                Keep this task in the shift every day
+                            </span>
+                        </label>
+
+                        <button
+                            class="button button-primary daily-add-task-button"
+                            id="addDailyTaskButton"
+                            type="button"
+                        >
+                            Add to <span id="addTaskShiftLabel">Opening</span> Shift
+                        </button>
+                    </div>
+                </section>
+            </aside>
+        </section>
+    </main>
+
+
+    <!-- =========================================================
+         START A LAUNDRY LOAD
+    ========================================================== -->
+    <dialog
+        class="daily-laundry-dialog"
+        id="dailyLaundryDialog"
+        aria-labelledby="dailyLaundryDialogTitle"
+    >
+        <div class="daily-laundry-dialog-shell">
+            <div class="daily-laundry-dialog-head">
+                <div>
+                    <span>LAUNDRY FLOW // NEW LOAD</span>
+                    <h2 id="dailyLaundryDialogTitle">Start a laundry load</h2>
+                </div>
+
+                <button
+                    class="daily-laundry-dialog-close"
+                    id="dailyLaundryCancelButton"
+                    type="button"
+                    aria-label="Close laundry dialog"
+                >
+                    ×
+                </button>
+            </div>
+
+            <p>
+                Name it the way you actually sort laundry. HomeOS will start it in Wash and keep the stage synced with the full Laundry page.
+            </p>
+
+            <label class="daily-laundry-field" for="dailyLaundryName">
+                <span>LOAD NAME</span>
+
+                <input
+                    class="app-input"
+                    id="dailyLaundryName"
+                    type="text"
+                    maxlength="80"
+                    list="dailyLaundryNameSuggestions"
+                    placeholder="Darks, towels, kids clothes, bedding..."
+                    autocomplete="off"
+                >
+            </label>
+
+            <datalist id="dailyLaundryNameSuggestions">
+                <option value="Darks"></option>
+                <option value="Lights"></option>
+                <option value="Whites"></option>
+                <option value="Kids Clothes"></option>
+                <option value="Towels"></option>
+                <option value="Bedding"></option>
+            </datalist>
+
+            <div class="daily-laundry-dialog-actions">
+                <button
+                    class="button button-secondary"
+                    id="dailyLaundryCancelButtonSecondary"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="button button-primary"
+                    id="dailyLaundryStartButton"
+                    type="button"
+                >
+                    Start Washer →
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+
+    <!-- =========================================================
+         SHARED FOOTER
+    ========================================================== -->
+
+    <footer id="appFooter"></footer>
+
+    <!-- =========================================================
+         SHARED TOAST
+    ========================================================== -->
+
+    <div
+        class="app-toast"
+        id="appToast"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- =========================================================
+         SHARED SCRIPT ORDER
+
+         store.js = Home memory
+         app.js   = shared helpers
+         shell.js = shared header + footer + theme
+         daily.js = Daily Rhythm behavior only
+    ========================================================== -->
+    <script src="assets/js/store.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script src="assets/js/daily.js"></script>
+
+</body>
+</html>

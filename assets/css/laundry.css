@@ -1,0 +1,3907 @@
+/* ================================================================
+   DARLING HOMEOS
+   LAUNDRY FLOW
+
+   app.css owns the shared HomeOS shell.
+   laundry.css owns only Laundry Flow.
+================================================================ */
+
+body[data-page="laundry"] {
+
+    --laundry-cyan: #27d5ee;
+    --laundry-blue: #5b87ff;
+    --laundry-pink: #f255ba;
+    --laundry-violet: #936bff;
+    --laundry-mint: #38d7aa;
+    --laundry-warn: #efad3d;
+    --laundry-danger: #ff667d;
+
+    --laundry-page: #f4f8ff;
+
+    --laundry-panel:
+        rgba(255, 255, 255, 0.84);
+
+    --laundry-panel-strong:
+        rgba(255, 255, 255, 0.96);
+
+    --laundry-panel-soft:
+        rgba(244, 249, 255, 0.79);
+
+    --laundry-line:
+        rgba(78, 121, 188, 0.16);
+
+    --laundry-line-strong:
+        rgba(39, 213, 238, 0.28);
+
+    --laundry-text:
+        #14213b;
+
+    --laundry-copy:
+        #5c6b87;
+
+    --laundry-faint:
+        #8492aa;
+
+    --laundry-grid:
+        rgba(73, 115, 182, 0.055);
+
+    --laundry-shadow:
+        0 24px 70px
+        rgba(40, 59, 100, 0.12);
+
+    --laundry-shadow-soft:
+        0 14px 34px
+        rgba(40, 59, 100, 0.08);
+
+}
+
+
+
+body.dark[data-page="laundry"] {
+
+    --laundry-page:
+        #050816;
+
+    --laundry-panel:
+        rgba(9, 16, 35, 0.84);
+
+    --laundry-panel-strong:
+        rgba(9, 16, 35, 0.96);
+
+    --laundry-panel-soft:
+        rgba(13, 23, 49, 0.76);
+
+    --laundry-line:
+        rgba(91, 160, 255, 0.16);
+
+    --laundry-line-strong:
+        rgba(39, 213, 238, 0.31);
+
+    --laundry-text:
+        #f7faff;
+
+    --laundry-copy:
+        #bdc9df;
+
+    --laundry-faint:
+        #8597b7;
+
+    --laundry-grid:
+        rgba(91, 160, 255, 0.055);
+
+    --laundry-shadow:
+        0 28px 82px
+        rgba(0, 0, 0, 0.36);
+
+    --laundry-shadow-soft:
+        0 14px 36px
+        rgba(0, 0, 0, 0.24);
+
+}
+
+
+
+body[data-page="laundry"] {
+
+    background:
+
+        linear-gradient(
+            var(--laundry-grid)
+            1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            var(--laundry-grid)
+            1px,
+            transparent 1px
+        ),
+
+        radial-gradient(
+            circle at 80% 8%,
+            rgba(39, 213, 238, 0.15),
+            transparent 27%
+        ),
+
+        radial-gradient(
+            circle at 12% 58%,
+            rgba(91, 135, 255, 0.11),
+            transparent 27%
+        ),
+
+        radial-gradient(
+            circle at 88% 84%,
+            rgba(242, 85, 186, 0.12),
+            transparent 24%
+        ),
+
+        var(--laundry-page);
+
+    background-size:
+        52px 52px,
+        52px 52px,
+        auto,
+        auto,
+        auto,
+        auto;
+
+}
+
+
+
+.laundry-main {
+
+    position:
+        relative;
+
+    isolation:
+        isolate;
+
+    color:
+        var(--laundry-text);
+
+}
+
+
+
+.laundry-main::before {
+
+    content:
+        "";
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        -1;
+
+    pointer-events:
+        none;
+
+    background:
+        radial-gradient(
+            circle at 50% 10%,
+            rgba(39, 213, 238, 0.055),
+            transparent 30%
+        );
+
+}
+
+
+
+.laundry-main .ui-kicker,
+.laundry-dialog .ui-kicker {
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.14em;
+
+}
+
+
+
+/* ================================================================
+   COMMAND DECK
+================================================================ */
+
+.laundry-command-deck {
+
+    min-height:
+        560px;
+
+    padding:
+        clamp(26px, 3vw, 42px);
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(270px, 0.72fr)
+        minmax(260px, 0.60fr);
+
+    gap:
+        18px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        30px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(39, 213, 238, 0.08),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            315deg,
+            rgba(242, 85, 186, 0.055),
+            transparent 30%
+        ),
+
+        var(--laundry-panel);
+
+    box-shadow:
+        var(--laundry-shadow);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+}
+
+
+
+.laundry-command-deck::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    pointer-events:
+        none;
+
+    background:
+
+        linear-gradient(
+            rgba(95, 145, 220, 0.05)
+            1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(95, 145, 220, 0.05)
+            1px,
+            transparent 1px
+        );
+
+    background-size:
+        34px 34px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.82),
+            transparent 92%
+        );
+
+}
+
+
+
+.laundry-command-deck::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        34px;
+
+    right:
+        34px;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--laundry-blue),
+            var(--laundry-cyan),
+            var(--laundry-pink),
+            transparent
+        );
+
+    box-shadow:
+        0 0 22px
+        rgba(39, 213, 238, 0.24);
+
+}
+
+
+
+.laundry-command-copy,
+.laundry-guide-panel,
+.laundry-core-console {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+
+.laundry-command-copy {
+
+    min-width:
+        0;
+
+    padding:
+        clamp(18px, 2vw, 34px)
+        clamp(4px, 1vw, 16px);
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+}
+
+
+
+.laundry-system-kicker {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.15em;
+
+}
+
+
+
+.laundry-live-dot {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    flex:
+        0 0 auto;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--laundry-mint);
+
+    box-shadow:
+        0 0 14px
+        var(--laundry-mint);
+
+    animation:
+        laundryPulse
+        2s
+        ease-in-out
+        infinite;
+
+}
+
+
+
+.laundry-command-copy h1 {
+
+    margin:
+        24px
+        0
+        18px;
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(48px, 5.7vw, 82px);
+
+    font-weight:
+        500;
+
+    line-height:
+        0.95;
+
+    letter-spacing:
+        -0.045em;
+
+}
+
+
+
+.laundry-command-copy h1 em {
+
+    color:
+        var(--laundry-cyan);
+
+    font-weight:
+        500;
+
+    text-shadow:
+        0 0 30px
+        rgba(39, 213, 238, 0.18);
+
+}
+
+
+
+.laundry-command-lead {
+
+    max-width:
+        700px;
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        16px;
+
+    line-height:
+        1.75;
+
+}
+
+
+
+.laundry-command-time {
+
+    margin:
+        24px
+        0
+        0;
+
+    color:
+        var(--laundry-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.07em;
+
+}
+
+
+
+.laundry-command-actions {
+
+    margin-top:
+        28px;
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        10px;
+
+}
+
+
+
+.laundry-command-actions .button {
+
+    min-height:
+        48px;
+
+}
+
+
+
+/* ================================================================
+   GUIDE
+================================================================ */
+
+.laundry-guide-panel,
+.laundry-core-console {
+
+    min-width:
+        0;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        22px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(39, 213, 238, 0.075),
+            transparent 42%
+        ),
+
+        var(--laundry-panel-soft);
+
+    box-shadow:
+
+        inset
+        0
+        0
+        0
+        1px
+        rgba(255, 255, 255, 0.02),
+
+        var(--laundry-shadow-soft);
+
+}
+
+
+
+.laundry-guide-panel {
+
+    min-height:
+        470px;
+
+    padding:
+        18px
+        18px
+        20px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    overflow:
+        hidden;
+
+}
+
+
+
+.laundry-guide-panel::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        12px;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.075);
+
+    border-radius:
+        16px;
+
+    pointer-events:
+        none;
+
+}
+
+
+
+.laundry-guide-scan {
+
+    position:
+        absolute;
+
+    left:
+        18px;
+
+    right:
+        18px;
+
+    top:
+        20%;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(39, 213, 238, 0.75),
+            transparent
+        );
+
+    box-shadow:
+        0 0 14px
+        rgba(39, 213, 238, 0.36);
+
+    opacity:
+        0.45;
+
+    animation:
+        laundryScan
+        6s
+        linear
+        infinite;
+
+}
+
+
+
+.laundry-guide-topline {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    color:
+        var(--laundry-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.13em;
+
+}
+
+
+
+.laundry-guide-topline strong {
+
+    color:
+        var(--laundry-mint);
+
+}
+
+
+
+.laundry-guide-visual {
+
+    min-height:
+        240px;
+
+    flex:
+        1;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+}
+
+
+
+.laundry-guide-halo {
+
+    width:
+        190px;
+
+    aspect-ratio:
+        1;
+
+    position:
+        absolute;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.22);
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(39, 213, 238, 0.11),
+            transparent 64%
+        );
+
+    box-shadow:
+        0 0 42px
+        rgba(39, 213, 238, 0.17);
+
+}
+
+
+
+.laundry-guide-halo::before,
+.laundry-guide-halo::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        14px;
+
+    border:
+        1px dashed
+        rgba(91, 135, 255, 0.24);
+
+    border-radius:
+        inherit;
+
+    animation:
+        laundryRotate
+        16s
+        linear
+        infinite;
+
+}
+
+
+
+.laundry-guide-halo::after {
+
+    inset:
+        33px;
+
+    border-style:
+        solid;
+
+    border-color:
+        rgba(242, 85, 186, 0.17);
+
+    animation-direction:
+        reverse;
+
+    animation-duration:
+        11s;
+
+}
+
+
+
+.laundry-guide-mascot {
+
+    width:
+        min(220px, 86%);
+
+    max-height:
+        260px;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    object-fit:
+        contain;
+
+    filter:
+
+        drop-shadow(
+            0 18px 30px
+            rgba(0, 0, 0, 0.18)
+        )
+
+        drop-shadow(
+            0 0 16px
+            rgba(39, 213, 238, 0.17)
+        );
+
+}
+
+
+
+.laundry-guide-message {
+
+    padding:
+        14px;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        14px;
+
+    background:
+        rgba(39, 213, 238, 0.035);
+
+}
+
+
+
+.laundry-guide-message > span {
+
+    display:
+        block;
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.14em;
+
+}
+
+
+
+.laundry-guide-message p {
+
+    margin:
+        7px 0 0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.55;
+
+}
+
+
+
+.laundry-guide-action {
+
+    min-height:
+        42px;
+
+    margin-top:
+        10px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.28);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--laundry-text);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(39, 213, 238, 0.12),
+            rgba(91, 135, 255, 0.07)
+        );
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.09em;
+
+    transition:
+        0.2s ease;
+
+}
+
+
+
+.laundry-guide-action:hover {
+
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(39, 213, 238, 0.48);
+
+    box-shadow:
+        0 0 22px
+        rgba(39, 213, 238, 0.18);
+
+}
+
+
+
+/* ================================================================
+   LAUNDRY CORE
+================================================================ */
+
+.laundry-core-console {
+
+    min-height:
+        470px;
+
+    padding:
+        19px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+
+.laundry-core-console-head {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        flex-start;
+
+    gap:
+        12px;
+
+}
+
+
+
+.laundry-core-console-head h2 {
+
+    margin:
+        5px 0 0;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        27px;
+
+    font-weight:
+        500;
+
+}
+
+
+
+.laundry-online-pill {
+
+    min-height:
+        28px;
+
+    padding:
+        0 9px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    border:
+        1px solid
+        rgba(56, 215, 170, 0.20);
+
+    border-radius:
+        999px;
+
+    color:
+        var(--laundry-mint);
+
+    background:
+        rgba(56, 215, 170, 0.05);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.laundry-online-pill i {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--laundry-mint);
+
+    box-shadow:
+        0 0 9px
+        var(--laundry-mint);
+
+}
+
+
+
+.laundry-core-progress {
+
+    min-height:
+        230px;
+
+    flex:
+        1;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+}
+
+
+
+.laundry-health-ring {
+
+    --laundry-health:
+        0deg;
+
+    width:
+        188px;
+
+    height:
+        188px;
+
+    padding:
+        9px;
+
+    border-radius:
+        50%;
+
+    background:
+        conic-gradient(
+            from 210deg,
+
+            var(--laundry-blue)
+            0deg,
+
+            var(--laundry-cyan)
+            var(--laundry-health),
+
+            rgba(122, 148, 194, 0.16)
+            var(--laundry-health),
+
+            rgba(122, 148, 194, 0.16)
+            360deg
+        );
+
+    box-shadow:
+        0 0 42px
+        rgba(39, 213, 238, 0.16);
+
+}
+
+
+
+.laundry-health-center {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.10);
+
+    border-radius:
+        50%;
+
+    background:
+        var(--laundry-panel-strong);
+
+}
+
+
+
+.laundry-health-center strong {
+
+    margin:
+        8px 0 4px;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        48px;
+
+    font-weight:
+        500;
+
+}
+
+
+
+.laundry-health-center > span:last-child {
+
+    color:
+        var(--laundry-copy);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.laundry-core-footer {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border-top:
+        1px solid
+        var(--laundry-line);
+
+}
+
+
+
+.laundry-core-footer > div {
+
+    padding:
+        13px 8px;
+
+    text-align:
+        center;
+
+}
+
+
+
+.laundry-core-footer > div + div {
+
+    border-left:
+        1px solid
+        var(--laundry-line);
+
+}
+
+
+
+.laundry-core-footer span {
+
+    display:
+        block;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        9px;
+
+}
+
+
+
+.laundry-core-footer strong {
+
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    color:
+        var(--laundry-text);
+
+    font-size:
+        12px;
+
+}
+
+
+
+/* ================================================================
+   METRICS
+================================================================ */
+
+.laundry-metrics-grid {
+
+    margin-top:
+        18px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap:
+        10px;
+
+}
+
+
+
+.laundry-metric-card {
+
+    min-height:
+        150px;
+
+    padding:
+        17px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        16px;
+
+    background:
+        var(--laundry-panel);
+
+    box-shadow:
+        var(--laundry-shadow-soft);
+
+}
+
+
+
+.laundry-metric-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    top:
+        0;
+
+    height:
+        2px;
+
+    background:
+        var(--metric-color);
+
+    box-shadow:
+        0 0 13px
+        color-mix(
+            in srgb,
+            var(--metric-color) 40%,
+            transparent
+        );
+
+}
+
+
+
+.laundry-metric-card > strong {
+
+    display:
+        block;
+
+    margin-top:
+        14px;
+
+    color:
+        var(--metric-color);
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        35px;
+
+    font-weight:
+        500;
+
+}
+
+
+
+.laundry-metric-card p {
+
+    margin:
+        3px 0 5px;
+
+    color:
+        var(--laundry-text);
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+}
+
+
+
+.laundry-metric-card small {
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.45;
+
+}
+
+
+
+/* ================================================================
+   SECTION SHELL
+================================================================ */
+
+.laundry-section,
+.laundry-memory-section {
+
+    margin-top:
+        48px;
+
+}
+
+
+
+.laundry-section {
+
+    padding:
+        clamp(20px, 2.5vw, 30px);
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        24px;
+
+    background:
+        var(--laundry-panel);
+
+    box-shadow:
+        var(--laundry-shadow);
+
+}
+
+
+
+.laundry-section::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    pointer-events:
+        none;
+
+    background:
+
+        radial-gradient(
+            circle at 6% 0%,
+            rgba(39, 213, 238, 0.055),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 96% 100%,
+            rgba(242, 85, 186, 0.045),
+            transparent 24%
+        );
+
+}
+
+
+
+.laundry-section-heading {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        flex-end;
+
+    gap:
+        32px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+
+.laundry-section-heading h2 {
+
+    margin:
+        7px 0 0;
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(34px, 4vw, 50px);
+
+    font-weight:
+        500;
+
+    letter-spacing:
+        -0.03em;
+
+}
+
+
+
+.laundry-section-heading-right {
+
+    max-width:
+        540px;
+
+    display:
+        flex;
+
+    align-items:
+        flex-end;
+
+    gap:
+        14px;
+
+}
+
+
+
+.laundry-section-heading-right p,
+.laundry-memory-copy {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+
+}
+
+
+
+.laundry-section-heading-right .button {
+
+    flex:
+        0 0 auto;
+
+}
+
+
+
+/* ================================================================
+   FLOW LEGEND
+================================================================ */
+
+.laundry-stage-legend {
+
+    margin-top:
+        22px;
+
+    padding:
+        15px 18px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr
+        auto
+        1fr
+        auto
+        1fr;
+
+    gap:
+        10px;
+
+    align-items:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        14px;
+
+    background:
+        var(--laundry-panel-soft);
+
+}
+
+
+
+.legend-stage {
+
+    min-height:
+        54px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        9px;
+
+    border:
+        1px solid
+        currentColor;
+
+    border-radius:
+        11px;
+
+    background:
+        rgba(255, 255, 255, 0.015);
+
+}
+
+
+
+.legend-stage span {
+
+    width:
+        27px;
+
+    height:
+        27px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        currentColor;
+
+    border-radius:
+        50%;
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.legend-stage strong {
+
+    font-size:
+        11px;
+
+}
+
+
+.legend-stage.wash {
+    color: var(--laundry-blue);
+}
+
+
+.legend-stage.dry {
+    color: var(--laundry-cyan);
+}
+
+
+.legend-stage.fold {
+    color: var(--laundry-pink);
+}
+
+
+.legend-stage.put-away {
+    color: var(--laundry-mint);
+}
+
+
+
+.legend-arrow {
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        16px;
+
+}
+
+
+
+/* ================================================================
+   ACTIVE LOADS
+================================================================ */
+
+.active-loads-grid {
+
+    margin-top:
+        16px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        13px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+
+.active-load-card {
+
+    padding:
+        19px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.24);
+
+    border-radius:
+        17px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(39, 213, 238, 0.055),
+            transparent 46%
+        ),
+
+        var(--laundry-panel-soft);
+
+    box-shadow:
+        var(--laundry-shadow-soft);
+
+}
+
+
+
+.active-load-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        18px;
+
+    right:
+        18px;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--laundry-cyan),
+            transparent
+        );
+
+    box-shadow:
+        0 0 12px
+        rgba(39, 213, 238, 0.24);
+
+}
+
+
+
+.active-load-heading {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+    align-items:
+        flex-start;
+
+}
+
+
+
+.active-load-heading h3 {
+
+    margin:
+        6px 0 4px;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        27px;
+
+    font-weight:
+        500;
+
+}
+
+
+
+.active-load-heading p {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        11px;
+
+}
+
+
+
+.load-elapsed {
+
+    min-width:
+        78px;
+
+    padding:
+        9px 10px;
+
+    text-align:
+        right;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(39, 213, 238, 0.035);
+
+}
+
+
+
+.load-elapsed span {
+
+    display:
+        block;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        8px;
+
+}
+
+
+
+.load-elapsed strong {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        11px;
+
+}
+
+
+
+.load-stage-track {
+
+    margin-top:
+        20px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:
+        7px;
+
+}
+
+
+
+.load-stage {
+
+    min-height:
+        65px;
+
+    padding:
+        9px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        space-between;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        10px;
+
+    color:
+        var(--laundry-faint);
+
+    background:
+        rgba(255, 255, 255, 0.018);
+
+    transition:
+        0.2s ease;
+
+}
+
+
+
+.load-stage span {
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.load-stage strong {
+
+    font-size:
+        10px;
+
+}
+
+
+
+.load-stage.passed {
+
+    color:
+        var(--laundry-mint);
+
+    border-color:
+        rgba(56, 215, 170, 0.25);
+
+    background:
+        rgba(56, 215, 170, 0.04);
+
+}
+
+
+
+.load-stage.current {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+
+.load-stage.current.wash {
+
+    color:
+        var(--laundry-blue);
+
+    border-color:
+        rgba(91, 135, 255, 0.44);
+
+    background:
+        rgba(91, 135, 255, 0.08);
+
+    box-shadow:
+        0 0 18px
+        rgba(91, 135, 255, 0.13);
+
+}
+
+
+
+.load-stage.current.dry {
+
+    color:
+        var(--laundry-cyan);
+
+    border-color:
+        rgba(39, 213, 238, 0.44);
+
+    background:
+        rgba(39, 213, 238, 0.08);
+
+    box-shadow:
+        0 0 18px
+        rgba(39, 213, 238, 0.13);
+
+}
+
+
+
+.load-stage.current.fold {
+
+    color:
+        var(--laundry-pink);
+
+    border-color:
+        rgba(242, 85, 186, 0.44);
+
+    background:
+        rgba(242, 85, 186, 0.08);
+
+    box-shadow:
+        0 0 18px
+        rgba(242, 85, 186, 0.13);
+
+}
+
+
+
+.load-stage.current.put-away {
+
+    color:
+        var(--laundry-mint);
+
+    border-color:
+        rgba(56, 215, 170, 0.44);
+
+    background:
+        rgba(56, 215, 170, 0.08);
+
+    box-shadow:
+        0 0 18px
+        rgba(56, 215, 170, 0.13);
+
+}
+
+
+
+.active-load-footer {
+
+    margin-top:
+        17px;
+
+    padding-top:
+        14px;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        14px;
+
+    border-top:
+        1px solid
+        var(--laundry-line);
+
+}
+
+
+
+.current-stage-copy span {
+
+    display:
+        block;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        0.07em;
+
+}
+
+
+
+.current-stage-copy strong {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    font-size:
+        12px;
+
+}
+
+
+
+.load-action-group {
+
+    display:
+        flex;
+
+    gap:
+        8px;
+
+    align-items:
+        center;
+
+}
+
+
+
+.remove-load-button {
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    padding:
+        0;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--laundry-faint);
+
+    background:
+        var(--laundry-panel-strong);
+
+    font-size:
+        18px;
+
+}
+
+
+
+.remove-load-button:hover {
+
+    color:
+        var(--laundry-danger);
+
+    border-color:
+        rgba(255, 102, 125, 0.35);
+
+}
+
+
+
+.laundry-empty-flow {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+
+/* ================================================================
+   WEEKLY RHYTHM
+================================================================ */
+
+.laundry-day-tabs {
+
+    margin-top:
+        22px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap:
+        7px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+
+.laundry-day-tab {
+
+    min-height:
+        92px;
+
+    padding:
+        12px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        flex-start;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        13px;
+
+    color:
+        var(--laundry-copy);
+
+    background:
+        var(--laundry-panel-soft);
+
+    transition:
+        0.2s ease;
+
+}
+
+
+
+.laundry-day-tab::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        12px;
+
+    right:
+        12px;
+
+    bottom:
+        0;
+
+    height:
+        2px;
+
+    background:
+        transparent;
+
+}
+
+
+
+.laundry-day-tab:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(39, 213, 238, 0.24);
+
+}
+
+
+
+.laundry-day-tab span {
+
+    margin-bottom:
+        auto;
+
+    color:
+        var(--laundry-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.laundry-day-tab strong {
+
+    color:
+        var(--laundry-text);
+
+    font-size:
+        12px;
+
+}
+
+
+
+.laundry-day-tab small {
+
+    margin-top:
+        3px;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        9px;
+
+}
+
+
+
+.laundry-day-tab.today {
+
+    box-shadow:
+        inset
+        0
+        0
+        0
+        1px
+        rgba(242, 85, 186, 0.15);
+
+}
+
+
+
+.laundry-day-tab.today::before {
+
+    content:
+        "TODAY";
+
+    position:
+        absolute;
+
+    top:
+        9px;
+
+    right:
+        8px;
+
+    color:
+        var(--laundry-pink);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        6px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+
+.laundry-day-tab.active {
+
+    color:
+        var(--laundry-cyan);
+
+    border-color:
+        rgba(39, 213, 238, 0.42);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(39, 213, 238, 0.08),
+            rgba(91, 135, 255, 0.04),
+            var(--laundry-panel-soft)
+        );
+
+    box-shadow:
+        0 12px 30px
+        rgba(39, 213, 238, 0.11);
+
+}
+
+
+
+.laundry-day-tab.active::after {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--laundry-blue),
+            var(--laundry-cyan)
+        );
+
+    box-shadow:
+        0 0 10px
+        var(--laundry-cyan);
+
+}
+
+
+
+.selected-laundry-day {
+
+    margin-top:
+        22px;
+
+    padding-bottom:
+        14px;
+
+    display:
+        flex;
+
+    align-items:
+        flex-end;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    border-bottom:
+        1px solid
+        var(--laundry-line);
+
+}
+
+
+
+.selected-laundry-day h3 {
+
+    margin:
+        5px 0 0;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        30px;
+
+    font-weight:
+        500;
+
+}
+
+
+
+.weekly-schedule-list {
+
+    padding-top:
+        11px;
+
+    display:
+        grid;
+
+    gap:
+        8px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+
+.schedule-row {
+
+    min-height:
+        82px;
+
+    padding:
+        12px 14px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto
+        auto;
+
+    gap:
+        14px;
+
+    align-items:
+        center;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        13px;
+
+    background:
+        var(--laundry-panel-soft);
+
+}
+
+
+
+.schedule-row.complete {
+
+    border-color:
+        rgba(56, 215, 170, 0.24);
+
+    background:
+        rgba(56, 215, 170, 0.045);
+
+}
+
+
+
+.schedule-time {
+
+    min-width:
+        72px;
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.schedule-main h4 {
+
+    margin:
+        0 0 3px;
+
+    font-size:
+        13px;
+
+}
+
+
+
+.schedule-main p {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        10px;
+
+}
+
+
+
+.schedule-actions {
+
+    display:
+        flex;
+
+    gap:
+        6px;
+
+    align-items:
+        center;
+
+}
+
+
+
+.schedule-icon-button {
+
+    min-width:
+        38px;
+
+    height:
+        38px;
+
+    padding:
+        0 9px;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        10px;
+
+    color:
+        var(--laundry-copy);
+
+    background:
+        var(--laundry-panel-strong);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+/* ================================================================
+   MAINTENANCE
+================================================================ */
+
+.maintenance-grid {
+
+    margin-top:
+        22px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap:
+        11px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+
+.maintenance-card {
+
+    min-height:
+        210px;
+
+    padding:
+        17px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        15px;
+
+    background:
+        var(--laundry-panel-soft);
+
+}
+
+
+
+.maintenance-card.attention {
+
+    border-color:
+        rgba(239, 173, 61, 0.34);
+
+    box-shadow:
+        inset
+        0
+        2px
+        0
+        rgba(239, 173, 61, 0.28);
+
+}
+
+
+
+.maintenance-card.overdue {
+
+    border-color:
+        rgba(255, 102, 125, 0.34);
+
+    box-shadow:
+        inset
+        0
+        2px
+        0
+        rgba(255, 102, 125, 0.28);
+
+}
+
+
+
+.maintenance-card.current {
+
+    border-color:
+        rgba(56, 215, 170, 0.21);
+
+}
+
+
+
+.maintenance-card-top {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    align-items:
+        flex-start;
+
+}
+
+
+
+.maintenance-symbol {
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.27);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--laundry-cyan);
+
+    background:
+        rgba(39, 213, 238, 0.05);
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+
+.maintenance-card.attention
+.maintenance-symbol {
+
+    color:
+        var(--laundry-warn);
+
+    border-color:
+        rgba(239, 173, 61, 0.30);
+
+}
+
+
+
+.maintenance-card.overdue
+.maintenance-symbol {
+
+    color:
+        var(--laundry-danger);
+
+    border-color:
+        rgba(255, 102, 125, 0.30);
+
+}
+
+
+
+.maintenance-card.current
+.maintenance-symbol {
+
+    color:
+        var(--laundry-mint);
+
+    border-color:
+        rgba(56, 215, 170, 0.30);
+
+}
+
+
+
+.maintenance-card h3 {
+
+    margin:
+        16px 0 7px;
+
+    font-size:
+        14px;
+
+    line-height:
+        1.4;
+
+}
+
+
+
+.maintenance-card p {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.5;
+
+}
+
+
+
+.maintenance-card-footer {
+
+    margin-top:
+        auto;
+
+    padding-top:
+        16px;
+
+    display:
+        flex;
+
+    gap:
+        7px;
+
+}
+
+
+
+.maintenance-card-footer .button {
+
+    flex:
+        1;
+
+}
+
+
+
+/* ================================================================
+   HISTORY
+================================================================ */
+
+.laundry-memory-section {
+
+    margin-bottom:
+        18px;
+
+}
+
+
+
+.laundry-history-list {
+
+    margin-top:
+        18px;
+
+    display:
+        grid;
+
+    gap:
+        8px;
+
+}
+
+
+
+.laundry-history-row {
+
+    min-height:
+        82px;
+
+    padding:
+        12px 14px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto
+        auto;
+
+    gap:
+        14px;
+
+    align-items:
+        center;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        13px;
+
+    background:
+        var(--laundry-panel);
+
+    box-shadow:
+        var(--laundry-shadow-soft);
+
+}
+
+
+
+.history-check {
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(56, 215, 170, 0.28);
+
+    border-radius:
+        10px;
+
+    color:
+        var(--laundry-mint);
+
+    background:
+        rgba(56, 215, 170, 0.05);
+
+}
+
+
+
+.laundry-history-main h3 {
+
+    margin:
+        0 0 3px;
+
+    font-size:
+        13px;
+
+}
+
+
+
+.laundry-history-main p {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        10px;
+
+}
+
+
+
+.history-meta {
+
+    min-width:
+        90px;
+
+    text-align:
+        right;
+
+}
+
+
+
+.history-meta span {
+
+    display:
+        block;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        8px;
+
+}
+
+
+
+.history-meta strong {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+}
+
+
+
+/* ================================================================
+   STATUS PILLS
+================================================================ */
+
+body[data-page="laundry"]
+.status-pill {
+
+    min-height:
+        26px;
+
+    padding:
+        0 8px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        999px;
+
+    color:
+        var(--laundry-copy);
+
+    background:
+        rgba(255, 255, 255, 0.02);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.07em;
+
+}
+
+
+
+body[data-page="laundry"]
+.status-pill.success {
+
+    color:
+        var(--laundry-mint);
+
+    border-color:
+        rgba(56, 215, 170, 0.25);
+
+    background:
+        rgba(56, 215, 170, 0.05);
+
+}
+
+
+
+body[data-page="laundry"]
+.status-pill.warning {
+
+    color:
+        var(--laundry-warn);
+
+    border-color:
+        rgba(239, 173, 61, 0.25);
+
+    background:
+        rgba(239, 173, 61, 0.05);
+
+}
+
+
+
+body[data-page="laundry"]
+.status-pill.danger {
+
+    color:
+        var(--laundry-danger);
+
+    border-color:
+        rgba(255, 102, 125, 0.25);
+
+    background:
+        rgba(255, 102, 125, 0.05);
+
+}
+
+
+
+/* ================================================================
+   DIALOGS
+================================================================ */
+
+.laundry-dialog {
+
+    color:
+        var(--laundry-text);
+
+    border-color:
+        rgba(39, 213, 238, 0.22);
+
+    background:
+        var(--laundry-panel-strong);
+
+    box-shadow:
+
+        0 34px 110px
+        rgba(0, 0, 0, 0.42),
+
+        0 0 48px
+        rgba(39, 213, 238, 0.12);
+
+}
+
+
+
+.laundry-dialog::backdrop {
+
+    background:
+        rgba(2, 5, 15, 0.74);
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+
+.laundry-dialog
+.app-dialog-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(39, 213, 238, 0.075),
+            transparent 55%
+        );
+
+}
+
+
+
+.laundry-dialog
+.app-input,
+.laundry-dialog
+.app-select {
+
+    color:
+        var(--laundry-text);
+
+    border-color:
+        var(--laundry-line);
+
+    background:
+        var(--laundry-panel-strong);
+
+}
+
+
+
+.laundry-dialog
+.app-input::placeholder {
+
+    color:
+        var(--laundry-faint);
+
+}
+
+
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+
+@media
+(max-width: 1180px) {
+
+    .laundry-command-deck {
+
+        grid-template-columns:
+            minmax(0, 1.2fr)
+            minmax(250px, 0.8fr);
+
+    }
+
+
+    .laundry-core-console {
+
+        grid-column:
+            1 / -1;
+
+        min-height:
+            0;
+
+        display:
+            grid;
+
+        grid-template-columns:
+            auto
+            220px
+            minmax(260px, 1fr);
+
+        gap:
+            18px;
+
+        align-items:
+            center;
+
+    }
+
+
+    .laundry-core-progress {
+
+        min-height:
+            190px;
+
+    }
+
+
+    .laundry-health-ring {
+
+        width:
+            150px;
+
+        height:
+            150px;
+
+    }
+
+
+    .laundry-core-footer {
+
+        border-top:
+            0;
+
+        border-left:
+            1px solid
+            var(--laundry-line);
+
+    }
+
+
+    .laundry-metrics-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .active-loads-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+
+@media
+(max-width: 920px) {
+
+    .laundry-command-deck {
+
+        grid-template-columns:
+            1fr;
+
+        min-height:
+            0;
+
+    }
+
+
+    .laundry-guide-panel {
+
+        min-height:
+            390px;
+
+    }
+
+
+    .laundry-core-console {
+
+        grid-column:
+            auto;
+
+        min-height:
+            410px;
+
+        display:
+            flex;
+
+    }
+
+
+    .laundry-core-footer {
+
+        border-top:
+            1px solid
+            var(--laundry-line);
+
+        border-left:
+            0;
+
+    }
+
+
+    .laundry-day-tabs {
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+    }
+
+
+    .maintenance-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .laundry-section-heading,
+    .laundry-section-heading-right {
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .laundry-section-heading-right {
+
+        flex-direction:
+            column;
+
+    }
+
+}
+
+
+
+@media
+(max-width: 720px) {
+
+    .laundry-command-deck {
+
+        padding:
+            20px;
+
+        border-radius:
+            22px;
+
+    }
+
+
+    .laundry-command-copy {
+
+        padding:
+            8px 0;
+
+    }
+
+
+    .laundry-command-copy h1 {
+
+        font-size:
+            clamp(43px, 13vw, 64px);
+
+    }
+
+
+    .laundry-command-actions,
+    .laundry-section-heading,
+    .laundry-section-heading-right {
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .laundry-command-actions
+    .button,
+    .laundry-section-heading-right
+    .button {
+
+        width:
+            100%;
+
+    }
+
+
+    .laundry-section-heading {
+
+        align-items:
+            stretch;
+
+        gap:
+            12px;
+
+    }
+
+
+    .laundry-stage-legend {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .legend-arrow {
+
+        display:
+            none;
+
+    }
+
+
+    .load-stage-track {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .active-load-footer {
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+    }
+
+
+    .load-action-group {
+
+        width:
+            100%;
+
+    }
+
+
+    .load-action-group
+    .button {
+
+        flex:
+            1;
+
+    }
+
+
+    .laundry-day-tabs {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .schedule-row {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .schedule-actions {
+
+        width:
+            100%;
+
+        flex-wrap:
+            wrap;
+
+    }
+
+
+    .maintenance-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .laundry-history-row {
+
+        grid-template-columns:
+            auto
+            1fr;
+
+    }
+
+
+    .history-meta {
+
+        text-align:
+            left;
+
+    }
+
+}
+
+
+
+@media
+(max-width: 520px) {
+
+    .laundry-metrics-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .laundry-guide-panel {
+
+        min-height:
+            350px;
+
+    }
+
+
+    .laundry-guide-visual {
+
+        min-height:
+            200px;
+
+    }
+
+
+    .laundry-guide-mascot {
+
+        max-height:
+            220px;
+
+    }
+
+
+    .laundry-section {
+
+        padding:
+            16px;
+
+        border-radius:
+            19px;
+
+    }
+
+
+    .selected-laundry-day {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+}
+
+
+
+/* ================================================================
+   MOTION
+================================================================ */
+
+@keyframes
+laundryPulse {
+
+    0%,
+    100% {
+
+        opacity:
+            0.65;
+
+        transform:
+            scale(0.92);
+
+    }
+
+
+    50% {
+
+        opacity:
+            1;
+
+        transform:
+            scale(1.08);
+
+    }
+
+}
+
+
+
+@keyframes
+laundryRotate {
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+
+@keyframes
+laundryScan {
+
+    0% {
+
+        transform:
+            translateY(-90px);
+
+        opacity:
+            0;
+
+    }
+
+
+    15% {
+
+        opacity:
+            0.45;
+
+    }
+
+
+    85% {
+
+        opacity:
+            0.45;
+
+    }
+
+
+    100% {
+
+        transform:
+            translateY(330px);
+
+        opacity:
+            0;
+
+    }
+
+}
+
+
+
+@media
+(prefers-reduced-motion: reduce) {
+
+    .laundry-live-dot,
+    .laundry-guide-scan,
+    .laundry-guide-halo::before,
+    .laundry-guide-halo::after {
+
+        animation:
+            none !important;
+
+    }
+
+}

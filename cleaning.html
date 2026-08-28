@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Cleaning | DARLING HomeOS</title>
+
+    <meta
+        name="description"
+        content="DARLING HomeOS Cleaning Control and Home Topology"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/css/app.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/css/cleaning.css"
+    >
+</head>
+
+
+<body data-page="cleaning">
+
+    <!-- =========================================================
+         SHARED HOMEOS SHELL
+    ========================================================== -->
+
+    <header id="appHeader"></header>
+
+
+    <main class="app-main cleaning-main">
+
+        <!-- =====================================================
+             CLEANING COMMAND DECK
+        ====================================================== -->
+
+        <section class="cleaning-command-deck">
+
+            <!-- COMMAND COPY -->
+
+            <div class="cleaning-command-copy">
+
+                <div class="cleaning-system-kicker">
+
+                    <span class="cleaning-live-dot"></span>
+
+                    CLEANING CORE // HOME TOPOLOGY ONLINE
+
+                </div>
+
+
+                <h1>
+                    Clean your home<br>
+                    with <em>intelligence.</em>
+                </h1>
+
+
+                <p class="cleaning-command-lead">
+
+                    Pick one room when you want a focused reset,
+                    or activate a full zone when you are ready to
+                    move through the house. HomeOS remembers where
+                    you stopped and how each space is doing.
+
+                </p>
+
+
+                <p
+                    class="cleaning-command-time"
+                    id="cleaningDateTime"
+                >
+                    Loading home time...
+                </p>
+
+
+                <div class="cleaning-command-actions">
+
+                    <button
+                        class="button button-primary"
+                        id="heroRoomMode"
+                        type="button"
+                    >
+
+                        <span class="button-light"></span>
+
+                        Clean A Room
+
+                    </button>
+
+
+                    <button
+                        class="button button-secondary"
+                        id="heroZoneMode"
+                        type="button"
+                    >
+                        Clean By Zone
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 HOMEOS CLEANING GUIDE
+            ================================================== -->
+
+            <aside class="cleaning-guide-panel">
+
+                <div
+                    class="cleaning-guide-scan"
+                    aria-hidden="true"
+                ></div>
+
+
+                <div class="cleaning-guide-topline">
+
+                    <span>
+                        HOMEOS GUIDE
+                    </span>
+
+                    <strong id="cleaningGuideStatus">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="cleaning-guide-visual">
+
+                    <div
+                        class="cleaning-guide-halo"
+                        aria-hidden="true"
+                    ></div>
+
+
+                    <img
+                        src="assets/images/branding/cleaning-mascot.png"
+                        alt="DARLING HomeOS cleaning guide"
+                        class="cleaning-guide-mascot"
+                    >
+
+                </div>
+
+
+                <div class="cleaning-guide-message">
+
+                    <span class="cleaning-guide-label">
+                        CLEANING GUIDE // ACTIVE
+                    </span>
+
+
+                    <p id="cleaningGuideMessage">
+
+                        HomeOS is checking which space needs
+                        you most.
+
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="cleaning-guide-action"
+                    id="guidePrimaryAction"
+                    type="button"
+                >
+                    START RECOMMENDED →
+                </button>
+
+            </aside>
+
+
+
+            <!-- =================================================
+                 CLEANING CORE
+            ================================================== -->
+
+            <aside class="cleaning-core-console">
+
+                <div class="cleaning-core-console-head">
+
+                    <div>
+
+                        <span class="ui-kicker">
+                            CLEANING CORE
+                        </span>
+
+
+                        <h2>
+                            Home State
+                        </h2>
+
+                    </div>
+
+
+                    <span class="cleaning-online-pill">
+
+                        <i></i>
+
+                        LIVE
+
+                    </span>
+
+                </div>
+
+
+                <div class="cleaning-core-orb-wrap">
+
+                    <div class="cleaning-core-orb">
+
+                        <span
+                            class="cleaning-orb-ring ring-one"
+                        ></span>
+
+                        <span
+                            class="cleaning-orb-ring ring-two"
+                        ></span>
+
+
+                        <strong id="homeCleanScore">
+                            0%
+                        </strong>
+
+
+                        <small>
+                            HOME CLEAN
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cleaning-core-metrics">
+
+                    <div>
+
+                        <span>
+                            Spaces
+                        </span>
+
+                        <strong id="mappedSpaceCount">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Zones
+                        </span>
+
+                        <strong id="zoneCount">
+                            09
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Attention
+                        </span>
+
+                        <strong id="roomsAttentionCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cleaning-core-footer">
+
+                    <div>
+
+                        <span>
+                            Level
+                        </span>
+
+                        <strong id="heroCurrentFloor">
+                            Upstairs
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Session
+                        </span>
+
+                        <strong id="heroActiveCleaning">
+                            None
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ACTIVE CLEANING SESSION
+        ====================================================== -->
+
+        <section
+            class="active-cleaning-strip is-hidden"
+            id="activeCleaningStrip"
+        >
+
+            <div class="active-cleaning-beacon">
+
+                <span></span>
+
+            </div>
+
+
+            <div class="active-cleaning-main">
+
+                <span class="ui-kicker">
+                    ACTIVE CLEANING PROTOCOL
+                </span>
+
+
+                <h2 id="activeCleaningTitle">
+                    Kitchen · Standard
+                </h2>
+
+
+                <p id="activeCleaningDetail">
+                    Progress saved.
+                </p>
+
+            </div>
+
+
+            <div class="active-cleaning-progress">
+
+                <div>
+
+                    <span>
+                        PROGRESS
+                    </span>
+
+                    <strong id="activeCleaningPercent">
+                        0%
+                    </strong>
+
+                </div>
+
+
+                <div class="cleaning-progress-track">
+
+                    <span id="activeCleaningBar"></span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="button button-primary"
+                id="resumeCleaningButton"
+                type="button"
+            >
+                Resume Cleaning
+            </button>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             CLEANING MODE
+        ====================================================== -->
+
+        <section class="cleaning-control-section">
+
+            <div class="cleaning-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        CLEANING CONTROL // 01
+                    </span>
+
+
+                    <h2>
+                        How are we cleaning today?
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    Room Mode gives you one exact space.
+                    Zone Mode moves through a complete
+                    household cleaning zone.
+
+                </p>
+
+            </div>
+
+
+            <div class="cleaning-mode-switch">
+
+                <!-- ROOM MODE -->
+
+                <button
+                    class="cleaning-mode-button active"
+                    type="button"
+                    data-cleaning-mode="room"
+                >
+
+                    <span class="mode-number">
+                        01
+                    </span>
+
+
+                    <span class="mode-copy">
+
+                        <strong>
+                            Clean By Room
+                        </strong>
+
+                        <small>
+                            Target one space and choose
+                            Quick, Standard or Deep.
+                        </small>
+
+                    </span>
+
+
+                    <span class="mode-state">
+                        FOCUSED
+                    </span>
+
+                </button>
+
+
+                <!-- ZONE MODE -->
+
+                <button
+                    class="cleaning-mode-button"
+                    type="button"
+                    data-cleaning-mode="zone"
+                >
+
+                    <span class="mode-number">
+                        02
+                    </span>
+
+
+                    <span class="mode-copy">
+
+                        <strong>
+                            Zone Cleaning
+                        </strong>
+
+                        <small>
+                            Move through a connected group
+                            of rooms as one clean.
+                        </small>
+
+                    </span>
+
+
+                    <span class="mode-state">
+                        SYSTEM
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ROOM MODE
+        ====================================================== -->
+
+        <section
+            class="cleaning-workspace"
+            id="roomModeWorkspace"
+        >
+
+            <div class="cleaning-section-heading cleaning-workspace-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        HOME TOPOLOGY // ROOM MODE
+                    </span>
+
+
+                    <h2>
+                        Select a level of your home.
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    Each tile is a real HomeOS cleaning space.
+                    Select a room to inspect its cleaning memory
+                    and start a protocol.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- FLOOR / LEVEL CONTROL -->
+
+            <div
+                class="floor-tabs"
+                id="floorTabs"
+            ></div>
+
+
+
+            <!-- =================================================
+                 HOME MAP
+            ================================================== -->
+
+            <section class="home-map-shell">
+
+                <div class="home-map-heading">
+
+                    <div>
+
+                        <span
+                            class="ui-kicker"
+                            id="mapLevelCode"
+                        >
+                            LVL // 02
+                        </span>
+
+
+                        <h2 id="mapFloorTitle">
+                            Upstairs
+                        </h2>
+
+
+                        <p id="mapFloorDescription">
+
+                            Private living, kids spaces,
+                            laundry and linen systems.
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="floor-state-card">
+
+                        <span class="floor-state-light"></span>
+
+
+                        <div>
+
+                            <span>
+                                LEVEL STATE
+                            </span>
+
+                            <strong id="floorStateLabel">
+                                STABLE
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="home-map-layout">
+
+                    <!-- =========================================
+                         INTERACTIVE HOME MAP
+                    ========================================== -->
+
+                    <div class="room-map-panel">
+
+                        <div
+                            class="room-map-grid-labels"
+                            aria-hidden="true"
+                        >
+
+                            <span>
+                                HOME TOPOLOGY
+                            </span>
+
+                            <span>
+                                LIVE ROOM MATRIX
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="room-map"
+                            id="roomMap"
+                        ></div>
+
+
+                        <div class="room-map-footer">
+
+                            <span>
+
+                                <i></i>
+
+                                SELECT A ROOM TO INSPECT
+
+                            </span>
+
+
+                            <span>
+                                ZONE COLOR // LIVE
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =========================================
+                         SELECTED ROOM
+                    ========================================== -->
+
+                    <aside
+                        class="selected-space-panel"
+                        id="selectedRoomPanel"
+                    >
+
+                        <div
+                            class="selected-space-accent"
+                            id="selectedRoomAccent"
+                        ></div>
+
+
+                        <div class="selected-space-heading">
+
+                            <span
+                                class="selected-space-code"
+                                id="selectedRoomCode"
+                            >
+                                R-U01
+                            </span>
+
+
+                            <span
+                                class="selected-space-icon"
+                                id="selectedRoomIcon"
+                            >
+                                MB
+                            </span>
+
+                        </div>
+
+
+                        <span class="selected-space-kicker">
+                            SELECTED SPACE
+                        </span>
+
+
+                        <h2 id="selectedRoomName">
+                            Master Bedroom
+                        </h2>
+
+
+                        <strong
+                            class="selected-zone-name"
+                            id="selectedRoomZone"
+                        >
+                            Z-01 · Master Suite
+                        </strong>
+
+
+                        <p
+                            class="selected-space-description"
+                            id="selectedRoomDescription"
+                        >
+
+                            Primary bedroom and private
+                            resting space.
+
+                        </p>
+
+
+
+                        <!-- STATE BAND -->
+
+                        <div class="selected-state-band">
+
+                            <div>
+
+                                <span>
+                                    CLEAN STATE
+                                </span>
+
+                                <strong id="selectedRoomState">
+                                    87%
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    RECOMMENDED
+                                </span>
+
+                                <strong id="selectedRoomSuggested">
+                                    QUICK
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- CLEANING MEMORY -->
+
+                        <div class="selected-space-stats">
+
+                            <div>
+
+                                <span>
+                                    Last Quick
+                                </span>
+
+                                <strong id="selectedRoomQuick">
+                                    NOT TRACKED
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Last Standard
+                                </span>
+
+                                <strong id="selectedRoomStandard">
+                                    NOT TRACKED
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Last Deep
+                                </span>
+
+                                <strong id="selectedRoomDeep">
+                                    NOT TRACKED
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Level
+                                </span>
+
+                                <strong id="selectedRoomFloor">
+                                    Upstairs
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="button button-primary selected-space-start"
+                            id="openRoomCleaning"
+                            type="button"
+                        >
+                            Start Cleaning Protocol
+                        </button>
+
+                    </aside>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ZONE MODE
+        ====================================================== -->
+
+        <section
+            class="cleaning-workspace is-hidden"
+            id="zoneModeWorkspace"
+        >
+
+            <div class="cleaning-section-heading cleaning-workspace-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        HOME TOPOLOGY // ZONE MODE
+                    </span>
+
+
+                    <h2>
+                        Activate a cleaning zone.
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    A zone combines rooms that make sense
+                    to clean together. The selected protocol
+                    applies across every mapped space in that zone.
+
+                </p>
+
+            </div>
+
+
+            <div class="zone-cleaning-layout">
+
+                <!-- ZONE GRID -->
+
+                <div
+                    class="zone-cleaning-grid"
+                    id="zoneCleaningGrid"
+                ></div>
+
+
+
+                <!-- SELECTED ZONE -->
+
+                <aside
+                    class="selected-space-panel selected-zone-panel"
+                    id="selectedZonePanel"
+                >
+
+                    <div
+                        class="selected-space-accent"
+                        id="selectedZoneAccent"
+                    ></div>
+
+
+                    <span
+                        class="selected-space-code"
+                        id="selectedZoneCode"
+                    >
+                        Z-01
+                    </span>
+
+
+                    <span class="selected-space-kicker">
+                        ACTIVE ZONE
+                    </span>
+
+
+                    <h2 id="selectedZoneName">
+                        Master Suite
+                    </h2>
+
+
+                    <p
+                        class="selected-space-description"
+                        id="selectedZoneDescription"
+                    >
+                        Master bedroom, bathroom and closets.
+                    </p>
+
+
+
+                    <div class="selected-state-band">
+
+                        <div>
+
+                            <span>
+                                ZONE STATE
+                            </span>
+
+                            <strong id="selectedZoneState">
+                                87%
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                RECOMMENDED
+                            </span>
+
+                            <strong id="selectedZoneSuggested">
+                                QUICK
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="selected-space-stats zone-stats">
+
+                        <div>
+
+                            <span>
+                                Mapped Spaces
+                            </span>
+
+                            <strong id="selectedZoneRooms">
+                                4
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong id="selectedZoneStatus">
+                                SETTLED
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div
+                        class="zone-room-list"
+                        id="selectedZoneRoomList"
+                    ></div>
+
+
+                    <button
+                        class="button button-primary selected-space-start"
+                        id="openZoneCleaning"
+                        type="button"
+                    >
+                        Start Zone Protocol
+                    </button>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             CLEANING MEMORY
+        ====================================================== -->
+
+        <section class="cleaning-memory-section">
+
+            <div class="cleaning-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        HOME MEMORY // CLEANING
+                    </span>
+
+
+                    <h2>
+                        Recent Cleaning
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    Completed protocols stay in Home Memory
+                    so HomeOS can make better recommendations later.
+
+                </p>
+
+            </div>
+
+
+            <div
+                class="cleaning-history-list"
+                id="cleaningHistoryList"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================================================
+         CLEANING PROTOCOL
+    ========================================================== -->
+
+    <dialog
+        class="app-dialog cleaning-dialog"
+        id="cleaningDialog"
+    >
+
+        <div class="cleaning-dialog-shell">
+
+            <!-- DIALOG HEADER -->
+
+            <div class="cleaning-dialog-header">
+
+                <div>
+
+                    <span class="cleaning-dialog-system">
+                        CLEANING PROTOCOL // HOMEOS
+                    </span>
+
+
+                    <span
+                        class="ui-kicker"
+                        id="cleaningDialogKicker"
+                    >
+                        ROOM CLEANING
+                    </span>
+
+
+                    <h2 id="cleaningDialogTitle">
+                        Master Bedroom
+                    </h2>
+
+
+                    <p id="cleaningProtocolRecommendation">
+
+                        Choose the cleaning level that matches
+                        what this space needs today.
+
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="dialog-close"
+                    id="closeCleaningDialog"
+                    type="button"
+                    aria-label="Close cleaning protocol"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LEVEL SELECTOR
+            ================================================== -->
+
+            <div
+                class="cleaning-level-screen"
+                id="cleaningLevelScreen"
+            >
+
+                <div class="cleaning-level-intro">
+
+                    <span class="ui-kicker">
+                        SELECT CLEANING LEVEL
+                    </span>
+
+
+                    <h3>
+                        How much does this space need?
+                    </h3>
+
+
+                    <p>
+
+                        Standard includes Quick.
+                        Deep includes Quick + Standard
+                        + detailed reset tasks.
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="cleaning-level-grid">
+
+                    <!-- QUICK -->
+
+                    <button
+                        class="cleaning-level-card quick-level"
+                        type="button"
+                        data-cleaning-level="quick"
+                    >
+
+                        <span class="level-number">
+                            01
+                        </span>
+
+                        <span class="level-signal"></span>
+
+
+                        <h3>
+                            Quick
+                        </h3>
+
+
+                        <p>
+
+                            Restore visible order and put
+                            the space back into rhythm.
+
+                        </p>
+
+
+                        <strong>
+                            LIGHT RESET →
+                        </strong>
+
+                    </button>
+
+
+
+                    <!-- STANDARD -->
+
+                    <button
+                        class="cleaning-level-card standard-level"
+                        type="button"
+                        data-cleaning-level="standard"
+                    >
+
+                        <span class="level-number">
+                            02
+                        </span>
+
+                        <span class="level-signal"></span>
+
+
+                        <h3>
+                            Standard
+                        </h3>
+
+
+                        <p>
+
+                            Your normal complete room-cleaning
+                            routine with surfaces and floors.
+
+                        </p>
+
+
+                        <strong>
+                            FULL CLEAN →
+                        </strong>
+
+                    </button>
+
+
+
+                    <!-- DEEP -->
+
+                    <button
+                        class="cleaning-level-card deep-level"
+                        type="button"
+                        data-cleaning-level="deep"
+                    >
+
+                        <span class="level-number">
+                            03
+                        </span>
+
+                        <span class="level-signal"></span>
+
+
+                        <h3>
+                            Deep
+                        </h3>
+
+
+                        <p>
+
+                            Detailed cleaning, organizing
+                            and work that does not happen
+                            every week.
+
+                        </p>
+
+
+                        <strong>
+                            DEEP RESET →
+                        </strong>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ACTIVE CLEANING CHECKLIST
+            ================================================== -->
+
+            <div
+                class="cleaning-task-screen is-hidden"
+                id="cleaningTaskScreen"
+            >
+
+                <div class="cleaning-session-top">
+
+                    <div>
+
+                        <span class="ui-kicker">
+                            ACTIVE CLEAN
+                        </span>
+
+
+                        <h3 id="sessionLevelTitle">
+                            Standard Clean
+                        </h3>
+
+                    </div>
+
+
+                    <div class="session-progress-number">
+
+                        <strong id="sessionProgressPercent">
+                            0%
+                        </strong>
+
+
+                        <span>
+                            COMPLETE
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="session-progress-track">
+
+                    <span id="sessionProgressBar"></span>
+
+                </div>
+
+
+
+                <!-- TASKS -->
+
+                <div
+                    class="cleaning-task-list"
+                    id="cleaningTaskList"
+                ></div>
+
+
+
+                <!-- MANUAL TASK -->
+
+                <div class="manual-task-panel">
+
+                    <div>
+
+                        <span class="ui-kicker">
+                            SOMETHING ELSE?
+                        </span>
+
+
+                        <strong>
+                            Add it to this cleaning protocol.
+                        </strong>
+
+                    </div>
+
+
+                    <div class="manual-task-form">
+
+                        <input
+                            class="app-input"
+                            id="manualCleaningTask"
+                            type="text"
+                            placeholder="Example: Organize dresser drawer"
+                        >
+
+
+                        <button
+                            class="button button-secondary"
+                            id="addManualCleaningTask"
+                            type="button"
+                        >
+                            + Add Task
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SESSION CONTROLS -->
+
+                <div class="cleaning-session-footer">
+
+                    <button
+                        class="button button-secondary"
+                        id="pauseCleaningButton"
+                        type="button"
+                    >
+                        Save + Close
+                    </button>
+
+
+                    <button
+                        class="button button-primary"
+                        id="completeCleaningButton"
+                        type="button"
+                        disabled
+                    >
+                        Complete Clean ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </dialog>
+
+
+
+    <!-- =========================================================
+         SHARED FOOTER
+    ========================================================== -->
+
+    <footer id="appFooter"></footer>
+
+
+
+    <!-- =========================================================
+         SHARED TOAST
+    ========================================================== -->
+
+    <div
+        class="app-toast"
+        id="appToast"
+        aria-live="polite"
+    ></div>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script src="assets/js/store.js"></script>
+
+    <script src="assets/js/app.js"></script>
+
+    <script src="assets/js/shell.js"></script>
+
+    <script src="assets/js/cleaning.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>Home Inventory | DARLING HomeOS</title>
+    <meta
+        name="description"
+        content="DARLING HomeOS Home Inventory"
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="assets/css/app.css"
+    >
+    <link
+        rel="stylesheet"
+        href="assets/css/inventory.css"
+    >
+</head>
+
+<body data-page="inventory">
+
+    <!-- SHARED HOMEOS SHELL -->
+    <header id="appHeader"></header>
+
+    <main class="app-main inventory-main">
+
+        <!-- =====================================================
+             INVENTORY COMMAND DECK
+        ====================================================== -->
+
+        <section class="inventory-command-deck">
+
+            <div class="inventory-command-copy">
+
+                <div class="inventory-system-kicker">
+                    <span class="inventory-live-dot"></span>
+                    HOME INVENTORY // STOCK NETWORK ONLINE
+                </div>
+
+                <h1>
+                    Know what your<br>
+                    home <em>needs.</em>
+                </h1>
+
+                <p class="inventory-command-lead">
+                    HomeOS tracks what is already in your pantry,
+                    refrigerators, freezers and household supply zones.
+                    Current quantity stays separate from your preferred
+                    stock so shortages turn into one intelligent shopping list.
+                </p>
+
+                <p
+                    class="inventory-command-time"
+                    id="inventoryDateTime"
+                >
+                    Loading inventory...
+                </p>
+
+                <div class="inventory-command-actions">
+
+                    <button
+                        class="button button-primary"
+                        id="heroAddItemButton"
+                        type="button"
+                    >
+                        <span class="button-light"></span>
+                        Add Inventory Item
+                    </button>
+
+                    <button
+                        class="button button-secondary"
+                        id="heroShoppingButton"
+                        type="button"
+                    >
+                        Open Shopping List
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- HOMEOS INVENTORY GUIDE -->
+
+            <aside class="inventory-guide-panel">
+
+                <div
+                    class="inventory-guide-scan"
+                    aria-hidden="true"
+                ></div>
+
+                <div class="inventory-guide-topline">
+                    <span>HOMEOS GUIDE</span>
+                    <strong id="inventoryGuideStatus">
+                        ONLINE
+                    </strong>
+                </div>
+
+                <div class="inventory-guide-visual">
+
+                    <div
+                        class="inventory-guide-halo"
+                        aria-hidden="true"
+                    ></div>
+
+                    <img
+                        class="inventory-guide-mascot"
+                        src="assets/images/branding/inventory-mascot.png"
+                        alt="DARLING HomeOS inventory guide"
+                    >
+
+                </div>
+
+                <div class="inventory-guide-message">
+
+                    <span>
+                        INVENTORY GUIDE // ACTIVE
+                    </span>
+
+                    <p id="inventoryGuideMessage">
+                        HomeOS is checking household stock.
+                    </p>
+
+                </div>
+
+                <button
+                    class="inventory-guide-action"
+                    id="inventoryGuideAction"
+                    type="button"
+                >
+                    OPEN INVENTORY →
+                </button>
+
+            </aside>
+
+            <!-- INVENTORY CORE -->
+
+            <aside class="inventory-core-console">
+
+                <div class="inventory-core-console-head">
+
+                    <div>
+                        <span class="ui-kicker">
+                            INVENTORY CORE
+                        </span>
+
+                        <h2>
+                            Stock Health
+                        </h2>
+                    </div>
+
+                    <span class="inventory-online-pill">
+                        <i></i>
+                        TRACKING
+                    </span>
+
+                </div>
+
+                <div class="inventory-core-progress">
+
+                    <div
+                        class="inventory-health-ring"
+                        id="inventoryHealthRing"
+                    >
+
+                        <div class="inventory-health-center">
+
+                            <span class="ui-kicker">
+                                HOME STOCK
+                            </span>
+
+                            <strong id="inventoryHealthValue">
+                                0%
+                            </strong>
+
+                            <span id="inventoryHealthStatus">
+                                CHECKING
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="inventory-core-footer">
+
+                    <div>
+                        <span>Low</span>
+                        <strong id="heroLowCount">
+                            0
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Shopping</span>
+                        <strong id="heroShoppingCount">
+                            0
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Auto List</span>
+                        <strong id="heroAutoStatus">
+                            Off
+                        </strong>
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+        <!-- =====================================================
+             INVENTORY METRICS
+        ====================================================== -->
+
+        <section class="inventory-metrics-grid">
+
+            <article
+                class="inventory-metric-card"
+                style="--metric-color: var(--inventory-pink);"
+            >
+
+                <span class="ui-kicker">
+                    ITEMS TRACKED
+                </span>
+
+                <strong id="trackedItemsMetric">
+                    0
+                </strong>
+
+                <p>
+                    Across your home
+                </p>
+
+                <small id="trackedItemsDetail">
+                    Loading inventory.
+                </small>
+
+            </article>
+
+            <article
+                class="inventory-metric-card"
+                style="--metric-color: var(--inventory-danger);"
+            >
+
+                <span class="ui-kicker">
+                    LOW STOCK
+                </span>
+
+                <strong id="lowStockMetric">
+                    0
+                </strong>
+
+                <p>
+                    Below preferred level
+                </p>
+
+                <small id="lowStockDetail">
+                    Checking shortages.
+                </small>
+
+            </article>
+
+            <article
+                class="inventory-metric-card"
+                style="--metric-color: var(--inventory-cyan);"
+            >
+
+                <span class="ui-kicker">
+                    SHOPPING LIST
+                </span>
+
+                <strong id="shoppingMetric">
+                    0
+                </strong>
+
+                <p>
+                    Things to buy
+                </p>
+
+                <small id="shoppingMetricDetail">
+                    Your list is loading.
+                </small>
+
+            </article>
+
+            <article
+                class="inventory-metric-card"
+                style="--metric-color: var(--inventory-mint);"
+            >
+
+                <span class="ui-kicker">
+                    STORAGE ZONES
+                </span>
+
+                <strong id="storageZonesMetric">
+                    06
+                </strong>
+
+                <p>
+                    Inventory locations
+                </p>
+
+                <small>
+                    Pantry, cold storage and household supplies.
+                </small>
+
+            </article>
+
+        </section>
+
+        <!-- =====================================================
+             STORAGE NETWORK
+        ====================================================== -->
+
+        <section class="inventory-section inventory-network-section">
+
+            <div class="inventory-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        HOME STORAGE // 06 ACTIVE NODES
+                    </span>
+
+                    <h2>
+                        Inventory Network
+                    </h2>
+
+                </div>
+
+                <p>
+                    Choose a storage zone to inspect its exact quantities,
+                    shortages and stock health. The Beverage Mini Fridge
+                    remains its own HomeOS node even though it lives
+                    inside the pantry.
+                </p>
+
+            </div>
+
+            <div
+                class="inventory-zone-grid"
+                id="inventoryZoneGrid"
+            ></div>
+
+        </section>
+
+        <!-- =====================================================
+             SELECTED STORAGE NODE
+        ====================================================== -->
+
+        <section
+            class="inventory-section inventory-workspace"
+            id="inventoryWorkspace"
+        >
+
+            <div
+                class="inventory-workspace-accent"
+                id="selectedInventoryZoneAccent"
+            ></div>
+
+            <div class="inventory-workspace-header">
+
+                <div>
+
+                    <span
+                        class="ui-kicker"
+                        id="selectedInventoryZoneCode"
+                    >
+                        ST-01
+                    </span>
+
+                    <h2 id="selectedInventoryZoneName">
+                        Walk-In Pantry
+                    </h2>
+
+                    <p id="selectedInventoryZoneDescription">
+                        Dry goods, snacks, food backstock and pantry staples.
+                    </p>
+
+                </div>
+
+                <div class="inventory-node-status">
+
+                    <div>
+                        <span>NODE HEALTH</span>
+                        <strong id="selectedInventoryZoneHealth">
+                            0%
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>STATE</span>
+                        <strong id="selectedInventoryZoneState">
+                            CHECKING
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>TRACKED</span>
+                        <strong id="selectedInventoryZoneCount">
+                            0 ITEMS
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>SIGNAL</span>
+                        <strong id="selectedInventoryZoneLow">
+                            0 LOW
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TOOLBAR -->
+
+            <div class="inventory-toolbar">
+
+                <div class="inventory-search-wrap">
+
+                    <span aria-hidden="true">
+                        ⌕
+                    </span>
+
+                    <input
+                        class="app-input inventory-search"
+                        id="inventorySearch"
+                        type="search"
+                        placeholder="Search this storage node..."
+                    >
+
+                </div>
+
+                <button
+                    class="button button-primary"
+                    id="addInventoryItemButton"
+                    type="button"
+                >
+                    + Add Item
+                </button>
+
+            </div>
+
+            <!-- INVENTORY TABLE -->
+
+            <div class="inventory-table-shell">
+
+                <div class="inventory-table-header">
+
+                    <span>Item</span>
+                    <span>Current</span>
+                    <span>Target</span>
+                    <span>Need</span>
+                    <span>State</span>
+                    <span>Controls</span>
+
+                </div>
+
+                <div
+                    class="inventory-item-list"
+                    id="inventoryItemList"
+                ></div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+             SMART RESTOCK
+        ====================================================== -->
+
+        <section
+            class="inventory-restock-section"
+            id="shoppingSection"
+        >
+
+            <div class="inventory-section-heading">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        SMART RESTOCK // SHARED HOMEOS SHOPPING
+                    </span>
+
+                    <h2>
+                        Make the list for me.
+                    </h2>
+
+                </div>
+
+                <p>
+                    HomeOS already knows what is missing.
+                    Add one shortage, add every shortage,
+                    or let Auto Restock keep the list synchronized.
+                </p>
+
+            </div>
+
+            <div class="smart-restock-layout">
+
+                <!-- SHORTAGES -->
+
+                <article class="restock-panel shortage-panel">
+
+                    <div class="restock-panel-head">
+
+                        <div>
+
+                            <span class="ui-kicker">
+                                NEED NOW
+                            </span>
+
+                            <h3>
+                                Home Shortages
+                            </h3>
+
+                            <p>
+                                Calculated live from Current versus
+                                Preferred quantities.
+                            </p>
+
+                        </div>
+
+                        <span
+                            class="restock-count-pill"
+                            id="shortageCountPill"
+                        >
+                            0 SHORTAGES
+                        </span>
+
+                    </div>
+
+                    <div class="auto-restock-control">
+
+                        <div>
+
+                            <strong>
+                                Auto Add Shortages
+                            </strong>
+
+                            <span>
+                                When stock drops below target,
+                                HomeOS automatically adds the shortage
+                                to the shared shopping list.
+                            </span>
+
+                        </div>
+
+                        <label class="homeos-switch">
+
+                            <input
+                                id="autoRestockToggle"
+                                type="checkbox"
+                            >
+
+                            <span></span>
+
+                        </label>
+
+                    </div>
+
+                    <button
+                        class="button button-secondary restock-all-button"
+                        id="addAllShortagesButton"
+                        type="button"
+                    >
+                        Add All Current Shortages
+                    </button>
+
+                    <div
+                        class="shortage-list"
+                        id="shortageList"
+                    ></div>
+
+                </article>
+
+                <!-- SHOPPING LIST -->
+
+                <article class="restock-panel shopping-panel">
+
+                    <div class="restock-panel-head">
+
+                        <div>
+
+                            <span class="ui-kicker">
+                                LIVE SHOPPING LIST
+                            </span>
+
+                            <h3>
+                                What We Need
+                            </h3>
+
+                            <p>
+                                Inventory shortages, Seasonal Home Care
+                                and anything else you add all meet here.
+                            </p>
+
+                        </div>
+
+                        <span
+                            class="restock-count-pill"
+                            id="shoppingCountPill"
+                        >
+                            0 ITEMS
+                        </span>
+
+                    </div>
+
+                    <div class="quick-shopping-add">
+
+                        <input
+                            class="app-input"
+                            id="customShoppingName"
+                            type="text"
+                            placeholder="Add anything else..."
+                        >
+
+                        <input
+                            class="app-input shopping-qty-input"
+                            id="customShoppingQty"
+                            type="number"
+                            min="1"
+                            value="1"
+                            aria-label="Quantity"
+                        >
+
+                        <button
+                            class="button button-primary"
+                            id="addCustomShoppingButton"
+                            type="button"
+                        >
+                            Add
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="shopping-list"
+                        id="shoppingList"
+                    ></div>
+
+                    <div class="shopping-list-actions">
+
+                        <button
+                            class="button button-secondary"
+                            id="copyShoppingListButton"
+                            type="button"
+                        >
+                            Copy List
+                        </button>
+
+                        <button
+                            class="button button-primary"
+                            id="markPurchasedButton"
+                            type="button"
+                            disabled
+                        >
+                            Mark Purchased
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         ADD / EDIT INVENTORY ITEM
+    ========================================================== -->
+
+    <dialog
+        class="app-dialog inventory-dialog"
+        id="inventoryItemDialog"
+    >
+
+        <form
+            method="dialog"
+            id="inventoryItemForm"
+        >
+
+            <input
+                id="inventoryItemId"
+                type="hidden"
+            >
+
+            <div class="app-dialog-header">
+
+                <div>
+
+                    <span class="ui-kicker">
+                        STOCK NETWORK // INVENTORY NODE
+                    </span>
+
+                    <h2 id="inventoryDialogTitle">
+                        Add inventory item
+                    </h2>
+
+                </div>
+
+                <button
+                    class="dialog-close"
+                    type="button"
+                    data-close-dialog="inventoryItemDialog"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div class="app-dialog-body">
+
+                <div class="app-form-grid">
+
+                    <div class="app-field">
+
+                        <label for="inventoryNameInput">
+                            Item name
+                        </label>
+
+                        <input
+                            class="app-input"
+                            id="inventoryNameInput"
+                            type="text"
+                            placeholder="Example: Paper Towels"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="app-field">
+
+                        <label for="inventoryZoneInput">
+                            Storage zone
+                        </label>
+
+                        <select
+                            class="app-select"
+                            id="inventoryZoneInput"
+                        ></select>
+
+                    </div>
+
+                    <div class="app-field">
+
+                        <label for="inventoryCurrentInput">
+                            Current quantity
+                        </label>
+
+                        <input
+                            class="app-input"
+                            id="inventoryCurrentInput"
+                            type="number"
+                            min="0"
+                            value="0"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="app-field">
+
+                        <label for="inventoryTargetInput">
+                            Preferred quantity
+                        </label>
+
+                        <input
+                            class="app-input"
+                            id="inventoryTargetInput"
+                            type="number"
+                            min="1"
+                            value="1"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="app-field">
+
+                        <label for="inventoryUnitInput">
+                            Unit
+                        </label>
+
+                        <input
+                            class="app-input"
+                            id="inventoryUnitInput"
+                            type="text"
+                            placeholder="packs, boxes, bottles..."
+                        >
+
+                    </div>
+
+                    <div class="app-field">
+
+                        <label for="inventoryCategoryInput">
+                            Category
+                        </label>
+
+                        <input
+                            class="app-input"
+                            id="inventoryCategoryInput"
+                            type="text"
+                            placeholder="Food, paper goods, drinks..."
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="app-dialog-footer">
+
+                <button
+                    class="button button-secondary"
+                    type="button"
+                    data-close-dialog="inventoryItemDialog"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="button button-primary"
+                    type="submit"
+                >
+                    Save Item
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+    <footer id="appFooter"></footer>
+
+    <div
+        class="app-toast"
+        id="appToast"
+        aria-live="polite"
+    ></div>
+
+    <script src="assets/js/store.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script src="assets/js/inventory.js"></script>
+
+</body>
+</html>

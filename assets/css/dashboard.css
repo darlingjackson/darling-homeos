@@ -1,0 +1,6603 @@
+/* ================================================================
+   DARLING HOMEOS
+   FUTURISTIC DASHBOARD
+
+   FILE:
+   assets/css/dashboard.css
+
+   THIS IS THE FULL DASHBOARD FILE.
+
+   We are NOT adding another patch at the bottom.
+
+   app.css still owns:
+   - reset
+   - shared forms
+   - shared shell foundation
+   - toast foundation
+   - footer foundation
+
+   dashboard.css owns:
+   - futuristic Dashboard content
+   - light + dark Dashboard page themes
+   - Dashboard cards
+   - mascot guide
+   - Dashboard-only responsive layout
+
+   app.css owns the shared HomeOS shell:
+   - brand
+   - navigation
+   - desktop command rail
+   - responsive shell
+   - theme control
+   - footer
+
+   BIG RULE:
+   FUTURISTIC DOES NOT MEAN HARD TO READ.
+
+   I still want:
+   - glow
+   - glass
+   - grids
+   - color
+   - system labels
+   - holographic details
+
+   But normal information needs to actually be comfortable to read.
+================================================================ */
+
+
+/* ================================================================
+   01 // LIGHT MODE
+
+   Light mode should still look like HomeOS.
+
+   Pearl.
+   Icy glass.
+   Soft cyan.
+   Pink holographic light.
+================================================================ */
+
+body[data-page="dashboard"] {
+
+    /* ------------------------------------------------------------
+       HOMEOS COLORS
+    ------------------------------------------------------------ */
+
+    --neo-pink:
+        #f255ba;
+
+    --neo-pink-bright:
+        #ff76ca;
+
+    --neo-cyan:
+        #20cce5;
+
+    --neo-cyan-bright:
+        #52e7f7;
+
+    --neo-blue:
+        #567cff;
+
+    --neo-violet:
+        #9365ff;
+
+    --neo-mint:
+        #29cfa0;
+
+    --neo-gold:
+        #e9a83d;
+
+    --neo-danger:
+        #ee5876;
+
+
+    /* ------------------------------------------------------------
+       SHARED DASHBOARD COLORS
+    ------------------------------------------------------------ */
+
+    --page-bg:
+        #f2f6ff;
+
+    --surface:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    --surface-soft:
+        rgba(
+            248,
+            250,
+            255,
+            0.96
+        );
+
+    --surface-muted:
+        #e9eff9;
+
+    --text:
+        #18223a;
+
+    --text-soft:
+        #56647c;
+
+    --text-faint:
+        #8490a7;
+
+    --border:
+        rgba(
+            59,
+            89,
+            144,
+            0.13
+        );
+
+    --border-strong:
+        rgba(
+            78,
+            111,
+            174,
+            0.22
+        );
+
+    --header-bg:
+        rgba(
+            247,
+            250,
+            255,
+            0.92
+        );
+
+
+    /* ------------------------------------------------------------
+       DASHBOARD SURFACES
+    ------------------------------------------------------------ */
+
+    --dash-bg:
+        #f2f6ff;
+
+    --dash-panel:
+        linear-gradient(
+            145deg,
+            rgba(
+                255,
+                255,
+                255,
+                0.95
+            ),
+            rgba(
+                245,
+                249,
+                255,
+                0.88
+            )
+        );
+
+    --dash-panel-strong:
+        linear-gradient(
+            145deg,
+            rgba(
+                255,
+                255,
+                255,
+                0.99
+            ),
+            rgba(
+                240,
+                247,
+                255,
+                0.94
+            )
+        );
+
+    --dash-panel-soft:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    --dash-panel-muted:
+        rgba(
+            231,
+            239,
+            251,
+            0.72
+        );
+
+    --dash-line:
+        rgba(
+            79,
+            111,
+            166,
+            0.15
+        );
+
+    --dash-line-strong:
+        rgba(
+            76,
+            141,
+            203,
+            0.26
+        );
+
+    --dash-title:
+        #172139;
+
+    --dash-copy:
+        #53627a;
+
+    --dash-faint:
+        #7e8ca5;
+
+    --dash-grid:
+        rgba(
+            67,
+            108,
+            172,
+            0.055
+        );
+
+    --dash-shadow:
+        0 24px 64px
+        rgba(
+            69,
+            90,
+            132,
+            0.13
+        );
+
+    --dash-glow:
+        0 0 42px
+        rgba(
+            32,
+            204,
+            229,
+            0.075
+        ),
+        0 0 85px
+        rgba(
+            242,
+            85,
+            186,
+            0.045
+        );
+
+
+    --dash-command:
+        radial-gradient(
+            circle at 76% 20%,
+            rgba(
+                242,
+                85,
+                186,
+                0.12
+            ),
+            transparent 31%
+        ),
+        radial-gradient(
+            circle at 49% 92%,
+            rgba(
+                32,
+                204,
+                229,
+                0.12
+            ),
+            transparent 36%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(
+                255,
+                255,
+                255,
+                0.96
+            ),
+            rgba(
+                239,
+                246,
+                255,
+                0.91
+            )
+        );
+
+    --dash-guide:
+        linear-gradient(
+            135deg,
+            rgba(
+                255,
+                238,
+                249,
+                0.94
+            ),
+            rgba(
+                235,
+                250,
+                255,
+                0.93
+            )
+        );
+
+
+    color:
+        var(--text);
+
+    background-color:
+        var(--dash-bg);
+
+}
+
+
+/* ================================================================
+   02 // DARK MODE
+
+   THIS IS THE BIG READABILITY FIX.
+
+   We keep our deep navy HomeOS command center,
+   but the panels, labels and supporting text are brighter.
+
+   No more struggling to read the information.
+================================================================ */
+
+body.dark[data-page="dashboard"] {
+
+    --page-bg:
+        #050816;
+
+    --surface:
+        #0c1329;
+
+    --surface-soft:
+        #111b38;
+
+    --surface-muted:
+        #1b274b;
+
+    --text:
+        #f7f9ff;
+
+    --text-soft:
+        #d2dcef;
+
+    --text-faint:
+        #9aabc8;
+
+    --border:
+        rgba(
+            111,
+            215,
+            255,
+            0.20
+        );
+
+    --border-strong:
+        rgba(
+            162,
+            111,
+            255,
+            0.38
+        );
+
+    --header-bg:
+        rgba(
+            5,
+            8,
+            22,
+            0.96
+        );
+
+
+    --neo-pink:
+        #ff5ec7;
+
+    --neo-pink-bright:
+        #ff8ddd;
+
+    --neo-cyan:
+        #4cf5ff;
+
+    --neo-cyan-bright:
+        #79f7ff;
+
+    --neo-blue:
+        #7b9cff;
+
+    --neo-violet:
+        #b07aff;
+
+    --neo-mint:
+        #55ffd0;
+
+    --neo-gold:
+        #ffd06f;
+
+
+    --dash-bg:
+        #050816;
+
+    --dash-panel:
+        linear-gradient(
+            145deg,
+            rgba(
+                20,
+                31,
+                66,
+                0.95
+            ),
+            rgba(
+                9,
+                14,
+                34,
+                0.97
+            )
+        );
+
+    --dash-panel-strong:
+        linear-gradient(
+            145deg,
+            rgba(
+                24,
+                37,
+                76,
+                0.98
+            ),
+            rgba(
+                10,
+                16,
+                37,
+                0.98
+            )
+        );
+
+    --dash-panel-soft:
+        rgba(
+            25,
+            39,
+            79,
+            0.76
+        );
+
+    --dash-panel-muted:
+        rgba(
+            30,
+            44,
+            85,
+            0.72
+        );
+
+    --dash-line:
+        rgba(
+            109,
+            185,
+            255,
+            0.19
+        );
+
+    --dash-line-strong:
+        rgba(
+            109,
+            206,
+            255,
+            0.30
+        );
+
+    --dash-title:
+        #f8faff;
+
+    --dash-copy:
+        #bdc9df;
+
+    --dash-faint:
+        #91a3c2;
+
+    --dash-grid:
+        rgba(
+            91,
+            138,
+            255,
+            0.055
+        );
+
+    --dash-shadow:
+        0 30px 80px
+        rgba(
+            0,
+            0,
+            0,
+            0.34
+        );
+
+    --dash-glow:
+        0 0 40px
+        rgba(
+            76,
+            245,
+            255,
+            0.09
+        ),
+        0 0 90px
+        rgba(
+            255,
+            94,
+            199,
+            0.055
+        );
+
+
+    --dash-command:
+        radial-gradient(
+            circle at 78% 28%,
+            rgba(
+                255,
+                62,
+                190,
+                0.11
+            ),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(
+                0,
+                214,
+                255,
+                0.10
+            ),
+            transparent 34%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(
+                11,
+                18,
+                46,
+                0.98
+            ),
+            rgba(
+                15,
+                23,
+                55,
+                0.94
+            )
+        );
+
+    --dash-guide:
+        linear-gradient(
+            135deg,
+            rgba(
+                43,
+                24,
+                72,
+                0.90
+            ),
+            rgba(
+                10,
+                39,
+                64,
+                0.88
+            )
+        );
+
+}
+
+
+/* ================================================================
+   03 // FUTURISTIC PAGE BACKGROUND
+================================================================ */
+
+body[data-page="dashboard"] {
+
+    background-image:
+
+        radial-gradient(
+            circle at 84% 0%,
+            rgba(
+                99,
+                101,
+                255,
+                0.10
+            ),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 6% 22%,
+            rgba(
+                242,
+                85,
+                186,
+                0.075
+            ),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            var(--dash-grid)
+            1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            var(--dash-grid)
+            1px,
+            transparent 1px
+        );
+
+    background-size:
+        auto,
+        auto,
+        52px 52px,
+        52px 52px;
+
+}
+
+
+body.dark[data-page="dashboard"] {
+
+    background-image:
+
+        radial-gradient(
+            circle at 82% 0%,
+            rgba(
+                86,
+                70,
+                255,
+                0.20
+            ),
+            transparent 29%
+        ),
+
+        radial-gradient(
+            circle at 8% 18%,
+            rgba(
+                255,
+                61,
+                188,
+                0.12
+            ),
+            transparent 27%
+        ),
+
+        radial-gradient(
+            circle at 58% 68%,
+            rgba(
+                0,
+                226,
+                255,
+                0.07
+            ),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            var(--dash-grid)
+            1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            var(--dash-grid)
+            1px,
+            transparent 1px
+        );
+
+    background-size:
+        auto,
+        auto,
+        auto,
+        52px 52px,
+        52px 52px;
+
+}
+
+
+/* ================================================================
+   04 // SHARED FUTURISTIC PANEL
+================================================================ */
+
+body[data-page="dashboard"]
+.future-panel {
+
+    position:
+        relative;
+
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        clamp(
+            18px,
+            1.6vw,
+            24px
+        );
+
+    background:
+        var(--dash-panel);
+
+    box-shadow:
+        var(--dash-shadow),
+        var(--dash-glow);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+}
+
+
+body[data-page="dashboard"]
+.future-panel::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        26px;
+
+    right:
+        26px;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(
+                242,
+                85,
+                186,
+                0.65
+            ),
+            rgba(
+                32,
+                204,
+                229,
+                0.60
+            ),
+            transparent
+        );
+
+    opacity:
+        0.72;
+
+    pointer-events:
+        none;
+
+}
+
+
+body[data-page="dashboard"]
+.future-panel::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        -80px;
+
+    right:
+        -70px;
+
+    width:
+        170px;
+
+    height:
+        170px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(
+                108,
+                95,
+                255,
+                0.11
+            ),
+            transparent 70%
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ================================================================
+   05 // READABILITY
+
+   Technical labels can still look technical.
+   They just do not need to look microscopic.
+================================================================ */
+
+body[data-page="dashboard"]
+.ui-kicker {
+
+    color:
+        var(--dash-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    letter-spacing:
+        0.09em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+body[data-page="dashboard"]
+h1,
+body[data-page="dashboard"]
+h2,
+body[data-page="dashboard"]
+h3,
+body[data-page="dashboard"]
+strong {
+
+    color:
+        var(--dash-title);
+
+}
+
+
+body[data-page="dashboard"]
+p {
+
+    color:
+        var(--dash-copy);
+
+}
+
+
+/* ================================================================
+   06 // COMMAND DECK
+================================================================ */
+
+body[data-page="dashboard"]
+.command-deck {
+
+    min-height:
+        clamp(
+            450px,
+            33vw,
+            520px
+        );
+
+    padding:
+        clamp(
+            26px,
+            2.7vw,
+            42px
+        );
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(
+            300px,
+            1fr
+        )
+        minmax(
+            250px,
+            0.72fr
+        )
+        minmax(
+            300px,
+            0.95fr
+        );
+
+    gap:
+        clamp(
+            18px,
+            2vw,
+            32px
+        );
+
+    align-items:
+        center;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        clamp(
+            20px,
+            2vw,
+            28px
+        );
+
+    background:
+        var(--dash-command);
+
+    box-shadow:
+        var(--dash-shadow);
+
+    backdrop-filter:
+        blur(22px);
+
+}
+
+
+body[data-page="dashboard"]
+.command-deck::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    pointer-events:
+        none;
+
+    background:
+        linear-gradient(
+            var(--dash-grid)
+            1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            var(--dash-grid)
+            1px,
+            transparent 1px
+        );
+
+    background-size:
+        34px 34px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 95%
+        );
+
+}
+
+
+/* ================================================================
+   07 // WELCOME
+================================================================ */
+
+body[data-page="dashboard"]
+.command-welcome {
+
+    min-width:
+        0;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+}
+
+
+body[data-page="dashboard"]
+.live-system-label {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    color:
+        var(--dash-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.live-system-dot {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--neo-mint);
+
+    box-shadow:
+        0 0 12px
+        var(--neo-mint);
+
+    animation:
+        homeosPulse
+        2.2s
+        ease-in-out
+        infinite;
+
+}
+
+
+body[data-page="dashboard"]
+.command-welcome h1 {
+
+    margin:
+        22px 0 14px;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            46px,
+            4.5vw,
+            74px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        0.99;
+
+    letter-spacing:
+        -0.055em;
+
+}
+
+
+body[data-page="dashboard"]
+.command-welcome h1 span {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--dash-title),
+            var(--neo-pink)
+            46%,
+            var(--neo-cyan)
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-datetime {
+
+    margin:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        14px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.command-subtitle {
+
+    max-width:
+        480px;
+
+    margin:
+        25px 0 0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        15px;
+
+    line-height:
+        1.7;
+
+}
+
+
+body[data-page="dashboard"]
+.command-subtitle strong {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--dash-title);
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-actions {
+
+    margin-top:
+        26px;
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        10px;
+
+}
+
+
+/* ================================================================
+   08 // FUTURISTIC BUTTONS
+================================================================ */
+
+body[data-page="dashboard"]
+.button {
+
+    min-height:
+        47px;
+
+    padding:
+        0 18px;
+
+    border-radius:
+        12px;
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+}
+
+
+body[data-page="dashboard"]
+.button-primary {
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.28
+        );
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f255ba,
+            #9b5eff 53%,
+            #32cfe9
+        );
+
+    box-shadow:
+        0 10px 28px
+        rgba(
+            193,
+            79,
+            221,
+            0.22
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.button-primary:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 14px 34px
+        rgba(
+            193,
+            79,
+            221,
+            0.31
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.button-secondary {
+
+    color:
+        var(--dash-title);
+
+    border:
+        1px solid
+        var(--dash-line-strong);
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+body[data-page="dashboard"]
+.button-secondary:hover {
+
+    border-color:
+        rgba(
+            32,
+            204,
+            229,
+            0.40
+        );
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.08
+        );
+
+}
+
+
+/* ================================================================
+   09 // HOLOGRAPHIC HOME CORE
+================================================================ */
+
+body[data-page="dashboard"]
+.homeos-core-stage {
+
+    min-width:
+        0;
+
+    min-height:
+        370px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+}
+
+
+body[data-page="dashboard"]
+.core-orbit {
+
+    position:
+        absolute;
+
+    top:
+        47%;
+
+    left:
+        50%;
+
+    translate:
+        -50%
+        -50%;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.22
+        );
+
+    border-radius:
+        50%;
+
+    pointer-events:
+        none;
+
+}
+
+
+body[data-page="dashboard"]
+.core-orbit-one {
+
+    width:
+        clamp(
+            230px,
+            20vw,
+            305px
+        );
+
+    aspect-ratio:
+        1;
+
+    animation:
+        homeosOrbit
+        19s
+        linear
+        infinite;
+
+}
+
+
+body[data-page="dashboard"]
+.core-orbit-two {
+
+    width:
+        clamp(
+            190px,
+            17vw,
+            250px
+        );
+
+    aspect-ratio:
+        1;
+
+    border-style:
+        dashed;
+
+    border-color:
+        rgba(
+            242,
+            85,
+            186,
+            0.24
+        );
+
+    animation:
+        homeosOrbitReverse
+        14s
+        linear
+        infinite;
+
+}
+
+
+body[data-page="dashboard"]
+.core-orbit-three {
+
+    width:
+        clamp(
+            155px,
+            14vw,
+            195px
+        );
+
+    aspect-ratio:
+        1;
+
+    border-color:
+        rgba(
+            147,
+            101,
+            255,
+            0.24
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.core-beam {
+
+    width:
+        180px;
+
+    height:
+        260px;
+
+    position:
+        absolute;
+
+    bottom:
+        55px;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(
+                32,
+                204,
+                229,
+                0.14
+            ),
+            transparent 76%
+        );
+
+    clip-path:
+        polygon(
+            35% 0,
+            65% 0,
+            100% 100%,
+            0 100%
+        );
+
+    filter:
+        blur(2px);
+
+}
+
+
+body[data-page="dashboard"]
+.homeos-core-icon-wrap {
+
+    width:
+        clamp(
+            145px,
+            13vw,
+            180px
+        );
+
+    aspect-ratio:
+        1;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        4;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.22
+        );
+
+    border-radius:
+        31px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(
+                32,
+                204,
+                229,
+                0.11
+            ),
+            transparent 66%
+        ),
+        var(--dash-panel-soft);
+
+    box-shadow:
+        inset
+        0 0 36px
+        rgba(
+            32,
+            204,
+            229,
+            0.05
+        ),
+        0 0 42px
+        rgba(
+            32,
+            204,
+            229,
+            0.13
+        ),
+        0 0 75px
+        rgba(
+            242,
+            85,
+            186,
+            0.09
+        );
+
+    animation:
+        homeosFloat
+        4.5s
+        ease-in-out
+        infinite;
+
+}
+
+
+body[data-page="dashboard"]
+.homeos-core-icon {
+
+    width:
+        80%;
+
+    height:
+        80%;
+
+    object-fit:
+        contain;
+
+    filter:
+        drop-shadow(
+            0 0 16px
+            rgba(
+                242,
+                85,
+                186,
+                0.38
+            )
+        )
+        drop-shadow(
+            0 0 22px
+            rgba(
+                32,
+                204,
+                229,
+                0.28
+            )
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.hologram-platform {
+
+    width:
+        clamp(
+            200px,
+            18vw,
+            250px
+        );
+
+    height:
+        62px;
+
+    position:
+        absolute;
+
+    bottom:
+        48px;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.24
+        );
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(
+                32,
+                204,
+                229,
+                0.15
+            ),
+            transparent 68%
+        );
+
+    box-shadow:
+        inset
+        0 0 25px
+        rgba(
+            32,
+            204,
+            229,
+            0.09
+        ),
+        0 0 28px
+        rgba(
+            32,
+            204,
+            229,
+            0.09
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.hologram-platform::before,
+body[data-page="dashboard"]
+.hologram-platform::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.16
+        );
+
+    border-radius:
+        50%;
+
+}
+
+
+body[data-page="dashboard"]
+.hologram-platform::before {
+
+    width:
+        76%;
+
+    height:
+        65%;
+
+}
+
+
+body[data-page="dashboard"]
+.hologram-platform::after {
+
+    width:
+        50%;
+
+    height:
+        38%;
+
+}
+
+
+body[data-page="dashboard"]
+.core-status {
+
+    position:
+        absolute;
+
+    bottom:
+        4px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        var(--neo-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.core-status-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--neo-mint);
+
+    box-shadow:
+        0 0 10px
+        var(--neo-mint);
+
+}
+
+
+/* ================================================================
+   10 // MASCOT GUIDE
+================================================================ */
+
+body[data-page="dashboard"]
+.homeos-guide {
+
+    min-width:
+        0;
+
+    min-height:
+        400px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        flex-end;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+}
+
+
+body[data-page="dashboard"]
+.mascot-stage {
+
+    min-height:
+        245px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+}
+
+
+body[data-page="dashboard"]
+.mascot-aura {
+
+    width:
+        min(
+            270px,
+            90%
+        );
+
+    height:
+        190px;
+
+    position:
+        absolute;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(
+                242,
+                85,
+                186,
+                0.19
+            ),
+            rgba(
+                32,
+                204,
+                229,
+                0.12
+            )
+            43%,
+            transparent 70%
+        );
+
+    filter:
+        blur(10px);
+
+}
+
+
+body[data-page="dashboard"]
+.homeos-mascot {
+
+    width:
+        min(
+            100%,
+            300px
+        );
+
+    max-height:
+        285px;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    object-fit:
+        contain;
+
+    filter:
+        drop-shadow(
+            0 20px 27px
+            rgba(
+                54,
+                65,
+                100,
+                0.20
+            )
+        );
+
+    animation:
+        mascotFloat
+        4.8s
+        ease-in-out
+        infinite;
+
+}
+
+
+body.dark[data-page="dashboard"]
+.homeos-mascot {
+
+    filter:
+        drop-shadow(
+            0 22px 30px
+            rgba(
+                0,
+                0,
+                0,
+                0.42
+            )
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.guide-message {
+
+    padding:
+        19px;
+
+    position:
+        relative;
+
+    border:
+        1px solid
+        rgba(
+            242,
+            85,
+            186,
+            0.23
+        );
+
+    border-radius:
+        17px;
+
+    background:
+        var(--dash-guide);
+
+    box-shadow:
+        0 13px 34px
+        rgba(
+            90,
+            91,
+            138,
+            0.08
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.guide-message::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        -7px;
+
+    right:
+        50px;
+
+    width:
+        13px;
+
+    height:
+        13px;
+
+    transform:
+        rotate(
+            45deg
+        );
+
+    border-left:
+        1px solid
+        rgba(
+            242,
+            85,
+            186,
+            0.20
+        );
+
+    border-top:
+        1px solid
+        rgba(
+            242,
+            85,
+            186,
+            0.20
+        );
+
+    background:
+        inherit;
+
+}
+
+
+body[data-page="dashboard"]
+.guide-message-top {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+}
+
+
+body[data-page="dashboard"]
+.guide-signal {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    color:
+        var(--neo-pink);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.guide-signal span {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--neo-pink);
+
+    box-shadow:
+        0 0 10px
+        var(--neo-pink);
+
+}
+
+
+body[data-page="dashboard"]
+.guide-live {
+
+    color:
+        var(--neo-mint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.guide-message h2 {
+
+    margin:
+        12px 0 6px;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            20px,
+            1.8vw,
+            26px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+}
+
+
+body[data-page="dashboard"]
+.guide-message p {
+
+    margin:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.62;
+
+}
+
+
+body[data-page="dashboard"]
+.guide-action {
+
+    min-height:
+        39px;
+
+    margin-top:
+        13px;
+
+    padding:
+        0 12px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.25
+        );
+
+    border-radius:
+        9px;
+
+    color:
+        var(--neo-cyan);
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.06
+        );
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* ================================================================
+   11 // HOME PULSE + TODAY
+================================================================ */
+
+body[data-page="dashboard"]
+.home-command-grid {
+
+    margin-top:
+        18px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(
+            0,
+            1.35fr
+        )
+        minmax(
+            330px,
+            0.65fr
+        );
+
+    gap:
+        18px;
+
+}
+
+
+/* ================================================================
+   12 // HOME PULSE
+================================================================ */
+
+body[data-page="dashboard"]
+.system-health-card {
+
+    min-height:
+        420px;
+
+    padding:
+        clamp(
+            24px,
+            2.5vw,
+            34px
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-heading {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-heading h2 {
+
+    margin:
+        5px 0 0;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            25px,
+            2vw,
+            30px
+        );
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.live-pill {
+
+    min-height:
+        28px;
+
+    padding:
+        0 10px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    border:
+        1px solid
+        rgba(
+            41,
+            207,
+            160,
+            0.20
+        );
+
+    border-radius:
+        999px;
+
+    color:
+        var(--neo-mint);
+
+    background:
+        rgba(
+            41,
+            207,
+            160,
+            0.06
+        );
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.09em;
+
+}
+
+
+body[data-page="dashboard"]
+.live-pill span {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--neo-mint);
+
+    box-shadow:
+        0 0 9px
+        var(--neo-mint);
+
+}
+
+
+body[data-page="dashboard"]
+.pulse-layout {
+
+    min-height:
+        315px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(
+            260px,
+            0.82fr
+        )
+        minmax(
+            260px,
+            1.18fr
+        );
+
+    gap:
+        22px;
+
+    align-items:
+        center;
+
+}
+
+
+body[data-page="dashboard"]
+.home-pulse-wrap {
+
+    min-height:
+        290px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+}
+
+
+body[data-page="dashboard"]
+.pulse-orbit {
+
+    position:
+        absolute;
+
+    border:
+        1px solid
+        rgba(
+            147,
+            101,
+            255,
+            0.20
+        );
+
+    border-radius:
+        50%;
+
+}
+
+
+body[data-page="dashboard"]
+.orbit-one {
+
+    width:
+        clamp(
+            245px,
+            20vw,
+            290px
+        );
+
+    aspect-ratio:
+        1;
+
+    animation:
+        homeosOrbit
+        21s
+        linear
+        infinite;
+
+}
+
+
+body[data-page="dashboard"]
+.orbit-two {
+
+    width:
+        clamp(
+            205px,
+            17vw,
+            242px
+        );
+
+    aspect-ratio:
+        1;
+
+    border-style:
+        dashed;
+
+    border-color:
+        rgba(
+            242,
+            85,
+            186,
+            0.22
+        );
+
+    animation:
+        homeosOrbitReverse
+        16s
+        linear
+        infinite;
+
+}
+
+
+body[data-page="dashboard"]
+.home-pulse-ring {
+
+    width:
+        clamp(
+            188px,
+            15vw,
+            218px
+        );
+
+    aspect-ratio:
+        1;
+
+    padding:
+        8px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    border-radius:
+        50%;
+
+    box-shadow:
+        0 0 35px
+        rgba(
+            242,
+            85,
+            186,
+            0.16
+        ),
+        0 0 60px
+        rgba(
+            32,
+            204,
+            229,
+            0.09
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.home-pulse-center {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        50%;
+
+    background:
+        var(--dash-panel-strong);
+
+    box-shadow:
+        inset
+        0 0 38px
+        rgba(
+            32,
+            204,
+            229,
+            0.05
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.home-pulse-center strong {
+
+    margin:
+        7px 0 3px;
+
+    color:
+        var(--neo-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            43px,
+            4vw,
+            53px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+}
+
+
+body[data-page="dashboard"]
+.home-pulse-status {
+
+    color:
+        var(--neo-pink);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.pulse-intelligence {
+
+    min-width:
+        0;
+
+    max-width:
+        490px;
+
+}
+
+
+body[data-page="dashboard"]
+.pulse-intelligence-label {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.pulse-intelligence h3 {
+
+    margin:
+        12px 0 8px;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            22px,
+            2vw,
+            31px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.17;
+
+}
+
+
+body[data-page="dashboard"]
+.pulse-intelligence p {
+
+    margin:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.68;
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-footer {
+
+    margin-top:
+        25px;
+
+    padding-top:
+        18px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        9px;
+
+    border-top:
+        1px solid
+        var(--dash-line);
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-footer div {
+
+    min-width:
+        0;
+
+    min-height:
+        67px;
+
+    padding:
+        12px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        5px;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        11px;
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-footer span {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        11px;
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-footer strong {
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        13px;
+
+}
+
+
+body[data-page="dashboard"]
+.system-health-footer
+.healthy-signal {
+
+    color:
+        var(--neo-mint);
+
+}
+
+
+/* ================================================================
+   13 // TODAY'S FOCUS
+================================================================ */
+
+body[data-page="dashboard"]
+.focus-card {
+
+    min-height:
+        420px;
+
+    padding:
+        clamp(
+            24px,
+            2.4vw,
+            30px
+        );
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-card-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+}
+
+
+body[data-page="dashboard"]
+.day-chip {
+
+    min-width:
+        42px;
+
+    min-height:
+        28px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.22
+        );
+
+    border-radius:
+        8px;
+
+    color:
+        var(--neo-cyan);
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.06
+        );
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-card > h2 {
+
+    margin:
+        19px 0 12px;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        29px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-color-line {
+
+    width:
+        100%;
+
+    height:
+        2px;
+
+    margin-bottom:
+        21px;
+
+    border-radius:
+        999px;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-suggestion-label {
+
+    color:
+        var(--neo-pink);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.10em;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-card > h3 {
+
+    margin:
+        7px 0 8px;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            22px,
+            1.9vw,
+            28px
+        );
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-card > p {
+
+    margin:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.63;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-meta {
+
+    margin-top:
+        auto;
+
+    padding-top:
+        22px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        7px;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-meta div {
+
+    min-width:
+        0;
+
+    min-height:
+        68px;
+
+    padding:
+        10px;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+body[data-page="dashboard"]
+.focus-meta span {
+
+    display:
+        block;
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-meta strong {
+
+    display:
+        block;
+
+    margin-top:
+        7px;
+
+    overflow-wrap:
+        anywhere;
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        12px;
+
+}
+
+
+body[data-page="dashboard"]
+.focus-actions {
+
+    margin-top:
+        12px;
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+}
+
+
+/* ================================================================
+   14 // HOME INTELLIGENCE
+================================================================ */
+
+body[data-page="dashboard"]
+.home-intelligence-section {
+
+    margin-top:
+        clamp(
+            36px,
+            4vw,
+            48px
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.section-heading {
+
+    margin-bottom:
+        18px;
+
+    display:
+        flex;
+
+    align-items:
+        flex-end;
+
+    justify-content:
+        space-between;
+
+    gap:
+        30px;
+
+}
+
+
+body[data-page="dashboard"]
+.section-heading h2 {
+
+    margin:
+        4px 0 0;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            33px,
+            3vw,
+            46px
+        );
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        -0.04em;
+
+}
+
+
+body[data-page="dashboard"]
+.section-heading > p {
+
+    max-width:
+        450px;
+
+    margin:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        14px;
+
+    text-align:
+        right;
+
+}
+
+
+/* ================================================================
+   15 // SYSTEM GRID
+================================================================ */
+
+body[data-page="dashboard"]
+.future-system-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            12,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        17px;
+
+}
+
+
+body[data-page="dashboard"]
+.intelligence-card,
+body[data-page="dashboard"]
+.zone-network-card,
+body[data-page="dashboard"]
+.quick-command-panel {
+
+    min-width:
+        0;
+
+    padding:
+        clamp(
+            21px,
+            2vw,
+            27px
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-system {
+
+    grid-column:
+        span 7;
+
+}
+
+
+body[data-page="dashboard"]
+.laundry-system {
+
+    grid-column:
+        span 5;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-card {
+
+    grid-column:
+        span 7;
+
+}
+
+
+body[data-page="dashboard"]
+.inventory-system {
+
+    grid-column:
+        span 5;
+
+}
+
+
+body[data-page="dashboard"]
+.seasonal-system {
+
+    grid-column:
+        span 5;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-panel {
+
+    grid-column:
+        span 7;
+
+}
+
+
+/* ================================================================
+   16 // SYSTEM CARD HEADERS
+================================================================ */
+
+body[data-page="dashboard"]
+.intelligence-card-top {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+}
+
+
+body[data-page="dashboard"]
+.intelligence-title-group {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+}
+
+
+body[data-page="dashboard"]
+.system-icon {
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    flex:
+        0 0 auto;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        currentColor;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--dash-panel-soft);
+
+    font-size:
+        20px;
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-icon {
+
+    color:
+        var(--neo-blue);
+
+}
+
+
+body[data-page="dashboard"]
+.laundry-icon {
+
+    color:
+        var(--neo-cyan);
+
+}
+
+
+body[data-page="dashboard"]
+.inventory-icon {
+
+    color:
+        var(--neo-pink);
+
+}
+
+
+body[data-page="dashboard"]
+.seasonal-icon {
+
+    color:
+        var(--neo-gold);
+
+}
+
+
+body[data-page="dashboard"]
+.intelligence-title-group h3 {
+
+    margin:
+        4px 0 0;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            18px,
+            1.6vw,
+            21px
+        );
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.system-score {
+
+    flex:
+        0 0 auto;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            22px,
+            2vw,
+            27px
+        );
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-score {
+
+    color:
+        var(--neo-blue);
+
+}
+
+
+body[data-page="dashboard"]
+.inventory-score {
+
+    color:
+        var(--neo-pink);
+
+}
+
+
+body[data-page="dashboard"]
+.seasonal-score {
+
+    color:
+        var(--neo-gold);
+
+}
+
+
+body[data-page="dashboard"]
+.system-count-pill {
+
+    min-height:
+        27px;
+
+    padding:
+        0 9px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.19
+        );
+
+    border-radius:
+        999px;
+
+    color:
+        var(--neo-cyan);
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.06
+        );
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.07em;
+
+}
+
+
+body[data-page="dashboard"]
+.system-description {
+
+    margin:
+        17px 0 0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.62;
+
+}
+
+
+/* ================================================================
+   17 // DAILY RHYTHM
+================================================================ */
+
+body[data-page="dashboard"]
+.rhythm-selector {
+
+    margin-top:
+        20px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        9px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift {
+
+    min-width:
+        0;
+
+    min-height:
+        98px;
+
+    padding:
+        13px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    grid-template-rows:
+        auto
+        auto;
+
+    gap:
+        6px 9px;
+
+    align-items:
+        center;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        13px;
+
+    color:
+        var(--dash-copy);
+
+    background:
+        var(--dash-panel-soft);
+
+    text-align:
+        left;
+
+    transition:
+        0.20s ease;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift:hover {
+
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(
+            32,
+            204,
+            229,
+            0.30
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift.is-active {
+
+    border-color:
+        rgba(
+            32,
+            204,
+            229,
+            0.34
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(
+                86,
+                124,
+                255,
+                0.13
+            ),
+            rgba(
+                32,
+                204,
+                229,
+                0.08
+            )
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift__number {
+
+    width:
+        31px;
+
+    height:
+        31px;
+
+    grid-row:
+        1 / 3;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(
+            86,
+            124,
+            255,
+            0.25
+        );
+
+    border-radius:
+        8px;
+
+    color:
+        var(--neo-blue);
+
+    background:
+        rgba(
+            86,
+            124,
+            255,
+            0.07
+        );
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift__copy {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift__copy strong {
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        13px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift__copy small {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-shift__percent {
+
+    color:
+        var(--neo-cyan);
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-mini-track {
+
+    height:
+        4px;
+
+    grid-column:
+        2 / 4;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--surface-muted);
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-mini-track span {
+
+    display:
+        block;
+
+    height:
+        100%;
+
+    border-radius:
+        inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--neo-blue),
+            var(--neo-cyan)
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-task-grid {
+
+    margin-top:
+        12px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        7px;
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-task {
+
+    min-width:
+        0;
+
+    min-height:
+        44px;
+
+    padding:
+        9px 10px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-task input {
+
+    accent-color:
+        var(--neo-cyan);
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-task label {
+
+    min-width:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.35;
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-task.done {
+
+    opacity:
+        0.60;
+
+}
+
+
+body[data-page="dashboard"]
+.rhythm-task.done label {
+
+    text-decoration:
+        line-through;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-footer {
+
+    margin-top:
+        14px;
+
+    padding-top:
+        13px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        14px;
+
+    border-top:
+        1px solid
+        var(--dash-line);
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-footer > span {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-rhythm-open {
+
+    min-height:
+        35px;
+
+    padding:
+        0 10px;
+
+    flex:
+        0 0 auto;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.20
+        );
+
+    border-radius:
+        8px;
+
+    color:
+        var(--neo-cyan);
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.05
+        );
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* ================================================================
+   18 // LAUNDRY CARD
+================================================================ */
+
+body[data-page="dashboard"]
+.laundry-flow-steps {
+
+    margin-top:
+        20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+}
+
+
+body[data-page="dashboard"]
+.laundry-step {
+
+    flex:
+        1 1 0;
+
+    min-width:
+        0;
+
+    min-height:
+        65px;
+
+    padding:
+        9px 6px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        4px;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.16
+        );
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.045
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.laundry-step span {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.laundry-step strong {
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        11px;
+
+}
+
+
+body[data-page="dashboard"]
+.flow-arrow {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        17px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-load-list {
+
+    margin-top:
+        13px;
+
+    display:
+        grid;
+
+    gap:
+        6px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-load-row {
+
+    min-width:
+        0;
+
+    min-height:
+        48px;
+
+    padding:
+        9px 10px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        minmax(
+            0,
+            1fr
+        )
+        auto;
+
+    gap:
+        9px;
+
+    align-items:
+        center;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+body[data-page="dashboard"]
+.load-state-dot {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--neo-cyan);
+
+    box-shadow:
+        0 0 8px
+        currentColor;
+
+}
+
+
+body[data-page="dashboard"]
+.load-state-dot.dry {
+
+    background:
+        var(--neo-blue);
+
+}
+
+
+body[data-page="dashboard"]
+.load-state-dot.fold {
+
+    background:
+        var(--neo-violet);
+
+}
+
+
+body[data-page="dashboard"]
+.load-state-dot.put-away {
+
+    background:
+        var(--neo-pink);
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-load-name {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-load-name strong {
+
+    overflow:
+        hidden;
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        12px;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-load-name span {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-load-status {
+
+    color:
+        var(--neo-cyan);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* ================================================================
+   19 // OPEN SYSTEM LINK
+================================================================ */
+
+body[data-page="dashboard"]
+.system-open-link {
+
+    min-height:
+        38px;
+
+    margin-top:
+        14px;
+
+    padding:
+        0 11px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.18
+        );
+
+    border-radius:
+        8px;
+
+    color:
+        var(--neo-cyan);
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.05
+        );
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+}
+
+
+body[data-page="dashboard"]
+.system-open-link:hover {
+
+    border-color:
+        rgba(
+            32,
+            204,
+            229,
+            0.32
+        );
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.09
+        );
+
+}
+
+
+/* ================================================================
+   20 // HOME MAP NETWORK
+================================================================ */
+
+body[data-page="dashboard"]
+.zone-network-card {
+
+    min-height:
+        455px;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-header {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-header h2 {
+
+    margin:
+        5px 0 6px;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            23px,
+            2vw,
+            27px
+        );
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-header p {
+
+    max-width:
+        540px;
+
+    margin:
+        0;
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+
+}
+
+
+body[data-page="dashboard"]
+.small-button {
+
+    min-height:
+        37px;
+
+    padding:
+        0 11px;
+
+    flex:
+        0 0 auto;
+
+    border:
+        1px solid
+        rgba(
+            32,
+            204,
+            229,
+            0.20
+        );
+
+    border-radius:
+        8px;
+
+    color:
+        var(--neo-cyan);
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.05
+        );
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-grid {
+
+    margin-top:
+        20px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        8px;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-item {
+
+    min-width:
+        0;
+
+    min-height:
+        108px;
+
+    padding:
+        12px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--zone-border);
+
+    border-radius:
+        12px;
+
+    color:
+        var(--dash-copy);
+
+    background:
+        var(--dash-panel-soft);
+
+    text-align:
+        left;
+
+    transition:
+        0.20s ease;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-item:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--zone-color);
+
+    box-shadow:
+        0 0 22px
+        color-mix(
+            in srgb,
+            var(--zone-color)
+            13%,
+            transparent
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-item.selected {
+
+    border-color:
+        var(--zone-color);
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--zone-color)
+                10%,
+                var(--dash-panel-soft)
+            ),
+            var(--dash-panel-soft)
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.zone-item-top {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        8px;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-symbol {
+
+    width:
+        29px;
+
+    height:
+        29px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--zone-color)
+            48%,
+            transparent
+        );
+
+    border-radius:
+        7px;
+
+    color:
+        var(--zone-color);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-code {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-network-item h3 {
+
+    margin:
+        9px 0 8px;
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-item-state {
+
+    margin-top:
+        auto;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        8px;
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-item-state strong {
+
+    color:
+        var(--zone-color);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.zone-item-track {
+
+    height:
+        3px;
+
+    margin-top:
+        6px;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--surface-muted);
+
+}
+
+
+body[data-page="dashboard"]
+.zone-item-track span {
+
+    display:
+        block;
+
+    height:
+        100%;
+
+    border-radius:
+        inherit;
+
+    background:
+        var(--zone-color);
+
+    box-shadow:
+        0 0 8px
+        color-mix(
+            in srgb,
+            var(--zone-color)
+            50%,
+            transparent
+        );
+
+}
+
+
+/* ================================================================
+   21 // INVENTORY
+================================================================ */
+
+body[data-page="dashboard"]
+.dashboard-inventory-list {
+
+    margin-top:
+        18px;
+
+    display:
+        grid;
+
+    gap:
+        6px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-inventory-row {
+
+    min-width:
+        0;
+
+    min-height:
+        52px;
+
+    padding:
+        9px 10px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        11px;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-inventory-name {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-inventory-name strong {
+
+    overflow:
+        hidden;
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        12px;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-inventory-name span {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.dashboard-inventory-needed {
+
+    flex:
+        0 0 auto;
+
+    color:
+        var(--neo-pink);
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* ================================================================
+   22 // SEASONAL
+================================================================ */
+
+body[data-page="dashboard"]
+.season-selector {
+
+    margin-top:
+        19px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        7px;
+
+}
+
+
+body[data-page="dashboard"]
+.season-selector button {
+
+    min-height:
+        48px;
+
+    padding:
+        0 11px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    border:
+        1px solid
+        rgba(
+            233,
+            168,
+            61,
+            0.16
+        );
+
+    border-radius:
+        9px;
+
+    color:
+        var(--dash-copy);
+
+    background:
+        var(--dash-panel-soft);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+}
+
+
+body[data-page="dashboard"]
+.season-selector button span {
+
+    color:
+        var(--neo-gold);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.season-selector button:hover,
+body[data-page="dashboard"]
+.season-selector button.active {
+
+    color:
+        var(--dash-title);
+
+    border-color:
+        rgba(
+            233,
+            168,
+            61,
+            0.36
+        );
+
+    background:
+        rgba(
+            233,
+            168,
+            61,
+            0.08
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.season-rule {
+
+    margin-top:
+        15px;
+
+    padding:
+        11px;
+
+    border:
+        1px solid
+        rgba(
+            233,
+            168,
+            61,
+            0.15
+        );
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(
+            233,
+            168,
+            61,
+            0.05
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.season-rule > span {
+
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+body[data-page="dashboard"]
+.season-rule strong {
+
+    color:
+        var(--dash-copy);
+
+    font-size:
+        10px;
+
+}
+
+
+body[data-page="dashboard"]
+.season-rule i {
+
+    margin:
+        0 6px;
+
+    color:
+        var(--neo-violet);
+
+    font-style:
+        normal;
+
+}
+
+
+/* ================================================================
+   23 // QUICK COMMANDS
+================================================================ */
+
+body[data-page="dashboard"]
+.quick-command-panel {
+
+    min-height:
+        320px;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-heading {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-heading h2 {
+
+    margin:
+        5px 0 0;
+
+    color:
+        var(--dash-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        26px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.command-ready-pill {
+
+    min-height:
+        26px;
+
+    padding:
+        0 9px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(
+            41,
+            207,
+            160,
+            0.18
+        );
+
+    border-radius:
+        999px;
+
+    color:
+        var(--neo-mint);
+
+    background:
+        rgba(
+            41,
+            207,
+            160,
+            0.05
+        );
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-grid {
+
+    margin-top:
+        21px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        9px;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-grid a,
+body[data-page="dashboard"]
+.quick-command-grid button {
+
+    min-width:
+        0;
+
+    min-height:
+        100px;
+
+    padding:
+        13px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        4px;
+
+    border:
+        1px solid
+        var(--dash-line);
+
+    border-radius:
+        12px;
+
+    color:
+        var(--dash-copy);
+
+    background:
+        var(--dash-panel-soft);
+
+    text-align:
+        center;
+
+    transition:
+        0.20s ease;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-grid a:hover,
+body[data-page="dashboard"]
+.quick-command-grid button:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(
+            32,
+            204,
+            229,
+            0.30
+        );
+
+    background:
+        rgba(
+            32,
+            204,
+            229,
+            0.065
+        );
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-grid a > span,
+body[data-page="dashboard"]
+.quick-command-grid button > span {
+
+    margin-bottom:
+        4px;
+
+    color:
+        var(--neo-cyan);
+
+    font-size:
+        22px;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-grid strong {
+
+    color:
+        var(--dash-title);
+
+    font-size:
+        12px;
+
+}
+
+
+body[data-page="dashboard"]
+.quick-command-grid small {
+
+    color:
+        var(--dash-faint);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+/* ================================================================
+   24 // EMPTY STATES
+================================================================ */
+
+body[data-page="dashboard"]
+.empty-state {
+
+    border-color:
+        var(--dash-line);
+
+    color:
+        var(--dash-copy);
+
+    background:
+        var(--dash-panel-soft);
+
+}
+
+
+/* ================================================================
+   25 // DASHBOARD TOAST
+================================================================ */
+
+body[data-page="dashboard"]
+.app-toast {
+
+    border-color:
+        var(--dash-line-strong);
+
+    color:
+        var(--dash-title);
+
+    background:
+        var(--surface);
+
+}
+
+
+/* ================================================================
+   26 // COMPACT DESKTOP
+   1100PX - 1279PX
+================================================================ */
+
+@media
+(
+    min-width:
+    1100px
+)
+and
+(
+    max-width:
+    1279px
+) {
+
+    body[data-page="dashboard"]
+    .command-deck {
+
+        grid-template-columns:
+            minmax(
+                270px,
+                1fr
+            )
+            minmax(
+                210px,
+                0.65fr
+            )
+            minmax(
+                275px,
+                0.90fr
+            );
+
+        padding:
+            28px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .command-welcome h1 {
+
+        font-size:
+            clamp(
+                48px,
+                5vw,
+                62px
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-core-stage {
+
+        min-height:
+            340px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-mascot {
+
+        max-height:
+            245px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .mascot-stage {
+
+        min-height:
+            220px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .home-command-grid {
+
+        grid-template-columns:
+            minmax(
+                0,
+                1.25fr
+            )
+            minmax(
+                320px,
+                0.75fr
+            );
+
+    }
+
+}
+
+
+/* ================================================================
+   27 // TABLET DASHBOARD LAYOUT
+   1099PX AND DOWN
+
+   Shared navigation behavior now comes from app.css.
+   This breakpoint only reshapes Dashboard content.
+================================================================ */
+
+@media (max-width: 1099px) {
+
+    body[data-page="dashboard"]
+    .command-deck {
+
+        grid-template-columns:
+            minmax(
+                0,
+                1fr
+            )
+            minmax(
+                260px,
+                0.72fr
+            );
+
+        min-height:
+            auto;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-guide {
+
+        grid-column:
+            1 / -1;
+
+        min-height:
+            auto;
+
+        display:
+            grid;
+
+        grid-template-columns:
+            minmax(
+                220px,
+                280px
+            )
+            minmax(
+                0,
+                1fr
+            );
+
+        align-items:
+            center;
+
+        gap:
+            18px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .mascot-stage {
+
+        min-height:
+            220px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-mascot {
+
+        max-height:
+            235px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .guide-message::before {
+
+        top:
+            50%;
+
+        left:
+            -7px;
+
+        right:
+            auto;
+
+        transform:
+            translateY(
+                -50%
+            )
+            rotate(
+                -45deg
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .home-command-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .future-system-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .rhythm-system,
+    body[data-page="dashboard"]
+    .zone-network-card {
+
+        grid-column:
+            1 / -1;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .laundry-system,
+    body[data-page="dashboard"]
+    .inventory-system,
+    body[data-page="dashboard"]
+    .seasonal-system,
+    body[data-page="dashboard"]
+    .quick-command-panel {
+
+        grid-column:
+            span 1;
+
+    }
+
+}
+
+
+/* ================================================================
+   28 // SMALL TABLET
+   899PX AND DOWN
+================================================================ */
+
+@media (max-width: 899px) {
+
+    body[data-page="dashboard"]
+    .command-deck {
+
+        grid-template-columns:
+            1fr;
+
+        padding:
+            27px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .command-welcome {
+
+        max-width:
+            650px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-core-stage {
+
+        min-height:
+            325px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-guide {
+
+        grid-column:
+            auto;
+
+        grid-template-columns:
+            minmax(
+                200px,
+                250px
+            )
+            minmax(
+                0,
+                1fr
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .pulse-layout {
+
+        grid-template-columns:
+            minmax(
+                240px,
+                0.9fr
+            )
+            minmax(
+                0,
+                1.1fr
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .zone-network-grid {
+
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+}
+
+
+/* ================================================================
+   29 // MOBILE TABLET
+   760PX AND DOWN
+================================================================ */
+
+@media (max-width: 760px) {
+
+    body[data-page="dashboard"]
+    .command-deck {
+
+        padding:
+            24px 20px;
+
+        border-radius:
+            20px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .command-welcome h1 {
+
+        font-size:
+            clamp(
+                43px,
+                11vw,
+                62px
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .dashboard-actions {
+
+        width:
+            100%;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-core-stage {
+
+        min-height:
+            300px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-guide {
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+        gap:
+            8px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .mascot-stage {
+
+        min-height:
+            225px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .guide-message::before {
+
+        top:
+            -7px;
+
+        left:
+            auto;
+
+        right:
+            50px;
+
+        transform:
+            rotate(
+                45deg
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .pulse-layout {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .home-pulse-wrap {
+
+        min-height:
+            270px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .pulse-intelligence {
+
+        max-width:
+            none;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .focus-meta {
+
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .section-heading {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            8px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .section-heading > p {
+
+        max-width:
+            none;
+
+        text-align:
+            left;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .future-system-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .rhythm-system,
+    body[data-page="dashboard"]
+    .laundry-system,
+    body[data-page="dashboard"]
+    .zone-network-card,
+    body[data-page="dashboard"]
+    .inventory-system,
+    body[data-page="dashboard"]
+    .seasonal-system,
+    body[data-page="dashboard"]
+    .quick-command-panel {
+
+        grid-column:
+            auto;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .rhythm-selector {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .zone-network-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .quick-command-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+}
+
+
+/* ================================================================
+   30 // PHONE
+   560PX AND DOWN
+
+   This becomes one clean vertical HomeOS feed.
+================================================================ */
+
+@media (max-width: 560px) {
+
+    body[data-page="dashboard"]
+    .command-deck {
+
+        padding:
+            22px 17px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .live-system-label {
+
+        font-size:
+            10px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .command-welcome h1 {
+
+        margin-top:
+            18px;
+
+        font-size:
+            clamp(
+                41px,
+                13vw,
+                57px
+            );
+
+    }
+
+
+    body[data-page="dashboard"]
+    .dashboard-datetime {
+
+        font-size:
+            13px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .command-subtitle {
+
+        margin-top:
+            20px;
+
+        font-size:
+            14px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .dashboard-actions,
+    body[data-page="dashboard"]
+    .focus-actions {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .dashboard-actions .button,
+    body[data-page="dashboard"]
+    .focus-actions .button {
+
+        width:
+            100%;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-core-stage {
+
+        min-height:
+            285px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .core-orbit-one {
+
+        width:
+            235px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .core-orbit-two {
+
+        width:
+            195px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-core-icon-wrap {
+
+        width:
+            145px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .hologram-platform {
+
+        width:
+            205px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .homeos-mascot {
+
+        max-height:
+            225px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .guide-message {
+
+        padding:
+            17px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .system-health-card,
+    body[data-page="dashboard"]
+    .focus-card,
+    body[data-page="dashboard"]
+    .intelligence-card,
+    body[data-page="dashboard"]
+    .zone-network-card,
+    body[data-page="dashboard"]
+    .quick-command-panel {
+
+        padding:
+            19px;
+
+        border-radius:
+            17px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .system-health-heading h2,
+    body[data-page="dashboard"]
+    .focus-card > h2 {
+
+        font-size:
+            25px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .system-health-footer {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .focus-meta {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .rhythm-selector {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .rhythm-task-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .dashboard-rhythm-footer {
+
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .dashboard-rhythm-open {
+
+        width:
+            100%;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .laundry-flow-steps {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        gap:
+            7px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .flow-arrow {
+
+        display:
+            none;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .zone-network-header {
+
+        flex-direction:
+            column;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .zone-network-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .quick-command-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .section-heading h2 {
+
+        font-size:
+            34px;
+
+    }
+
+
+}
+
+
+/* ================================================================
+   31 // VERY SMALL PHONE
+================================================================ */
+
+@media (max-width: 390px) {
+
+    body[data-page="dashboard"]
+    .command-deck {
+
+        padding-left:
+            15px;
+
+        padding-right:
+            15px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .command-welcome h1 {
+
+        font-size:
+            39px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .guide-message h2 {
+
+        font-size:
+            19px;
+
+    }
+
+
+    body[data-page="dashboard"]
+    .system-health-card,
+    body[data-page="dashboard"]
+    .focus-card,
+    body[data-page="dashboard"]
+    .intelligence-card,
+    body[data-page="dashboard"]
+    .zone-network-card,
+    body[data-page="dashboard"]
+    .quick-command-panel {
+
+        padding:
+            16px;
+
+    }
+
+}
+
+
+/* ================================================================
+   32 // POLISHED THEME TRANSITION
+================================================================ */
+
+body[data-page="dashboard"],
+body[data-page="dashboard"]
+.command-deck,
+body[data-page="dashboard"]
+.future-panel,
+body[data-page="dashboard"]
+.guide-message,
+body[data-page="dashboard"]
+.home-pulse-center,
+body[data-page="dashboard"]
+.dashboard-rhythm-shift,
+body[data-page="dashboard"]
+.rhythm-task,
+body[data-page="dashboard"]
+.dashboard-load-row,
+body[data-page="dashboard"]
+.dashboard-inventory-row,
+body[data-page="dashboard"]
+.zone-network-item,
+body[data-page="dashboard"]
+.quick-command-grid a,
+body[data-page="dashboard"]
+.quick-command-grid button {
+
+    transition:
+        color
+        0.26s ease,
+        background
+        0.26s ease,
+        background-color
+        0.26s ease,
+        border-color
+        0.26s ease,
+        box-shadow
+        0.26s ease,
+        transform
+        0.20s ease;
+
+}
+
+
+/* ================================================================
+   33 // ANIMATION
+================================================================ */
+
+@keyframes homeosPulse {
+
+    0%,
+    100% {
+
+        opacity:
+            1;
+
+        transform:
+            scale(
+                1
+            );
+
+    }
+
+
+    50% {
+
+        opacity:
+            0.50;
+
+        transform:
+            scale(
+                0.78
+            );
+
+    }
+
+}
+
+
+@keyframes homeosOrbit {
+
+    from {
+
+        transform:
+            rotate(
+                0deg
+            );
+
+    }
+
+
+    to {
+
+        transform:
+            rotate(
+                360deg
+            );
+
+    }
+
+}
+
+
+@keyframes homeosOrbitReverse {
+
+    from {
+
+        transform:
+            rotate(
+                360deg
+            );
+
+    }
+
+
+    to {
+
+        transform:
+            rotate(
+                0deg
+            );
+
+    }
+
+}
+
+
+@keyframes homeosFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(
+                0
+            );
+
+    }
+
+
+    50% {
+
+        transform:
+            translateY(
+                -8px
+            );
+
+    }
+
+}
+
+
+@keyframes mascotFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(
+                0
+            )
+            rotate(
+                -0.3deg
+            );
+
+    }
+
+
+    50% {
+
+        transform:
+            translateY(
+                -7px
+            )
+            rotate(
+                0.4deg
+            );
+
+    }
+
+}
+
+
+/* ================================================================
+   34 // REDUCED MOTION
+================================================================ */
+
+@media
+(
+    prefers-reduced-motion:
+    reduce
+) {
+
+    body[data-page="dashboard"] *,
+    body[data-page="dashboard"] *::before,
+    body[data-page="dashboard"] *::after {
+
+        scroll-behavior:
+            auto !important;
+
+        animation-duration:
+            0.001ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.001ms !important;
+
+    }
+
+}
