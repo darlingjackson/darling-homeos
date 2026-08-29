@@ -173,6 +173,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             ◐
                         </button>
 
+                        <button
+                            class="icon-button"
+                            id="signOutButton"
+                            type="button"
+                            aria-label="Sign out of HomeOS"
+                            title="Sign out"
+                        >
+                            ↪
+                        </button>
+
                     </div>
 
                 </div>
@@ -362,10 +372,111 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         /* ============================================================
+           AUTHENTICATION
+        ============================================================ */
+
+        async signOut() {
+
+            /*
+               Authentication itself is owned by auth.js.
+
+               shell.js only provides the shared UI control
+               that asks HomeOS.auth to perform the logout.
+            */
+
+            if (!window.HomeOS?.auth) {
+
+                console.error(
+                    "DARLING HomeOS cannot sign out because the authentication service is unavailable."
+                );
+
+                return;
+            }
+
+
+            /* Find the shared sign-out button */
+            const button =
+                document.getElementById(
+                    "signOutButton"
+                );
+
+
+            /*
+               Temporarily disable the button so the user
+               cannot trigger multiple sign-out requests.
+            */
+
+            if (button) {
+
+                button.disabled = true;
+
+                button.setAttribute(
+                    "aria-label",
+                    "Signing out"
+                );
+            }
+
+
+            /* Ask our shared auth service to end the session */
+            const { error } =
+                await window.HomeOS.auth.signOut();
+
+
+            /* --------------------------------------------------------
+               HANDLE SIGN-OUT ERROR
+            -------------------------------------------------------- */
+
+            if (error) {
+
+                console.error(
+                    "DARLING HomeOS could not sign out.",
+                    error
+                );
+
+
+                /* Allow the user to try again */
+                if (button) {
+
+                    button.disabled = false;
+
+                    button.setAttribute(
+                        "aria-label",
+                        "Sign out of HomeOS"
+                    );
+                }
+
+                return;
+            }
+
+
+            /* --------------------------------------------------------
+               SIGN-OUT SUCCESS
+            -------------------------------------------------------- */
+
+            console.log(
+                "DARLING HomeOS: User signed out."
+            );
+
+
+            /*
+               Send the user back to login.html.
+
+               replace() prevents the protected dashboard
+               from remaining as the immediately previous
+               browser-history entry.
+            */
+
+            window.location.replace(
+                "login.html"
+            );
+        },
+
+          /* ============================================================
            FOOTER
         ============================================================ */
 
         renderFooter() {
+
             const footer =
                 document.getElementById(
                     "appFooter"
@@ -389,37 +500,67 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         },
 
+
         /* ============================================================
            SHARED STATE
         ============================================================ */
 
+        /*
+           HomeStore sends a "homeos:statechange" event whenever
+           shared HomeOS state changes.
+
+           The theme toggle changes settings.theme inside HomeStore.
+
+           This listener hears that change and applies the new
+           theme to the page.
+        */
+
         bindStateEvents() {
+
             window.addEventListener(
                 "homeos:statechange",
+
                 event => {
+
                     this.applyTheme(
                         event.detail ||
                         HomeStore.getState()
                     );
+
                 }
             );
+
         },
+
 
         /* ============================================================
            SHARED EVENTS
         ============================================================ */
 
         bindEvents() {
+
             document.addEventListener(
                 "click",
                 event => {
+
                     if (
                         event.target.closest(
                             "#themeToggle"
                         )
                     ) {
                         this.toggleTheme();
+
+                        return;
                     }
+
+                    if (
+                        event.target.closest(
+                            "#signOutButton"
+                        )
+                    ) {
+                        this.signOut();
+                    }
+
                 }
             );
         }

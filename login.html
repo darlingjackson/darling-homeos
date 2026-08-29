@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ======================================================
+       BASIC PAGE SETUP
+       ====================================================== -->
+
+  <meta charset="UTF-8" />
+
+  <!-- Makes the page responsive on phones/tablets -->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Sign In | DARLING HomeOS</title>
+
+
+  <!-- ======================================================
+       SHARED HOMEOS STYLES
+       ====================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="assets/css/app.css"
+  />
+
+
+  <!-- ======================================================
+       TEMPORARY AUTH PAGE STYLES
+       ====================================================== -->
+
+  <!--
+    Signup and login now use almost the same visual styles.
+
+    Once we confirm that authentication is working,
+    we will move these shared styles into:
+
+        assets/css/auth.css
+
+    That will prevent duplicated CSS.
+  -->
+
+  <style>
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      width: min(100%, 460px);
+      padding: 32px;
+
+      border-radius: 24px;
+
+      background:
+        rgba(255, 255, 255, 0.06);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .auth-card h1 {
+      margin-bottom: 8px;
+    }
+
+    .auth-card p {
+      margin-bottom: 24px;
+      opacity: 0.8;
+    }
+
+    .auth-field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .auth-field label {
+      font-weight: 600;
+    }
+
+    .auth-field input {
+      width: 100%;
+      padding: 14px 16px;
+
+      border-radius: 12px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.14);
+
+      background:
+        rgba(255, 255, 255, 0.07);
+
+      color: inherit;
+
+      font: inherit;
+    }
+
+    .auth-button {
+      width: 100%;
+
+      padding: 14px 18px;
+
+      border: 0;
+
+      border-radius: 12px;
+
+      cursor: pointer;
+
+      font: inherit;
+
+      font-weight: 700;
+    }
+
+    .auth-message {
+      margin-top: 18px;
+      min-height: 24px;
+    }
+
+    .auth-link {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+  <!-- ======================================================
+       LOGIN CARD
+       ====================================================== -->
+
+  <main class="auth-card">
+
+    <h1>Welcome back</h1>
+
+    <p>
+      Sign in to continue to DARLING HomeOS.
+    </p>
+
+
+    <!-- ====================================================
+         LOGIN FORM
+         ==================================================== -->
+
+    <form id="login-form">
+
+
+      <!-- ==================================================
+           EMAIL
+           ================================================== -->
+
+      <div class="auth-field">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+        />
+
+      </div>
+
+
+      <!-- ==================================================
+           PASSWORD
+           ================================================== -->
+
+      <div class="auth-field">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+
+          <!--
+            Since this is an EXISTING account,
+            we use current-password instead of
+            new-password.
+          -->
+          autocomplete="current-password"
+
+          required
+        />
+
+      </div>
+
+
+      <!-- ==================================================
+           SIGN IN BUTTON
+           ================================================== -->
+
+      <button
+        class="auth-button"
+        id="login-button"
+        type="submit"
+      >
+        Sign In
+      </button>
+
+
+      <!-- ==================================================
+           STATUS / ERROR MESSAGES
+           ================================================== -->
+
+      <div
+        id="login-message"
+        class="auth-message"
+        aria-live="polite"
+      ></div>
+
+    </form>
+
+
+    <!-- ====================================================
+         NEW ACCOUNT LINK
+         ==================================================== -->
+
+    <div class="auth-link">
+
+      Don't have an account?
+
+      <a href="signup.html">
+        Create one
+      </a>
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================================
+       JAVASCRIPT DEPENDENCIES
+       ====================================================== -->
+
+  <!--
+    Load order matters:
+
+    Supabase library
+          ↓
+    supabase.js
+          ↓
+    auth.js
+          ↓
+    this page's login code
+  -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script src="assets/js/supabase.js"></script>
+
+  <script src="assets/js/auth.js"></script>
+
+
+  <!-- ======================================================
+       LOGIN PAGE LOGIC
+       ====================================================== -->
+
+  <script>
+
+    /* -------------------------------------------------------
+       GET PAGE ELEMENTS
+       ------------------------------------------------------- */
+
+    const loginForm =
+      document.getElementById("login-form");
+
+    const loginButton =
+      document.getElementById("login-button");
+
+    const loginMessage =
+      document.getElementById("login-message");
+
+
+    /* -------------------------------------------------------
+       CHECK WHETHER USER JUST CONFIRMED EMAIL
+       ------------------------------------------------------- */
+
+    /*
+      Our signup process redirects confirmed users to:
+
+          login.html?confirmed=true
+
+      URLSearchParams lets us read that:
+
+          confirmed=true
+
+      from the browser URL.
+    */
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+
+    if (params.get("confirmed") === "true") {
+
+      loginMessage.textContent =
+        "Email confirmed. You can now sign in.";
+
+    }
+
+
+    /* -------------------------------------------------------
+       LISTEN FOR LOGIN FORM SUBMISSION
+       ------------------------------------------------------- */
+
+    loginForm.addEventListener(
+      "submit",
+
+      async function (event) {
+
+        /*
+          Prevent normal HTML form submission.
+
+          JavaScript will handle authentication
+          through Supabase instead.
+        */
+        event.preventDefault();
+
+
+        /* ---------------------------------------------------
+           READ EMAIL + PASSWORD
+           --------------------------------------------------- */
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+
+        /* ---------------------------------------------------
+           SHOW LOGIN IN PROGRESS
+           --------------------------------------------------- */
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+          "Signing In...";
+
+
+        loginMessage.textContent = "";
+
+
+        /* ---------------------------------------------------
+           ASK OUR AUTH SERVICE TO SIGN IN
+           --------------------------------------------------- */
+
+        /*
+          Architecture:
+
+          login.html
+               ↓
+          HomeOS.auth.signIn()
+               ↓
+          auth.js
+               ↓
+          Supabase Auth
+        */
+
+        const { data, error } =
+          await HomeOS.auth.signIn(
+            email,
+            password
+          );
+
+
+        /* ---------------------------------------------------
+           HANDLE LOGIN ERROR
+           --------------------------------------------------- */
+
+        if (error) {
+
+          loginMessage.textContent =
+            error.message;
+
+
+          loginButton.disabled = false;
+
+          loginButton.textContent =
+            "Sign In";
+
+          return;
+        }
+
+
+        /* ---------------------------------------------------
+           LOGIN SUCCESSFUL
+           --------------------------------------------------- */
+
+        console.log(
+          "DARLING HomeOS: Login successful.",
+          data
+        );
+
+
+        /*
+          User has successfully authenticated.
+
+          For NOW, send them directly to the dashboard.
+
+          Later we will change this logic to:
+
+              Login
+                ↓
+              Does household exist?
+                 ↓          ↓
+                YES         NO
+                 ↓           ↓
+            Dashboard     Setup Home
+        */
+
+        window.location.href =
+          "index.html";
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
