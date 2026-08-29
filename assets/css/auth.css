@@ -1,0 +1,551 @@
+/* ================================================================
+   DARLING HOMEOS
+   AUTHENTICATION
+
+   Used by:
+   - login.html
+   - signup.html
+
+   app.css owns the overall HomeOS design system.
+   This file only owns authentication-page layout.
+================================================================ */
+
+
+/* ================================================================
+   PAGE
+================================================================ */
+
+.auth-page {
+    min-height: 100vh;
+
+    display: grid;
+    place-items: center;
+
+    padding:
+        clamp(
+            24px,
+            5vw,
+            56px
+        );
+}
+
+
+/* ================================================================
+   AUTH SHELL
+================================================================ */
+
+.auth-shell {
+    width:
+        min(
+            100%,
+            1080px
+        );
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 0.95fr)
+        minmax(420px, 1.05fr);
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-xl);
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+/* ================================================================
+   BRAND SIDE
+================================================================ */
+
+.auth-intro {
+    min-height: 640px;
+
+    padding:
+        clamp(
+            36px,
+            5vw,
+            64px
+        );
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-right:
+        1px solid
+        var(--border);
+
+    background:
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(242, 85, 186, 0.16),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            rgba(32, 204, 229, 0.14),
+            transparent 38%
+        ),
+        var(--surface-soft);
+}
+
+
+.auth-intro::after {
+    content: "";
+
+    width: 210px;
+    height: 210px;
+
+    position: absolute;
+
+    right: -90px;
+    bottom: -80px;
+
+    border:
+        1px solid
+        rgba(32, 204, 229, 0.20);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 70px
+        rgba(32, 204, 229, 0.10);
+}
+
+
+/* ================================================================
+   AUTH BRAND
+================================================================ */
+
+.auth-brand {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 12px;
+
+    width: fit-content;
+}
+
+
+.auth-brand .brand-mark {
+    flex-shrink: 0;
+}
+
+
+.auth-brand-copy {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.auth-brand-name {
+    color:
+        var(--shell-title);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing:
+        0.06em;
+}
+
+
+.auth-brand-system {
+    margin-top: 4px;
+
+    color:
+        var(--darling-pink);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.12em;
+}
+
+
+/* ================================================================
+   INTRO COPY
+================================================================ */
+
+.auth-intro-copy {
+    position: relative;
+    z-index: 1;
+}
+
+
+.auth-kicker {
+    margin: 0 0 14px;
+
+    color:
+        var(--shell-pink);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.auth-intro-title {
+    max-width: 500px;
+
+    margin:
+        0 0 20px;
+
+    color:
+        var(--shell-title);
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(
+            46px,
+            5vw,
+            68px
+        );
+
+    font-weight: 500;
+
+    line-height: 0.98;
+
+    letter-spacing:
+        -0.045em;
+}
+
+
+.auth-intro-text {
+    max-width: 500px;
+
+    margin: 0;
+
+    color:
+        var(--text-soft);
+
+    font-size: 16px;
+
+    line-height: 1.75;
+}
+
+
+.auth-system-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 9px;
+
+    position: relative;
+    z-index: 1;
+
+    color:
+        var(--shell-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.06em;
+}
+
+
+.auth-system-status::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background:
+        var(--shell-mint);
+
+    box-shadow:
+        0 0 12px
+        var(--shell-mint);
+}
+
+
+/* ================================================================
+   FORM SIDE
+================================================================ */
+
+.auth-panel {
+    padding:
+        clamp(
+            36px,
+            5vw,
+            64px
+        );
+
+    display: flex;
+    align-items: center;
+
+    background:
+        var(--surface);
+}
+
+
+.auth-panel-inner {
+    width: 100%;
+
+    max-width: 440px;
+
+    margin: 0 auto;
+}
+
+
+.auth-panel h1 {
+    margin:
+        0 0 10px;
+
+    font-family:
+        var(--font-display);
+
+    font-size:
+        clamp(
+            38px,
+            4vw,
+            52px
+        );
+
+    font-weight: 500;
+
+    letter-spacing:
+        -0.035em;
+}
+
+
+.auth-panel-lead {
+    margin:
+        0 0 32px;
+
+    color:
+        var(--text-soft);
+
+    font-size: 15px;
+
+    line-height: 1.65;
+}
+
+
+/* ================================================================
+   FORM
+================================================================ */
+
+.auth-form {
+    display: grid;
+
+    gap: 18px;
+}
+
+
+.auth-submit {
+    width: 100%;
+
+    margin-top: 4px;
+}
+
+
+.auth-submit:disabled {
+    cursor: wait;
+
+    opacity: 0.68;
+
+    transform: none;
+}
+
+
+/* ================================================================
+   MESSAGES
+================================================================ */
+
+.auth-message {
+    min-height: 22px;
+
+    margin-top: 2px;
+
+    color:
+        var(--text-soft);
+
+    font-family:
+        var(--font-ui);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+.auth-message.error {
+    color:
+        var(--attention);
+}
+
+
+.auth-message.success {
+    color:
+        var(--success);
+}
+
+
+/* ================================================================
+   FOOTER LINK
+================================================================ */
+
+.auth-switch {
+    margin:
+        26px 0 0;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    color:
+        var(--text-soft);
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+.auth-switch a {
+    color:
+        var(--darling-pink);
+
+    font-family:
+        var(--font-ui);
+
+    font-weight: 800;
+}
+
+
+.auth-switch a:hover {
+    color:
+        var(--darling-pink-deep);
+}
+
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+
+@media (max-width: 850px) {
+
+    .auth-shell {
+        max-width: 560px;
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .auth-intro {
+        min-height: auto;
+
+        padding:
+            34px;
+
+        gap: 70px;
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid
+            var(--border);
+    }
+
+
+    .auth-intro-title {
+        max-width: 420px;
+
+        font-size:
+            clamp(
+                40px,
+                9vw,
+                56px
+            );
+    }
+
+
+    .auth-panel {
+        padding:
+            38px 34px 42px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .auth-page {
+        padding:
+            14px;
+    }
+
+
+    .auth-shell {
+        border-radius:
+            24px;
+    }
+
+
+    .auth-intro {
+        padding:
+            28px 24px;
+
+        gap: 50px;
+    }
+
+
+    .auth-panel {
+        padding:
+            32px 24px 36px;
+    }
+
+
+    .auth-panel h1 {
+        font-size:
+            38px;
+    }
+
+}

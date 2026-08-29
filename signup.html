@@ -2,598 +2,206 @@
 <html lang="en">
 
 <head>
-  <!-- ======================================================
-       BASIC PAGE SETUP
-       ====================================================== -->
+    <meta charset="UTF-8">
 
-  <!-- Tells the browser how to read text characters correctly -->
-  <meta charset="UTF-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <!-- Makes the page resize correctly on phones/tablets -->
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+    <title>Create Account | DARLING HomeOS</title>
 
-  <!-- Text shown in the browser tab -->
-  <title>Create Account | DARLING HomeOS</title>
+    <link
+        rel="stylesheet"
+        href="assets/css/app.css"
+    >
 
-
-  <!-- ======================================================
-       SHARED HOMEOS STYLES
-       ====================================================== -->
-
-  <!--
-    Loads our main shared HomeOS CSS file.
-
-    We are using app.css so the signup page can inherit
-    the same fonts, colors, theme, etc. as the rest of HomeOS.
-  -->
-  <link
-    rel="stylesheet"
-    href="assets/css/app.css"
-  />
-
-
-  <!-- ======================================================
-       TEMPORARY AUTH PAGE STYLES
-       ====================================================== -->
-
-  <!--
-    These styles are specific to the authentication page.
-
-    FOR NOW they live inside signup.html.
-
-    Later, once login.html exists too, we will probably move
-    these shared authentication styles into something like:
-
-        assets/css/auth.css
-
-    That way login and signup can share the same design.
-  -->
-  <style>
-
-    /* Center the authentication card on the page */
-    body {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-
-
-    /* Main signup card */
-    .auth-card {
-      width: min(100%, 460px);
-
-      padding: 32px;
-
-      border-radius: 24px;
-
-      background: rgba(255, 255, 255, 0.06);
-
-      border: 1px solid rgba(255, 255, 255, 0.12);
-
-      backdrop-filter: blur(18px);
-    }
-
-
-    /* Main page heading */
-    .auth-card h1 {
-      margin-bottom: 8px;
-    }
-
-
-    /* Intro text below the heading */
-    .auth-card p {
-      margin-bottom: 24px;
-      opacity: 0.8;
-    }
-
-
-    /* Each label + input group */
-    .auth-field {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-
-    /* Input labels */
-    .auth-field label {
-      font-weight: 600;
-    }
-
-
-    /* Text/email/password fields */
-    .auth-field input {
-      width: 100%;
-
-      padding: 14px 16px;
-
-      border-radius: 12px;
-
-      border:
-        1px solid rgba(255, 255, 255, 0.14);
-
-      background:
-        rgba(255, 255, 255, 0.07);
-
-      color: inherit;
-
-      font: inherit;
-    }
-
-
-    /* Main Create Account button */
-    .auth-button {
-      width: 100%;
-
-      padding: 14px 18px;
-
-      border: 0;
-
-      border-radius: 12px;
-
-      cursor: pointer;
-
-      font: inherit;
-
-      font-weight: 700;
-    }
-
-
-    /*
-      Area where we show success or error messages.
-
-      Examples:
-
-      "Account created..."
-      "User already registered"
-      "Password should be at least..."
-    */
-    .auth-message {
-      margin-top: 18px;
-      min-height: 24px;
-    }
-
-
-    /* Sign-in link at the bottom */
-    .auth-link {
-      margin-top: 18px;
-      text-align: center;
-    }
-
-  </style>
+    <link
+        rel="stylesheet"
+        href="assets/css/auth.css"
+    >
 </head>
 
 
-<body>
+<body class="auth-page">
 
-  <!-- ======================================================
-       SIGNUP CARD
-       ====================================================== -->
+    <main class="auth-shell">
 
-  <main class="auth-card">
+        <!-- ========================================================
+             HOMEOS INTRO
+        ========================================================= -->
 
-    <!-- Main page title -->
-    <h1>Create your HomeOS account</h1>
+        <section class="auth-intro">
 
-    <!-- Small explanation of what signup starts -->
-    <p>
-      Create an account to begin setting up your household.
-    </p>
+            <a
+                href="signup.html"
+                class="auth-brand"
+                aria-label="DARLING HomeOS"
+            >
+                <span class="brand-mark">
 
+                    <img
+                        src="assets/images/branding/homeos-icon.png"
+                        alt=""
+                        class="brand-homeos-icon"
+                    >
 
-    <!-- ====================================================
-         SIGNUP FORM
-         ==================================================== -->
+                </span>
 
-    <!--
-      The form gathers:
+                <span class="auth-brand-copy">
 
-      1. Display name
-      2. Email
-      3. Password
+                    <span class="auth-brand-name">
+                        DARLING
+                    </span>
 
-      JavaScript will intercept this form later instead of
-      allowing the browser to perform a normal page submission.
-    -->
-    <form id="signup-form">
+                    <span class="auth-brand-system">
+                        HomeOS
+                    </span>
 
+                </span>
+            </a>
 
-      <!-- ==================================================
-           DISPLAY NAME
-           ================================================== -->
 
-      <div class="auth-field">
+            <div class="auth-intro-copy">
 
-        <label for="display-name">
-          Name
-        </label>
+                <p class="auth-kicker">
+                    Your Home Starts Here
+                </p>
 
-        <input
-          id="display-name"
-          name="display-name"
-          type="text"
+                <h2 class="auth-intro-title">
+                    Build a smarter rhythm for home.
+                </h2>
 
-          <!--
-            Helps browsers/password managers understand
-            what kind of information this field contains.
-          -->
-          autocomplete="name"
+                <p class="auth-intro-text">
+                    Create your HomeOS account and begin building
+                    a household system designed around the way
+                    your home actually works.
+                </p>
 
-          <!-- User cannot submit without entering a name -->
-          required
-        />
+            </div>
 
-      </div>
 
+            <div class="auth-system-status">
+                Secure HomeOS registration
+            </div>
 
-      <!-- ==================================================
-           EMAIL ADDRESS
-           ================================================== -->
+        </section>
 
-      <div class="auth-field">
 
-        <label for="email">
-          Email
-        </label>
+        <!-- ========================================================
+             SIGNUP
+        ========================================================= -->
 
-        <input
-          id="email"
-          name="email"
-          type="email"
+        <section class="auth-panel">
 
-          <!--
-            Gives browsers and password managers
-            the correct autocomplete behavior.
-          -->
-          autocomplete="email"
+            <div class="auth-panel-inner">
 
-          required
-        />
+                <h1>Create account.</h1>
 
-      </div>
+                <p class="auth-panel-lead">
+                    Start building your HomeOS.
+                </p>
 
 
-      <!-- ==================================================
-           PASSWORD
-           ================================================== -->
+                <form
+                    id="signup-form"
+                    class="auth-form"
+                >
 
-      <div class="auth-field">
+                    <div class="app-field">
 
-        <label for="password">
-          Password
-        </label>
+                        <label for="display-name">
+                            Name
+                        </label>
 
-        <input
-          id="password"
-          name="password"
-          type="password"
+                        <input
+                            class="app-input"
+                            id="display-name"
+                            name="display-name"
+                            type="text"
+                            autocomplete="name"
+                            required
+                        >
 
-          <!--
-            Tells the browser that this is a NEW password,
-            not a saved existing password.
-          -->
-          autocomplete="new-password"
+                    </div>
 
-          <!--
-            Basic browser validation.
 
-            Supabase will still enforce its own
-            authentication/password rules.
-          -->
-          minlength="8"
+                    <div class="app-field">
 
-          required
-        />
+                        <label for="email">
+                            Email
+                        </label>
 
-      </div>
+                        <input
+                            class="app-input"
+                            id="email"
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                            required
+                        >
 
+                    </div>
 
-      <!-- ==================================================
-           CREATE ACCOUNT BUTTON
-           ================================================== -->
 
-      <button
-        class="auth-button"
-        id="signup-button"
-        type="submit"
-      >
-        Create Account
-      </button>
+                    <div class="app-field">
 
+                        <label for="password">
+                            Password
+                        </label>
 
-      <!-- ==================================================
-           FORM STATUS / ERROR MESSAGE
-           ================================================== -->
+                        <input
+                            class="app-input"
+                            id="password"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
 
-      <!--
-        JavaScript will place messages here.
+                    </div>
 
-        aria-live="polite" also helps screen readers announce
-        changes without interrupting the user abruptly.
-      -->
-      <div
-        id="signup-message"
-        class="auth-message"
-        aria-live="polite"
-      ></div>
 
-    </form>
+                    <button
+                        class="button button-primary auth-submit"
+                        id="signup-button"
+                        type="submit"
+                    >
+                        Create Account
+                    </button>
 
 
-    <!-- ====================================================
-         EXISTING USER LINK
-         ==================================================== -->
+                    <div
+                        id="signup-message"
+                        class="auth-message"
+                        aria-live="polite"
+                    ></div>
 
-    <div class="auth-link">
+                </form>
 
-      Already have an account?
 
-      <!--
-        login.html does not exist yet.
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="login.html">
+                        Sign in
+                    </a>
+                </p>
 
-        That is okay.
+            </div>
 
-        We are building login.html immediately after
-        signup has been tested successfully.
-      -->
-      <a href="login.html">
-        Sign in
-      </a>
+        </section>
 
-    </div>
+    </main>
 
-  </main>
 
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
 
-  <!-- ======================================================
-       JAVASCRIPT DEPENDENCIES
-       ====================================================== -->
-
-  <!--
-    1. SUPABASE JAVASCRIPT LIBRARY
-
-    This is the official Supabase browser library.
-
-    It creates:
-
-        window.supabase
-
-    which our own supabase.js file uses.
-  -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-  ></script>
-
-
-  <!--
-    2. HOMEOS SUPABASE CLIENT
-
-    This is the file we created earlier.
-
-    It connects HomeOS to our darling-homeos-dev
-    Supabase project.
-
-    It creates:
-
-        HomeOS.supabase
-  -->
-  <script src="assets/js/supabase.js"></script>
-
-
-  <!--
-    3. HOMEOS AUTHENTICATION SERVICE
-
-    This is our shared authentication layer.
-
-    It gives us functions such as:
-
-        HomeOS.auth.signUp()
-        HomeOS.auth.signIn()
-        HomeOS.auth.signOut()
-        HomeOS.auth.getSession()
-        HomeOS.auth.getUser()
-  -->
-  <script src="assets/js/auth.js"></script>
-
-
-  <!-- ======================================================
-       SIGNUP PAGE LOGIC
-       ====================================================== -->
-
-  <script>
-
-    /* -------------------------------------------------------
-       Find the HTML elements we need
-       ------------------------------------------------------- */
-
-    const signupForm =
-      document.getElementById("signup-form");
-
-    const signupButton =
-      document.getElementById("signup-button");
-
-    const signupMessage =
-      document.getElementById("signup-message");
-
-
-    /* -------------------------------------------------------
-       LISTEN FOR FORM SUBMISSION
-       ------------------------------------------------------- */
-
-    signupForm.addEventListener(
-      "submit",
-
-      async function (event) {
-
-        /*
-          Normally submitting an HTML form would reload
-          the browser page.
-
-          preventDefault() stops that behavior because
-          WE want JavaScript to send the information
-          to Supabase instead.
-        */
-        event.preventDefault();
-
-
-        /* ---------------------------------------------------
-           READ THE USER'S FORM VALUES
-           --------------------------------------------------- */
-
-        const displayName =
-          document
-            .getElementById("display-name")
-            .value
-            .trim();
-
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-
-        /* ---------------------------------------------------
-           CHANGE BUTTON WHILE SIGNUP IS RUNNING
-           --------------------------------------------------- */
-
-        /*
-          Disable the button so the user cannot click
-          Create Account repeatedly while Supabase is
-          processing the request.
-        */
-        signupButton.disabled = true;
-
-
-        signupButton.textContent =
-          "Creating Account...";
-
-
-        /* Remove any old error/success message */
-        signupMessage.textContent = "";
-
-
-        /* ---------------------------------------------------
-           SEND SIGNUP REQUEST TO OUR AUTH SERVICE
-           --------------------------------------------------- */
-
-        /*
-          Instead of signup.html talking directly to Supabase,
-          it talks to:
-
-              HomeOS.auth.signUp()
-
-          Then auth.js talks to Supabase.
-
-          This keeps our authentication architecture clean:
-
-              signup.html
-                   ↓
-              HomeOS.auth
-                   ↓
-              Supabase Auth
-        */
-
-        const { data, error } =
-          await HomeOS.auth.signUp(
-            email,
-            password,
-            displayName
-          );
-
-
-        /* ---------------------------------------------------
-           HANDLE SIGNUP ERRORS
-           --------------------------------------------------- */
-
-        /*
-          Possible errors might include:
-
-          - invalid email
-          - password problem
-          - account already exists
-          - network problem
-          - Supabase authentication error
-        */
-
-        if (error) {
-
-          signupMessage.textContent =
-            error.message;
-
-
-          /*
-            Re-enable the button so the user can
-            correct the form and try again.
-          */
-          signupButton.disabled = false;
-
-
-          signupButton.textContent =
-            "Create Account";
-
-
-          /*
-            Stop executing the rest of the signup code.
-          */
-          return;
-        }
-
-
-        /* ---------------------------------------------------
-           SUCCESS
-           --------------------------------------------------- */
-
-        /*
-          Because we enabled Confirm Email in Supabase,
-          successful signup does NOT immediately send
-          the user into HomeOS.
-
-          Instead:
-
-              Account created
-                    ↓
-              Email sent
-                    ↓
-              User confirms email
-                    ↓
-              Account becomes verified
-        */
-
-        signupMessage.textContent =
-          "Account created. Check your email to confirm your account.";
-
-
-        /* Clear the form after successful signup */
-        signupForm.reset();
-
-
-        /*
-          This console message is mainly for us while
-          developing/debugging HomeOS.
-
-          Later we may remove or reduce development logs.
-        */
-        console.log(
-          "DARLING HomeOS: Signup successful.",
-          data
-        );
-
-      }
-    );
-
-  </script>
+    <script src="assets/js/supabase.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/auth-page.js"></script>
 
 </body>
 
