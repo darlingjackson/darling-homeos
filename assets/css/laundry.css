@@ -30,9 +30,6 @@ body[data-page="laundry"] {
     --laundry-line:
         rgba(78, 121, 188, 0.16);
 
-    --laundry-line-strong:
-        rgba(39, 213, 238, 0.28);
-
     --laundry-text:
         #14213b;
 
@@ -73,9 +70,6 @@ body.dark[data-page="laundry"] {
 
     --laundry-line:
         rgba(91, 160, 255, 0.16);
-
-    --laundry-line-strong:
-        rgba(39, 213, 238, 0.31);
 
     --laundry-text:
         #f7faff;
@@ -715,7 +709,7 @@ body[data-page="laundry"] {
         flex;
 
     justify-content:
-        space-between;
+        flex-end;
 
     gap:
         12px;
@@ -1647,162 +1641,6 @@ body[data-page="laundry"] {
 
 
 /* ================================================================
-   FLOW LEGEND
-================================================================ */
-
-.laundry-stage-legend {
-
-    margin-top:
-        22px;
-
-    padding:
-        15px 18px;
-
-    display:
-        grid;
-
-    grid-template-columns:
-        1fr
-        auto
-        1fr
-        auto
-        1fr
-        auto
-        1fr;
-
-    gap:
-        10px;
-
-    align-items:
-        center;
-
-    position:
-        relative;
-
-    z-index:
-        1;
-
-    border:
-        1px solid
-        var(--laundry-line);
-
-    border-radius:
-        14px;
-
-    background:
-        var(--laundry-panel-soft);
-
-}
-
-
-
-.legend-stage {
-
-    min-height:
-        54px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        9px;
-
-    border:
-        1px solid
-        currentColor;
-
-    border-radius:
-        11px;
-
-    background:
-        rgba(255, 255, 255, 0.015);
-
-}
-
-
-
-.legend-stage span {
-
-    width:
-        27px;
-
-    height:
-        27px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    border:
-        1px solid
-        currentColor;
-
-    border-radius:
-        50%;
-
-    font-family:
-        var(--font-ui);
-
-    font-size:
-        8px;
-
-    font-weight:
-        800;
-
-}
-
-
-
-.legend-stage strong {
-
-    font-size:
-        11px;
-
-}
-
-
-.legend-stage.wash {
-    color: var(--laundry-blue);
-}
-
-
-.legend-stage.dry {
-    color: var(--laundry-cyan);
-}
-
-
-.legend-stage.fold {
-    color: var(--laundry-pink);
-}
-
-
-.legend-stage.put-away {
-    color: var(--laundry-mint);
-}
-
-
-
-.legend-arrow {
-
-    color:
-        var(--laundry-faint);
-
-    font-size:
-        16px;
-
-}
-
-
-
-/* ================================================================
    ACTIVE LOADS
 ================================================================ */
 
@@ -1833,7 +1671,7 @@ body[data-page="laundry"] {
 .active-load-card {
 
     padding:
-        19px;
+        20px;
 
     position:
         relative;
@@ -2013,31 +1851,174 @@ body[data-page="laundry"] {
 
 
 
-.load-stage-track {
+/* ================================================================
+   UNIFIED ACTIVE LOAD FLOW
+
+   The stage tracker belongs to the load card itself.
+   No separate legend above the card.
+================================================================ */
+
+.unified-flow-track {
+
+    --flow-accent:
+        var(--laundry-cyan);
 
     margin-top:
-        20px;
+        22px;
+
+    padding:
+        18px 14px 13px;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--flow-accent) 6%,
+                transparent
+            ),
+            transparent 58%
+        );
+
+}
+
+
+.unified-flow-track.wash {
+
+    --flow-accent:
+        var(--laundry-blue);
+
+}
+
+
+.unified-flow-track.dry {
+
+    --flow-accent:
+        var(--laundry-cyan);
+
+}
+
+
+.unified-flow-track.fold {
+
+    --flow-accent:
+        var(--laundry-pink);
+
+}
+
+
+.unified-flow-track.put-away {
+
+    --flow-accent:
+        var(--laundry-mint);
+
+}
+
+
+.unified-flow-line {
+
+    height:
+        3px;
+
+    position:
+        absolute;
+
+    top:
+        31px;
+
+    left:
+        38px;
+
+    right:
+        38px;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        999px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--laundry-line) 82%,
+            transparent
+        );
+
+}
+
+
+.unified-flow-line span {
+
+    width:
+        var(--load-progress);
+
+    height:
+        100%;
+
+    display:
+        block;
+
+    border-radius:
+        inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--laundry-blue),
+            var(--laundry-cyan),
+            var(--laundry-pink),
+            var(--laundry-mint)
+        );
+
+    box-shadow:
+        0 0 14px
+        color-mix(
+            in srgb,
+            var(--flow-accent) 30%,
+            transparent
+        );
+
+}
+
+
+.unified-flow-steps {
 
     display:
         grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4, minmax(0, 1fr));
 
     gap:
         7px;
 
+    position:
+        relative;
+
+    z-index:
+        1;
+
 }
 
 
+.unified-flow-step {
 
-.load-stage {
-
-    min-height:
-        65px;
-
-    padding:
-        9px;
+    min-width:
+        0;
 
     display:
         flex;
@@ -2045,30 +2026,47 @@ body[data-page="laundry"] {
     flex-direction:
         column;
 
-    justify-content:
-        space-between;
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        var(--laundry-faint);
+
+    text-align:
+        center;
+
+}
+
+
+.unified-flow-step-number {
+
+    width:
+        29px;
+
+    height:
+        29px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
 
     border:
         1px solid
         var(--laundry-line);
 
     border-radius:
-        10px;
+        50%;
 
     color:
         var(--laundry-faint);
 
     background:
-        rgba(255, 255, 255, 0.018);
-
-    transition:
-        0.2s ease;
-
-}
-
-
-
-.load-stage span {
+        var(--laundry-panel-strong);
 
     font-family:
         var(--font-ui);
@@ -2082,114 +2080,83 @@ body[data-page="laundry"] {
 }
 
 
+.unified-flow-step strong {
 
-.load-stage strong {
+    color:
+        inherit;
+
+    font-family:
+        var(--font-ui);
 
     font-size:
         10px;
 
+    font-weight:
+        800;
+
 }
 
 
+.unified-flow-step.is-done {
 
-.load-stage.passed {
+    color:
+        var(--laundry-copy);
+
+}
+
+
+.unified-flow-step.is-done
+.unified-flow-step-number {
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--laundry-mint) 36%,
+            var(--laundry-line)
+        );
 
     color:
         var(--laundry-mint);
 
-    border-color:
-        rgba(56, 215, 170, 0.25);
+}
 
-    background:
-        rgba(56, 215, 170, 0.04);
+
+.unified-flow-step.is-current {
+
+    color:
+        var(--flow-accent);
 
 }
 
 
-
-.load-stage.current {
+.unified-flow-step.is-current
+.unified-flow-step-number {
 
     transform:
-        translateY(-2px);
-
-}
-
-
-
-.load-stage.current.wash {
-
-    color:
-        var(--laundry-blue);
+        scale(1.08);
 
     border-color:
-        rgba(91, 135, 255, 0.44);
-
-    background:
-        rgba(91, 135, 255, 0.08);
-
-    box-shadow:
-        0 0 18px
-        rgba(91, 135, 255, 0.13);
-
-}
-
-
-
-.load-stage.current.dry {
+        var(--flow-accent);
 
     color:
-        var(--laundry-cyan);
-
-    border-color:
-        rgba(39, 213, 238, 0.44);
+        var(--flow-accent);
 
     background:
-        rgba(39, 213, 238, 0.08);
+        color-mix(
+            in srgb,
+            var(--flow-accent) 9%,
+            var(--laundry-panel-strong)
+        );
 
     box-shadow:
-        0 0 18px
-        rgba(39, 213, 238, 0.13);
+        0 0 17px
+        color-mix(
+            in srgb,
+            var(--flow-accent) 25%,
+            transparent
+        );
 
 }
-
-
-
-.load-stage.current.fold {
-
-    color:
-        var(--laundry-pink);
-
-    border-color:
-        rgba(242, 85, 186, 0.44);
-
-    background:
-        rgba(242, 85, 186, 0.08);
-
-    box-shadow:
-        0 0 18px
-        rgba(242, 85, 186, 0.13);
-
-}
-
-
-
-.load-stage.current.put-away {
-
-    color:
-        var(--laundry-mint);
-
-    border-color:
-        rgba(56, 215, 170, 0.44);
-
-    background:
-        rgba(56, 215, 170, 0.08);
-
-    box-shadow:
-        0 0 18px
-        rgba(56, 215, 170, 0.13);
-
-}
-
 
 
 .active-load-footer {
@@ -2204,7 +2171,7 @@ body[data-page="laundry"] {
         flex;
 
     justify-content:
-        space-between;
+        flex-end;
 
     align-items:
         center;
@@ -2218,38 +2185,6 @@ body[data-page="laundry"] {
 
 }
 
-
-
-.current-stage-copy span {
-
-    display:
-        block;
-
-    color:
-        var(--laundry-faint);
-
-    font-size:
-        8px;
-
-    letter-spacing:
-        0.07em;
-
-}
-
-
-
-.current-stage-copy strong {
-
-    display:
-        block;
-
-    margin-top:
-        3px;
-
-    font-size:
-        12px;
-
-}
 
 
 
@@ -2847,47 +2782,6 @@ body[data-page="laundry"] {
 
 
 
-.maintenance-card.attention {
-
-    border-color:
-        rgba(239, 173, 61, 0.34);
-
-    box-shadow:
-        inset
-        0
-        2px
-        0
-        rgba(239, 173, 61, 0.28);
-
-}
-
-
-
-.maintenance-card.overdue {
-
-    border-color:
-        rgba(255, 102, 125, 0.34);
-
-    box-shadow:
-        inset
-        0
-        2px
-        0
-        rgba(255, 102, 125, 0.28);
-
-}
-
-
-
-.maintenance-card.current {
-
-    border-color:
-        rgba(56, 215, 170, 0.21);
-
-}
-
-
-
 .maintenance-card-top {
 
     display:
@@ -2964,19 +2858,6 @@ body[data-page="laundry"] {
 
     border-color:
         rgba(255, 102, 125, 0.30);
-
-}
-
-
-
-.maintenance-card.current
-.maintenance-symbol {
-
-    color:
-        var(--laundry-mint);
-
-    border-color:
-        rgba(56, 215, 170, 0.30);
 
 }
 
@@ -4734,30 +4615,6 @@ span {
     }
 
 
-    .laundry-stage-legend {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-
-    .legend-arrow {
-
-        display:
-            none;
-
-    }
-
-
-    .load-stage-track {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-
     .active-load-footer {
 
         flex-direction:
@@ -5465,3 +5322,57 @@ laundryScan {
     }
 
 }
+
+
+@media (max-width: 620px) {
+
+    .unified-flow-track {
+
+        padding:
+            16px 8px 12px;
+
+    }
+
+
+    .unified-flow-line {
+
+        top:
+            29px;
+
+        left:
+            28px;
+
+        right:
+            28px;
+
+    }
+
+
+    .unified-flow-steps {
+
+        gap:
+            3px;
+
+    }
+
+
+    .unified-flow-step strong {
+
+        font-size:
+            9px;
+
+    }
+
+
+    .unified-flow-step-number {
+
+        width:
+            26px;
+
+        height:
+            26px;
+
+    }
+
+}
+

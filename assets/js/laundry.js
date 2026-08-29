@@ -441,22 +441,21 @@ document.addEventListener(
                                         : "wash";
 
 
-                                const status =
+                                const cleanLoad = {
+                                    ...load
+                                };
 
-                                    stage ===
-                                        "fold" ||
-
-                                    stage ===
-                                        "put-away"
-
-                                        ? "NEEDS YOU"
-
-                                        : "ACTIVE";
+                                /*
+                                 * Older Laundry builds stored a separate
+                                 * status string. Stage is now the canonical
+                                 * source for ACTIVE / NEEDS YOU behavior.
+                                 */
+                                delete cleanLoad.status;
 
 
                                 return {
 
-                                    ...load,
+                                    ...cleanLoad,
 
                                     id:
                                         String(
@@ -477,8 +476,6 @@ document.addEventListener(
                                         null,
 
                                     stage,
-
-                                    status,
 
                                     stageHistory:
 
@@ -533,26 +530,6 @@ document.addEventListener(
                                 this.STARTER_MAINTENANCE
                             )
                         );
-
-
-                    changed =
-                        true;
-
-                }
-
-
-                /*
-                 * setupComplete only means the Laundry controller has
-                 * performed its one-time compatibility cleanup.
-                 */
-
-                if (
-                    laundry.setupComplete !==
-                    true
-                ) {
-
-                    laundry.setupComplete =
-                        true;
 
 
                     changed =
@@ -1374,6 +1351,20 @@ document.addEventListener(
                                     ];
 
 
+                                const stageNumber =
+                                    stageIndex + 1;
+
+
+                                const stageProgress =
+                                    Math.round(
+                                        (
+                                            stageNumber /
+                                            this.STAGES.length
+                                        ) *
+                                        100
+                                    );
+
+
                                 const stageMarkup =
                                     this.STAGES
                                         .map(
@@ -1382,42 +1373,34 @@ document.addEventListener(
                                                 index
                                             ) => {
 
-                                                let className =
-                                                    "";
-
-
-                                                if (
+                                                const isDone =
                                                     index <
-                                                    stageIndex
-                                                ) {
+                                                    stageIndex;
 
-                                                    className =
-                                                        "passed";
-
-                                                }
-
-
-                                                if (
+                                                const isCurrent =
                                                     index ===
-                                                    stageIndex
-                                                ) {
+                                                    stageIndex;
 
-                                                    className =
-                                                        `current ${stage}`;
+                                                const stateClass =
+                                                    isDone
+                                                        ? "is-done"
 
-                                                }
+                                                        : isCurrent
+                                                            ? "is-current"
 
+                                                            : "";
 
                                                 return `
 
                                                     <div
                                                         class="
-                                                            load-stage
-                                                            ${className}
+                                                            unified-flow-step
+                                                            ${stage}
+                                                            ${stateClass}
                                                         "
                                                     >
 
-                                                        <span>
+                                                        <span class="unified-flow-step-number">
                                                             ${String(index + 1).padStart(2, "0")}
                                                         </span>
 
@@ -1459,7 +1442,7 @@ document.addEventListener(
                                                 type="button"
                                                 data-complete-load="${load.id}"
                                             >
-                                                Finish + Put Away ✓
+                                                Complete Load ✓
                                             </button>
 
                                         `;
@@ -1522,25 +1505,29 @@ document.addEventListener(
                                         </div>
 
 
-                                        <div class="load-stage-track">
-                                            ${stageMarkup}
+                                        <div
+                                            class="
+                                                unified-flow-track
+                                                ${currentStage}
+                                            "
+                                            style="
+                                                --load-progress:
+                                                ${stageProgress}%;
+                                            "
+                                        >
+
+                                            <div class="unified-flow-line">
+                                                <span></span>
+                                            </div>
+
+                                            <div class="unified-flow-steps">
+                                                ${stageMarkup}
+                                            </div>
+
                                         </div>
 
 
                                         <div class="active-load-footer">
-
-                                            <div class="current-stage-copy">
-
-                                                <span>
-                                                    Current Stage
-                                                </span>
-
-                                                <strong>
-                                                    ${HomeApp.laundryStageLabel(currentStage)}
-                                                </strong>
-
-                                            </div>
-
 
                                             <div class="load-action-group">
 
@@ -1624,9 +1611,6 @@ document.addEventListener(
 
                                 stage:
                                     "wash",
-
-                                status:
-                                    "ACTIVE",
 
                                 startedAt:
                                     now,
@@ -1728,19 +1712,6 @@ document.addEventListener(
 
                         load.stageUpdatedAt =
                             now;
-
-
-                        load.status =
-
-                            next ===
-                                "fold" ||
-
-                            next ===
-                                "put-away"
-
-                                ? "NEEDS YOU"
-
-                                : "ACTIVE";
 
 
                         load.stageHistory =
@@ -5256,10 +5227,6 @@ document.addEventListener(
             }
 
         };
-
-
-        window.LaundryApp =
-            LaundryApp;
 
 
         LaundryApp.init();

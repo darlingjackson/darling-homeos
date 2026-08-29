@@ -450,11 +450,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                ring.style.setProperty(
-                    "--pulse-value",
-                    `${fullAngle}deg`
-                );
-
 
                 ring.style.background = `
                     conic-gradient(
@@ -543,10 +538,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span>→</span>
             `;
 
-
-            action.dataset
-                .guideSystem =
-                plan.system;
 
         },
 
@@ -655,8 +646,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "laundry",
 
                     title:
                         needsYou
@@ -702,8 +691,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "cleaning",
 
                     title:
                         `${selectedZone.name} is a good place to start.`,
@@ -759,8 +746,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     return {
 
-                        system:
-                            "inventory",
 
                         title:
                             `${lowItems.length} item${lowItems.length === 1 ? " needs" : "s need"} restocking.`,
@@ -783,8 +768,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "inventory",
 
                     title:
                         "Your inventory is looking good.",
@@ -815,8 +798,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "seasonal",
 
                     title:
                         season
@@ -874,8 +855,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "daily",
 
                     title:
                         `${name} is the next useful move.`,
@@ -917,8 +896,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "daily",
 
                     title:
                         "Your home is in a really good place.",
@@ -949,8 +926,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 return {
 
-                    system:
-                        "home",
 
                     title:
                         "Everything is in flow.",
@@ -971,9 +946,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             return {
-
-                system:
-                    "daily",
 
                 title:
                     "Your home is holding its rhythm.",
@@ -1854,15 +1826,10 @@ document.addEventListener("DOMContentLoaded", () => {
             load
         ) {
 
-            if (
-                load?.status
-            ) {
-
-                return load.status;
-
-            }
-
-
+            /*
+             * Stage is the single source of truth.
+             * Laundry no longer stores a duplicate status field.
+             */
             return {
 
                 wash:
@@ -2801,10 +2768,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     };
-
-
-    window.Dashboard =
-        Dashboard;
 
 
     Dashboard.init();

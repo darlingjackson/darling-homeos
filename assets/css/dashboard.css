@@ -3176,6 +3176,9 @@ body[data-page="dashboard"]
     grid-column:
         span 7;
 
+    min-height:
+        455px;
+
 }
 
 
@@ -3202,6 +3205,9 @@ body[data-page="dashboard"]
 
     grid-column:
         span 7;
+
+    min-height:
+        320px;
 
 }
 
@@ -4308,15 +4314,6 @@ body[data-page="dashboard"]
 ================================================================ */
 
 body[data-page="dashboard"]
-.zone-network-card {
-
-    min-height:
-        455px;
-
-}
-
-
-body[data-page="dashboard"]
 .zone-network-header {
 
     display:
@@ -5007,15 +5004,6 @@ body[data-page="dashboard"]
 ================================================================ */
 
 body[data-page="dashboard"]
-.quick-command-panel {
-
-    min-height:
-        320px;
-
-}
-
-
-body[data-page="dashboard"]
 .quick-command-heading {
 
     display:
@@ -5126,9 +5114,7 @@ body[data-page="dashboard"]
 
 
 body[data-page="dashboard"]
-.quick-command-grid a,
-body[data-page="dashboard"]
-.quick-command-grid button {
+.quick-command-grid a {
 
     min-width:
         0;
@@ -5177,9 +5163,7 @@ body[data-page="dashboard"]
 
 
 body[data-page="dashboard"]
-.quick-command-grid a:hover,
-body[data-page="dashboard"]
-.quick-command-grid button:hover {
+.quick-command-grid a:hover {
 
     transform:
         translateY(-2px);
@@ -5204,9 +5188,7 @@ body[data-page="dashboard"]
 
 
 body[data-page="dashboard"]
-.quick-command-grid a > span,
-body[data-page="dashboard"]
-.quick-command-grid button > span {
+.quick-command-grid a > span {
 
     margin-bottom:
         4px;
@@ -6234,9 +6216,7 @@ body[data-page="dashboard"]
 body[data-page="dashboard"]
 .zone-network-item,
 body[data-page="dashboard"]
-.quick-command-grid a,
-body[data-page="dashboard"]
-.quick-command-grid button {
+.quick-command-grid a {
 
     transition:
         color
