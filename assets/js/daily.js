@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lastDateKey: null,
         clockTimer: null,
 
-        DAILY_TEMPLATE_VERSION: 2,
+        DAILY_TEMPLATE_VERSION: 3,
         LAUNDRY_STAGES: ["wash", "dry", "fold", "put-away"],
 
         DAILY_TEMPLATE: {
@@ -244,8 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let needsUpdate =
                 rhythm.dailyTemplateVersion !== this.DAILY_TEMPLATE_VERSION ||
-                !Array.isArray(rhythm.shoppingList) ||
-                rhythm.shoppingDate !== today;
+                rhythm.sharedShoppingMigrated !== true;
 
             ["opening", "closing"].forEach(shift => {
                 const tasks = Array.isArray(rhythm[shift]) ? rhythm[shift] : [];
@@ -279,7 +278,85 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             HomeStore.update(current => {
+                if (
+                    !current.dailyRhythm ||
+                    typeof current.dailyRhythm !== "object"
+                ) {
+                    current.dailyRhythm = {};
+                }
+
                 const daily = current.dailyRhythm;
+
+                /*
+                   Daily Rhythm no longer owns a second shopping list.
+                   Migrate unfinished legacy Daily shopping items once
+                   into the shared HomeOS Shopping List used by Inventory
+                   and Seasonal.
+                */
+                if (daily.sharedShoppingMigrated !== true) {
+                    if (
+                        !current.inventory ||
+                        typeof current.inventory !== "object"
+                    ) {
+                        current.inventory = {};
+                    }
+
+                    if (!Array.isArray(current.inventory.shoppingList)) {
+                        current.inventory.shoppingList = [];
+                    }
+
+                    const legacyShopping =
+                        Array.isArray(daily.shoppingList)
+                            ? daily.shoppingList
+                            : [];
+
+                    legacyShopping
+                        .filter(item => !item.done)
+                        .forEach(item => {
+                            const name =
+                                String(item.title || item.name || "").trim();
+
+                            if (!name) {
+                                return;
+                            }
+
+                            const normalized =
+                                this.normalizeTitle(name);
+
+                            const alreadyExists =
+                                current.inventory.shoppingList.some(entry =>
+                                    this.normalizeTitle(
+                                        entry.name || entry.title || ""
+                                    ) === normalized
+                                );
+
+                            if (alreadyExists) {
+                                return;
+                            }
+
+                            current.inventory.shoppingList.push({
+                                id: this.makeId("daily-shopping"),
+                                sourceType: "custom",
+                                origin: "daily",
+                                sourceLabel: "Daily Rhythm",
+                                inventoryItemId: null,
+                                name,
+                                quantity: 1,
+                                quantityMode: "manual",
+                                unit: "",
+                                checked: false,
+                                addedAt:
+                                    item.createdAt ||
+                                    item.dayDate ||
+                                    new Date().toISOString()
+                            });
+                        });
+
+                    delete daily.shoppingList;
+                    delete daily.shoppingDate;
+
+                    daily.sharedShoppingMigrated = true;
+                }
 
                 if (daily.dailyTemplateVersion !== this.DAILY_TEMPLATE_VERSION) {
                     daily.opening = this.buildTemplateShift(
@@ -307,36 +384,25 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
 
                             const recurring = task.recurring !== false;
-                            return recurring || !task.createdDate || task.createdDate === today;
+
+                            return (
+                                recurring ||
+                                !task.createdDate ||
+                                task.createdDate === today
+                            );
                         })
                         .map(task => ({
                             ...task,
                             area: this.resolveTaskArea(task),
                             room: task.room || null,
-                            recurring: task.custom ? task.recurring !== false : true,
-                            createdDate: task.custom ? (task.createdDate || today) : null
+                            recurring: task.custom
+                                ? task.recurring !== false
+                                : true,
+                            createdDate: task.custom
+                                ? (task.createdDate || today)
+                                : null
                         }));
                 });
-
-                if (!Array.isArray(daily.shoppingList)) {
-                    daily.shoppingList = [];
-                }
-
-                const previousDate = daily.shoppingDate || today;
-
-                if (previousDate !== today) {
-                    daily.shoppingList = daily.shoppingList
-                        .filter(item => !item.done)
-                        .map(item => ({
-                            ...item,
-                            done: false,
-                            completedAt: null,
-                            carriedFrom: item.carriedFrom || previousDate,
-                            dayDate: today
-                        }));
-                }
-
-                daily.shoppingDate = today;
             });
         },
 
@@ -790,41 +856,94 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         addCustomTask() {
-            const input = document.getElementById("newDailyTask");
-            const areaInput = document.getElementById("newDailyTaskArea");
-            const recurringInput = document.getElementById("newDailyTaskRecurring");
+            const input =
+                document.getElementById(
+                    "newDailyTask"
+                );
 
-            if (!input || !areaInput || !recurringInput) {
+            const areaInput =
+                document.getElementById(
+                    "newDailyTaskArea"
+                );
+
+            const recurringInput =
+                document.getElementById(
+                    "newDailyTaskRecurring"
+                );
+
+            if (
+                !input ||
+                !areaInput ||
+                !recurringInput
+            ) {
                 return;
             }
 
-            const title = input.value.trim();
-            const area = areaInput.value;
-            const recurring = recurringInput.checked;
+            const title =
+                input.value.trim();
+
+            const area =
+                areaInput.value;
+
+            const recurring =
+                recurringInput.checked;
 
             if (!title) {
-                HomeApp.toast("Type a task before adding it.");
+                HomeApp.toast(
+                    "Type a task before adding it."
+                );
+
                 input.focus();
                 return;
             }
 
-            if (!["upstairs", "downstairs"].includes(area)) {
-                HomeApp.toast("Choose Upstairs or Downstairs first.");
+            if (
+                !["upstairs", "downstairs"]
+                    .includes(area)
+            ) {
+                HomeApp.toast(
+                    "Choose Upstairs or Downstairs first."
+                );
+
                 return;
             }
 
-            const shift = this.selectedShift;
-            const today = HomeStore.getLocalDateKey();
+            const shift =
+                this.selectedShift;
+
+            const today =
+                HomeStore.getLocalDateKey();
+
+            const normalizedTitle =
+                this.normalizeTitle(title);
+
+            let duplicate =
+                false;
 
             HomeStore.update(state => {
-                const tasks = state.dailyRhythm?.[shift];
+                const tasks =
+                    state.dailyRhythm?.[shift];
 
                 if (!Array.isArray(tasks)) {
                     return;
                 }
 
+                duplicate =
+                    tasks.some(task =>
+                        this.normalizeTitle(task.title) === normalizedTitle &&
+                        this.resolveTaskArea(task) === area
+                    );
+
+                if (duplicate) {
+                    return;
+                }
+
                 tasks.push({
-                    id: this.makeId(`daily-${shift}-custom`),
+                    id:
+                        this.makeId(
+                            `daily-${shift}-custom`
+                        ),
+
                     title,
                     area,
                     room: null,
@@ -836,11 +955,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
+            if (duplicate) {
+                HomeApp.toast(
+                    `${title} is already in ${this.areaName(area)} for this shift.`
+                );
+
+                input.focus();
+                return;
+            }
+
             input.value = "";
             recurringInput.checked = false;
 
             this.openAreas.add(area);
-            this.renderAreas(HomeStore.getState());
 
             HomeApp.toast(
                 recurring
@@ -1519,7 +1646,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         /* ============================================================
-           TODAY SHOPPING
+           SHARED HOMEOS SHOPPING
         ============================================================ */
 
         renderShopping(state) {
@@ -1534,23 +1661,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const list =
                 Array.isArray(
-                    state.dailyRhythm
+                    state.inventory
                         ?.shoppingList
                 )
-                    ? state.dailyRhythm.shoppingList
+                    ? state.inventory.shoppingList
                     : [];
-
-            const openItems =
-                list.filter(
-                    item =>
-                        !item.done
-                );
 
             this.setText(
                 "dailyShoppingCount",
 
-                `${openItems.length} ITEM${
-                    openItems.length === 1
+                `${list.length} ITEM${
+                    list.length === 1
                         ? ""
                         : "S"
                 }`
@@ -1562,11 +1683,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span>◇</span>
 
                         <strong>
-                            Nothing to pick up yet.
+                            Your HomeOS list is clear.
                         </strong>
 
                         <p>
-                            Add something the moment you think of it.
+                            Add something here and it will also appear
+                            in the full Shopping List on Inventory.
                         </p>
                     </div>
                 `;
@@ -1577,12 +1699,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const sorted = [
                 ...list.filter(
                     item =>
-                        !item.done
+                        !item.checked
                 ),
 
                 ...list.filter(
                     item =>
-                        item.done
+                        item.checked
                 )
             ];
 
@@ -1594,49 +1716,116 @@ document.addEventListener("DOMContentLoaded", () => {
                                 item.id
                             );
 
-                        const safeTitle =
+                        const displayName =
+                            String(
+                                item.name ||
+                                item.title ||
+                                "Shopping Item"
+                            );
+
+                        const safeName =
                             HomeApp.escapeHtml(
-                                item.title
+                                displayName
+                            );
+
+                        const quantity =
+                            Math.max(
+                                1,
+                                Number(
+                                    item.quantity
+                                ) ||
+                                1
+                            );
+
+                        const unit =
+                            String(
+                                item.unit ||
+                                ""
+                            ).trim();
+
+                        const quantityLabel =
+                            unit
+                                ? `${quantity} ${unit}`
+                                : `QTY ${quantity}`;
+
+                        let sourceLabel =
+                            "HOMEOS";
+
+                        if (
+                            item.sourceType ===
+                            "inventory"
+                        ) {
+                            sourceLabel =
+                                "INVENTORY";
+                        }
+
+                        else if (
+                            item.origin ===
+                            "seasonal"
+                        ) {
+                            sourceLabel =
+                                item.sourceLabel ||
+                                "SEASONAL";
+                        }
+
+                        else if (
+                            item.origin ===
+                            "daily"
+                        ) {
+                            sourceLabel =
+                                "DAILY";
+                        }
+
+                        else if (
+                            item.sourceLabel
+                        ) {
+                            sourceLabel =
+                                item.sourceLabel;
+                        }
+
+                        const safeSource =
+                            HomeApp.escapeHtml(
+                                String(
+                                    sourceLabel
+                                )
                             );
 
                         return `
                             <div
                                 class="
                                     daily-shopping-row
-                                    ${item.done ? "done" : ""}
+                                    ${item.checked ? "done" : ""}
                                 "
                             >
                                 <input
                                     type="checkbox"
-
                                     id="shopping-${safeId}"
-
                                     data-shopping-check="${safeId}"
-
-                                    ${item.done ? "checked" : ""}
+                                    ${item.checked ? "checked" : ""}
                                 >
 
                                 <label for="shopping-${safeId}">
-                                    <strong>
-                                        ${safeTitle}
-                                    </strong>
+                                    <span class="daily-shopping-name">
+                                        <strong>
+                                            ${safeName}
+                                        </strong>
+
+                                        <small>
+                                            ${safeSource} · ${HomeApp.escapeHtml(quantityLabel)}
+                                        </small>
+                                    </span>
 
                                     ${
-                                        item.carriedFrom &&
-                                        !item.done
-
-                                            ? "<span>CARRIED FORWARD</span>"
-
+                                        item.checked
+                                            ? '<span class="daily-shopping-ready">READY</span>'
                                             : ""
                                     }
                                 </label>
 
                                 <button
                                     type="button"
-
                                     data-remove-shopping="${safeId}"
-
-                                    aria-label="Remove ${safeTitle}"
+                                    aria-label="Remove ${safeName}"
                                 >
                                     ×
                                 </button>
@@ -1656,10 +1845,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const title =
+            const name =
                 input.value.trim();
 
-            if (!title) {
+            if (!name) {
                 HomeApp.toast(
                     "Type an item before adding it."
                 );
@@ -1668,52 +1857,126 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const today =
-                HomeStore.getLocalDateKey();
+            const normalizedName =
+                this.normalizeTitle(
+                    name
+                );
+
+            let result =
+                "added";
 
             HomeStore.update(state => {
                 if (
-                    !Array.isArray(
-                        state.dailyRhythm
-                            .shoppingList
-                    )
+                    !state.inventory ||
+                    typeof state.inventory !==
+                        "object"
                 ) {
-                    state.dailyRhythm.shoppingList = [];
+                    state.inventory = {};
                 }
 
-                state.dailyRhythm.shoppingDate =
-                    today;
+                if (
+                    !Array.isArray(
+                        state.inventory.shoppingList
+                    )
+                ) {
+                    state.inventory.shoppingList = [];
+                }
 
-                state.dailyRhythm.shoppingList.push({
+                const existing =
+                    state.inventory.shoppingList
+                        .find(item =>
+                            this.normalizeTitle(
+                                item.name ||
+                                item.title ||
+                                ""
+                            ) === normalizedName
+                        );
+
+                if (existing) {
+                    if (
+                        existing.sourceType ===
+                        "inventory"
+                    ) {
+                        result =
+                            "already-on-list";
+
+                        return;
+                    }
+
+                    existing.quantity =
+                        Math.max(
+                            1,
+                            Number(
+                                existing.quantity
+                            ) ||
+                            1
+                        ) + 1;
+
+                    existing.checked =
+                        false;
+
+                    result =
+                        "merged";
+
+                    return;
+                }
+
+                state.inventory.shoppingList.push({
                     id:
                         this.makeId(
                             "daily-shopping"
                         ),
 
-                    title,
+                    sourceType:
+                        "custom",
 
-                    done:
-                        false,
+                    origin:
+                        "daily",
 
-                    completedAt:
+                    sourceLabel:
+                        "Daily Rhythm",
+
+                    inventoryItemId:
                         null,
 
-                    createdDate:
-                        today,
+                    name,
 
-                    dayDate:
-                        today,
+                    quantity:
+                        1,
 
-                    carriedFrom:
-                        null
+                    quantityMode:
+                        "manual",
+
+                    unit:
+                        "",
+
+                    checked:
+                        false,
+
+                    addedAt:
+                        new Date()
+                            .toISOString()
                 });
             });
 
             input.value = "";
             input.focus();
 
+            if (
+                result ===
+                "already-on-list"
+            ) {
+                HomeApp.toast(
+                    `${name} is already on the HomeOS Shopping List.`
+                );
+
+                return;
+            }
+
             HomeApp.toast(
-                `${title} added to today's shopping list.`
+                result === "merged"
+                    ? `${name} quantity increased on the HomeOS Shopping List.`
+                    : `${name} added to the HomeOS Shopping List.`
             );
         },
 
@@ -1721,8 +1984,8 @@ document.addEventListener("DOMContentLoaded", () => {
             HomeStore.update(state => {
                 const item =
                     (
-                        state.dailyRhythm
-                            .shoppingList ||
+                        state.inventory
+                            ?.shoppingList ||
                         []
                     )
                     .find(
@@ -1735,34 +1998,33 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                item.done =
-                    !item.done;
-
-                item.completedAt =
-                    item.done
-                        ? new Date()
-                            .toISOString()
-                        : null;
+                item.checked =
+                    !item.checked;
             });
         },
 
         removeShoppingItem(itemId) {
             HomeStore.update(state => {
-                state.dailyRhythm.shoppingList =
-                    (
-                        state.dailyRhythm
-                            .shoppingList ||
-                        []
+                if (
+                    !state.inventory ||
+                    !Array.isArray(
+                        state.inventory.shoppingList
                     )
-                    .filter(
-                        item =>
-                            item.id !==
-                            itemId
-                    );
+                ) {
+                    return;
+                }
+
+                state.inventory.shoppingList =
+                    state.inventory.shoppingList
+                        .filter(
+                            item =>
+                                item.id !==
+                                itemId
+                        );
             });
 
             HomeApp.toast(
-                "Shopping item removed."
+                "Item removed from the HomeOS Shopping List."
             );
         },
 

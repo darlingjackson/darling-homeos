@@ -84,200 +84,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         /* ========================================================
-           FIRST-RUN STARTER STOCK
+           INVENTORY CLEANUP
+
+           HomeOS does not seed fake household stock.
+
+           These IDs belong to the old demo inventory only.
+           Cleanup version 1 removes them one time from saved state.
         ======================================================== */
 
-        STARTER_ITEMS: [
+        INVENTORY_CLEANUP_VERSION:
+            1,
 
-            {
-                id: "item-rice",
-                zoneId: "pantry",
-                name: "Rice",
-                category: "Dry Goods",
-                current: 2,
-                target: 3,
-                unit: "bags"
-            },
 
-            {
-                id: "item-pasta",
-                zoneId: "pantry",
-                name: "Pasta",
-                category: "Dry Goods",
-                current: 4,
-                target: 4,
-                unit: "boxes"
-            },
+        LEGACY_STARTER_ITEM_IDS: [
 
-            {
-                id: "item-cereal",
-                zoneId: "pantry",
-                name: "Cereal",
-                category: "Breakfast",
-                current: 2,
-                target: 3,
-                unit: "boxes"
-            },
-
-            {
-                id: "item-canned-tomatoes",
-                zoneId: "pantry",
-                name: "Canned Tomatoes",
-                category: "Canned Goods",
-                current: 5,
-                target: 6,
-                unit: "cans"
-            },
-
-            {
-                id: "item-milk",
-                zoneId: "refrigerator",
-                name: "Milk",
-                category: "Dairy",
-                current: 1,
-                target: 2,
-                unit: "gallons"
-            },
-
-            {
-                id: "item-eggs",
-                zoneId: "refrigerator",
-                name: "Eggs",
-                category: "Dairy",
-                current: 18,
-                target: 24,
-                unit: "eggs"
-            },
-
-            {
-                id: "item-cheese",
-                zoneId: "refrigerator",
-                name: "Cheese",
-                category: "Dairy",
-                current: 1,
-                target: 5,
-                unit: "packs"
-            },
-
-            {
-                id: "item-frozen-veg",
-                zoneId: "kitchen-freezer",
-                name: "Frozen Vegetables",
-                category: "Frozen Food",
-                current: 3,
-                target: 4,
-                unit: "bags"
-            },
-
-            {
-                id: "item-chicken-breast",
-                zoneId: "kitchen-freezer",
-                name: "Chicken Breast",
-                category: "Frozen Meat",
-                current: 5,
-                target: 6,
-                unit: "packs"
-            },
-
-            {
-                id: "item-family-chicken",
-                zoneId: "deep-freezer",
-                name: "Family Chicken Packs",
-                category: "Bulk Meat",
-                current: 3,
-                target: 3,
-                unit: "packs"
-            },
-
-            {
-                id: "item-ground-beef",
-                zoneId: "deep-freezer",
-                name: "Ground Beef",
-                category: "Bulk Meat",
-                current: 3,
-                target: 4,
-                unit: "packs"
-            },
-
-            {
-                id: "item-kids-drinks",
-                zoneId: "mini-fridge",
-                name: "Kids Drinks",
-                category: "Drinks",
-                current: 10,
-                target: 18,
-                unit: "drinks"
-            },
-
-            {
-                id: "item-water",
-                zoneId: "mini-fridge",
-                name: "Water Bottles",
-                category: "Drinks",
-                current: 20,
-                target: 24,
-                unit: "bottles"
-            },
-
-            {
-                id: "item-sparkling",
-                zoneId: "mini-fridge",
-                name: "Hosting Drinks",
-                category: "Hosting",
-                current: 6,
-                target: 8,
-                unit: "drinks"
-            },
-
-            {
-                id: "item-paper-towels",
-                zoneId: "household",
-                name: "Paper Towels",
-                category: "Paper Goods",
-                current: 2,
-                target: 10,
-                unit: "rolls"
-            },
-
-            {
-                id: "item-toilet-paper",
-                zoneId: "household",
-                name: "Toilet Paper",
-                category: "Paper Goods",
-                current: 18,
-                target: 24,
-                unit: "rolls"
-            },
-
-            {
-                id: "item-dishwasher-pods",
-                zoneId: "household",
-                name: "Dishwasher Pods",
-                category: "Kitchen Supplies",
-                current: 18,
-                target: 40,
-                unit: "pods"
-            },
-
-            {
-                id: "item-laundry-detergent",
-                zoneId: "household",
-                name: "Laundry Detergent",
-                category: "Laundry",
-                current: 2,
-                target: 3,
-                unit: "containers"
-            },
-
-            {
-                id: "item-trash-bags",
-                zoneId: "household",
-                name: "Trash Bags",
-                category: "Household",
-                current: 1,
-                target: 2,
-                unit: "boxes"
-            }
+            "item-rice",
+            "item-pasta",
+            "item-cereal",
+            "item-canned-tomatoes",
+            "item-milk",
+            "item-eggs",
+            "item-cheese",
+            "item-frozen-veg",
+            "item-chicken-breast",
+            "item-family-chicken",
+            "item-ground-beef",
+            "item-kids-drinks",
+            "item-water",
+            "item-sparkling",
+            "item-paper-towels",
+            "item-toilet-paper",
+            "item-dishwasher-pods",
+            "item-laundry-detergent",
+            "item-trash-bags"
 
         ],
 
@@ -395,20 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             if (
-                !inventory.setupComplete &&
-                inventory.items.length ===
-                    0
-            ) {
-
-                inventory.items =
-                    this.clone(
-                        this.STARTER_ITEMS
-                    );
-
-            }
-
-
-            if (
                 !Array.isArray(
                     inventory.shoppingList
                 )
@@ -442,6 +267,221 @@ document.addEventListener("DOMContentLoaded", () => {
                     [];
 
             }
+
+
+            /*
+               ------------------------------------------------------
+               LEGACY DEMO CLEANUP
+
+               Older Inventory builds inserted example household
+               stock automatically. Those records were never real
+               HomeOS data, so remove them once by their old IDs.
+
+               User-created items use generated IDs and are preserved.
+               ------------------------------------------------------
+            */
+
+            const cleanupVersion =
+                Number(
+                    inventory.cleanupVersion
+                ) ||
+                0;
+
+
+            if (
+                cleanupVersion <
+                this.INVENTORY_CLEANUP_VERSION
+            ) {
+
+                const legacyIds =
+                    new Set(
+                        this.LEGACY_STARTER_ITEM_IDS
+                    );
+
+
+                inventory.items =
+                    inventory.items
+                        .filter(
+                            item =>
+                                !legacyIds.has(
+                                    item?.id
+                                )
+                        );
+
+
+                inventory.shoppingList =
+                    inventory.shoppingList
+                        .filter(
+                            entry =>
+
+                                !(
+                                    entry?.sourceType ===
+                                        "inventory" &&
+
+                                    legacyIds.has(
+                                        entry?.inventoryItemId
+                                    )
+                                )
+                        );
+
+
+                inventory.cleanupVersion =
+                    this.INVENTORY_CLEANUP_VERSION;
+
+            }
+
+
+            /*
+               ------------------------------------------------------
+               NORMALIZE REAL INVENTORY
+
+               Do not invent items. Only repair the shape of records
+               that already exist.
+               ------------------------------------------------------
+            */
+
+            inventory.items =
+                inventory.items
+                    .filter(
+                        item =>
+                            item &&
+                            typeof item ===
+                                "object"
+                    )
+                    .map(
+                        item => {
+
+                            const validZone =
+                                inventory.zones.some(
+                                    zone =>
+                                        zone.id ===
+                                        item.zoneId
+                                );
+
+
+                            return {
+
+                                ...item,
+
+                                id:
+                                    item.id ||
+                                    this.makeId(
+                                        "inventory"
+                                    ),
+
+                                zoneId:
+                                    validZone
+
+                                        ? item.zoneId
+
+                                        : "pantry",
+
+                                name:
+                                    String(
+                                        item.name ||
+                                        "Inventory Item"
+                                    )
+                                        .trim(),
+
+                                category:
+                                    String(
+                                        item.category ||
+                                        ""
+                                    )
+                                        .trim(),
+
+                                current:
+                                    Math.max(
+                                        0,
+                                        Number(
+                                            item.current
+                                        ) ||
+                                        0
+                                    ),
+
+                                target:
+                                    Math.max(
+                                        1,
+                                        Number(
+                                            item.target
+                                        ) ||
+                                        1
+                                    ),
+
+                                unit:
+                                    String(
+                                        item.unit ||
+                                        ""
+                                    )
+                                        .trim()
+
+                            };
+
+                        }
+                    );
+
+
+            /*
+               Keep only one live Inventory-linked shopping entry
+               per tracked item. Seasonal and custom entries remain
+               separate because they may represent different needs.
+            */
+
+            const seenInventoryLinks =
+                new Set();
+
+
+            inventory.shoppingList =
+                inventory.shoppingList
+                    .filter(
+                        entry => {
+
+                            if (
+                                !entry ||
+                                typeof entry !==
+                                    "object"
+                            ) {
+
+                                return false;
+
+                            }
+
+
+                            if (
+                                entry.sourceType !==
+                                "inventory"
+                            ) {
+
+                                return true;
+
+                            }
+
+
+                            const itemId =
+                                entry.inventoryItemId;
+
+
+                            if (
+                                !itemId ||
+                                seenInventoryLinks.has(
+                                    itemId
+                                )
+                            ) {
+
+                                return false;
+
+                            }
+
+
+                            seenInventoryLinks.add(
+                                itemId
+                            );
+
+
+                            return true;
+
+                        }
+                    );
 
 
             const selectedExists =
@@ -697,6 +737,56 @@ document.addEventListener("DOMContentLoaded", () => {
                                         item.id ===
                                         entry.inventoryItemId
                                 );
+
+                        }
+                    );
+
+
+            /*
+               Keep one Inventory-linked shopping row per tracked item.
+               This prevents old duplicate shortage rows from surviving.
+            */
+
+            const seenInventoryEntries =
+                new Set();
+
+
+            inventory.shoppingList =
+                inventory.shoppingList
+                    .filter(
+                        entry => {
+
+                            if (
+                                entry.sourceType !==
+                                "inventory"
+                            ) {
+
+                                return true;
+
+                            }
+
+
+                            const itemId =
+                                entry.inventoryItemId;
+
+
+                            if (
+                                seenInventoryEntries.has(
+                                    itemId
+                                )
+                            ) {
+
+                                return false;
+
+                            }
+
+
+                            seenInventoryEntries.add(
+                                itemId
+                            );
+
+
+                            return true;
 
                         }
                     );
@@ -973,6 +1063,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 state.inventory;
 
 
+            const hasTrackedItems =
+                Array.isArray(
+                    inventory.items
+                ) &&
+                inventory.items.length >
+                    0;
+
+
             const health =
                 this.calculateInventoryHealth(
                     inventory.items
@@ -993,7 +1091,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 "inventoryHealthValue",
 
-                `${health}%`
+                hasTrackedItems
+                    ? `${health}%`
+                    : "—"
 
             );
 
@@ -1002,22 +1102,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 "inventoryHealthStatus",
 
-                health >=
-                    90
+                !hasTrackedItems
 
-                    ? "WELL STOCKED"
+                    ? "START TRACKING"
 
                     : health >=
-                        75
+                        90
 
-                        ? "MOSTLY STOCKED"
+                        ? "WELL STOCKED"
 
                         : health >=
-                            55
+                            75
 
-                            ? "RESTOCKING"
+                            ? "MOSTLY STOCKED"
 
-                            : "NEEDS ATTENTION"
+                            : health >=
+                                55
+
+                                ? "RESTOCKING"
+
+                                : "NEEDS ATTENTION"
 
             );
 
@@ -1059,10 +1163,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     "--inventory-health",
 
-                    `${Math.round(
-                        health *
-                        3.6
-                    )}deg`
+                    `${
+                        hasTrackedItems
+
+                            ? Math.round(
+                                health *
+                                3.6
+                            )
+
+                            : 0
+                    }deg`
 
                 );
 
@@ -1087,6 +1197,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById(
                     "inventoryGuideAction"
                 );
+
+
+            if (
+                !Array.isArray(
+                    inventory.items
+                ) ||
+                !inventory.items.length
+            ) {
+
+                this.setText(
+
+                    "inventoryGuideStatus",
+
+                    "READY TO TRACK"
+
+                );
+
+
+                this.setText(
+
+                    "inventoryGuideMessage",
+
+                    "Inventory is ready. Add the first real item from your home and HomeOS will begin building stock health and shortage intelligence."
+
+                );
+
+
+                this.configureGuideButton(
+
+                    button,
+
+                    "add-item",
+
+                    "ADD FIRST ITEM →"
+
+                );
+
+
+                return;
+
+            }
 
 
             const checkedCount =
@@ -1403,7 +1554,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 "trackedItemsDetail",
 
-                `${items.length} household item${items.length === 1 ? "" : "s"} currently tracked.`
+                items.length
+
+                    ? `${items.length} household item${items.length === 1 ? "" : "s"} currently tracked.`
+
+                    : "Add your first real household item to begin tracking."
 
             );
 
@@ -1422,7 +1577,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     ? `${low.length} item${low.length === 1 ? " is" : "s are"} below preferred stock.`
 
-                    : "Everything is currently at target."
+                    : items.length
+                        ? "Everything is currently at target."
+                        : "No stock levels are being tracked yet."
 
             );
 
@@ -1531,6 +1688,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     class="
                                         inventory-zone-card
                                         ${zone.id === this.selectedZone ? "selected" : ""}
+                                        ${items.length ? "" : "empty"}
                                     "
 
                                     type="button"
@@ -1570,17 +1728,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                         <span>
                                             ${
-                                                lowCount
+                                                !items.length
 
-                                                    ? `${lowCount} LOW`
+                                                    ? "EMPTY"
 
-                                                    : "STABLE"
+                                                    : lowCount
+
+                                                        ? `${lowCount} LOW`
+
+                                                        : "STABLE"
                                             }
                                         </span>
 
 
                                         <strong>
-                                            ${health}%
+                                            ${items.length ? `${health}%` : "—"}
                                         </strong>
 
                                     </div>
@@ -1591,7 +1753,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                         <span
                                             style="
                                                 width:
-                                                    ${health}%;
+                                                    ${items.length ? health : 0}%;
                                             "
                                         ></span>
 
@@ -1701,7 +1863,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 "selectedInventoryZoneHealth",
 
-                `${health}%`
+                items.length
+                    ? `${health}%`
+                    : "—"
 
             );
 
@@ -1710,17 +1874,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 "selectedInventoryZoneState",
 
-                health >=
-                    90
+                !items.length
 
-                    ? "STABLE"
+                    ? "EMPTY"
 
                     : health >=
-                        70
+                        90
 
-                        ? "WATCH"
+                        ? "STABLE"
 
-                        : "RESTOCK"
+                        : health >=
+                            70
+
+                            ? "WATCH"
+
+                            : "RESTOCK"
 
             );
 
@@ -1838,39 +2006,96 @@ document.addEventListener("DOMContentLoaded", () => {
                 !items.length
             ) {
 
+                const zone =
+                    state.inventory
+                        .zones
+                        .find(
+                            item =>
+                                item.id ===
+                                this.selectedZone
+                        );
+
+
+                const zoneName =
+                    zone?.name ||
+                    "this storage zone";
+
+
                 container.innerHTML = `
 
-                    <div class="empty-state inventory-empty">
+                    <div class="inventory-empty">
 
-                        <div class="empty-state-icon">
-                            ◇
+                        <div class="inventory-empty-visual">
+
+                            <span class="inventory-empty-orbit"></span>
+
+                            <strong>
+                                ${
+                                    this.searchTerm
+                                        ? "0"
+                                        : "+"
+                                }
+                            </strong>
+
                         </div>
 
-                        <div>
+
+                        <div class="inventory-empty-copy">
+
+                            <span class="ui-kicker">
+
+                                ${
+                                    this.searchTerm
+                                        ? "SEARCH RESULT // CLEAR"
+                                        : "STOCK NODE // READY TO TRACK"
+                                }
+
+                            </span>
+
 
                             <h3>
 
                                 ${
                                     this.searchTerm
 
-                                        ? "No matching inventory items."
+                                        ? `No matches in ${HomeApp.escapeHtml(zoneName)}.`
 
-                                        : "No inventory items here yet."
+                                        : `Nothing is tracked in ${HomeApp.escapeHtml(zoneName)} yet.`
                                 }
 
                             </h3>
+
 
                             <p>
 
                                 ${
                                     this.searchTerm
 
-                                        ? "Try another search or clear the search box."
+                                        ? "Try another item name or category. Your saved Inventory has not been changed."
 
-                                        : "Add the first item for this storage zone."
+                                        : "Add a real item from your home, then enter its Current and Preferred quantities. HomeOS will calculate stock health and shortages from those numbers."
                                 }
 
                             </p>
+
+
+                            ${
+                                this.searchTerm
+
+                                    ? ""
+
+                                    : `
+
+                                        <button
+                                            class="button button-primary inventory-empty-action"
+                                            type="button"
+                                            data-open-inventory-item
+                                        >
+                                            Track First Item →
+                                        </button>
+
+                                    `
+                            }
 
                         </div>
 
@@ -1969,7 +2194,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             return `
 
-                                <article class="inventory-item-row">
+                                <article
+                                    class="
+                                        inventory-item-row
+                                        ${stock.className}
+                                    "
+                                >
 
                                     <div class="inventory-item-main">
 
@@ -2113,6 +2343,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                             data-edit-item="${safeId}"
                                         >
                                             Edit
+                                        </button>
+
+
+                                        <button
+                                            class="inventory-row-action danger"
+                                            type="button"
+                                            data-delete-item="${safeId}"
+                                            aria-label="Delete ${HomeApp.escapeHtml(item.name)}"
+                                        >
+                                            Delete
                                         </button>
 
                                     </div>
@@ -2342,28 +2582,104 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            const addAllButton =
+                document.getElementById(
+                    "addAllShortagesButton"
+                );
+
+
+            if (
+                addAllButton
+            ) {
+
+                addAllButton.disabled =
+                    lowItems.length ===
+                    0;
+
+            }
+
+
             if (
                 !lowItems.length
             ) {
 
+                const hasTrackedItems =
+                    Array.isArray(
+                        state.inventory.items
+                    ) &&
+                    state.inventory.items.length >
+                        0;
+
+
                 container.innerHTML = `
 
-                    <div class="empty-state">
+                    <div class="inventory-restock-empty">
 
-                        <div class="empty-state-icon">
-                            ✓
+                        <div class="inventory-restock-empty-icon">
+
+                            ${
+                                hasTrackedItems
+                                    ? "✓"
+                                    : "+"
+                            }
+
                         </div>
+
 
                         <div>
 
+                            <span class="ui-kicker">
+
+                                ${
+                                    hasTrackedItems
+                                        ? "RESTOCK STATUS // HEALTHY"
+                                        : "RESTOCK STATUS // WAITING FOR INVENTORY"
+                                }
+
+                            </span>
+
+
                             <h3>
-                                Nothing needs restocking.
+
+                                ${
+                                    hasTrackedItems
+                                        ? "Nothing needs restocking."
+                                        : "Inventory tracking has not started yet."
+                                }
+
                             </h3>
 
+
                             <p>
-                                Every tracked item is currently at
-                                its preferred quantity.
+
+                                ${
+                                    hasTrackedItems
+
+                                        ? "Every tracked item is currently at or above its Preferred quantity. HomeOS will create a shortage here as soon as Current stock drops below Target."
+
+                                        : "Shopping-list items can still exist, but HomeOS cannot calculate Inventory shortages until you track real household stock with Current and Preferred quantities."
+                                }
+
                             </p>
+
+
+                            ${
+                                hasTrackedItems
+
+                                    ? ""
+
+                                    : `
+
+                                        <button
+                                            class="button button-secondary inventory-restock-start"
+                                            type="button"
+                                            data-open-inventory-item
+                                        >
+                                            Start Tracking Inventory
+                                        </button>
+
+                                    `
+                            }
 
                         </div>
 
@@ -2883,8 +3199,68 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
+            let merged =
+                false;
+
+
             HomeStore.update(
                 state => {
+
+                    const normalizedName =
+                        name
+                            .toLowerCase();
+
+
+                    const existing =
+                        state.inventory
+                            .shoppingList
+                            .find(
+                                entry =>
+
+                                    entry.sourceType ===
+                                        "custom" &&
+
+                                    String(
+                                        entry.name ||
+                                        ""
+                                    )
+                                        .trim()
+                                        .toLowerCase() ===
+                                        normalizedName
+                            );
+
+
+                    if (
+                        existing
+                    ) {
+
+                        existing.quantity =
+                            Math.max(
+                                1,
+                                Number(
+                                    existing.quantity
+                                ) ||
+                                1
+                            ) +
+                            quantity;
+
+
+                        existing.quantityMode =
+                            "manual";
+
+
+                        existing.checked =
+                            false;
+
+
+                        merged =
+                            true;
+
+
+                        return;
+
+                    }
+
 
                     state.inventory
                         .shoppingList
@@ -2937,7 +3313,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             HomeApp.toast(
 
-                `${name} added to the shopping list.`
+                merged
+
+                    ? `${name} was already on the list, so HomeOS increased the quantity.`
+
+                    : `${name} added to the shopping list.`
 
             );
 
@@ -3980,6 +4360,48 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
+            const duplicate =
+                HomeStore.getState()
+                    .inventory
+                    .items
+                    .find(
+                        item =>
+
+                            item.id !==
+                                id &&
+
+                            item.zoneId ===
+                                zoneId &&
+
+                            String(
+                                item.name ||
+                                ""
+                            )
+                                .trim()
+                                .toLowerCase() ===
+
+                            name
+                                .toLowerCase()
+                    );
+
+
+            if (
+                duplicate
+            ) {
+
+                HomeApp.toast(
+                    `${name} is already tracked in this storage zone.`
+                );
+
+
+                nameInput.focus();
+
+
+                return false;
+
+            }
+
+
             this.selectedZone =
                 zoneId;
 
@@ -4119,6 +4541,116 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             return true;
+
+        },
+
+
+        deleteItem(
+            itemId
+        ) {
+
+            const state =
+                HomeStore.getState();
+
+
+            const item =
+                state.inventory
+                    .items
+                    .find(
+                        value =>
+                            value.id ===
+                            itemId
+                    );
+
+
+            if (
+                !item
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                !window.confirm(
+
+                    `Delete ${item.name} from Home Inventory?`
+
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            HomeStore.update(
+                store => {
+
+                    store.inventory.items =
+                        store.inventory
+                            .items
+                            .filter(
+                                value =>
+                                    value.id !==
+                                    itemId
+                            );
+
+
+                    this.syncDerivedState(
+                        store
+                    );
+
+
+                    store.activity =
+                        Array.isArray(
+                            store.activity
+                        )
+                            ? store.activity
+                            : [];
+
+
+                    store.activity
+                        .unshift({
+
+                            id:
+                                this.makeId(
+                                    "activity"
+                                ),
+
+                            type:
+                                "inventory",
+
+                            title:
+                                `${item.name} removed from inventory`,
+
+                            description:
+                                "A tracked Home Inventory item was removed.",
+
+                            createdAt:
+                                new Date()
+                                    .toISOString()
+
+                        });
+
+
+                    store.activity =
+                        store.activity
+                            .slice(
+                                0,
+                                200
+                            );
+
+                }
+            );
+
+
+            HomeApp.toast(
+
+                `${item.name} removed from Home Inventory.`
+
+            );
 
         },
 
@@ -4668,6 +5200,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         event.target.closest(
                             "#addInventoryItemButton"
+                        ) ||
+
+                        event.target.closest(
+                            "[data-open-inventory-item]"
                         )
                     ) {
 
@@ -4818,6 +5354,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             edit.dataset
                                 .editItem
+
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    /* DELETE ITEM */
+
+                    const deleteItem =
+                        event.target.closest(
+                            "[data-delete-item]"
+                        );
+
+
+                    if (
+                        deleteItem
+                    ) {
+
+                        this.deleteItem(
+
+                            deleteItem.dataset
+                                .deleteItem
 
                         );
 
@@ -5117,21 +5678,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         "start"
 
                 });
-
-        },
-
-
-        clone(
-            value
-        ) {
-
-            return JSON.parse(
-
-                JSON.stringify(
-                    value
-                )
-
-            );
 
         },
 

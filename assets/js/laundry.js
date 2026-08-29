@@ -42,132 +42,34 @@ document.addEventListener(
             ],
 
 
-            STARTER_SCHEDULE: [
+            /*
+             * Old Laundry builds auto-created a full Monday-Sunday
+             * demonstration schedule. Those IDs are kept only so the
+             * cleanup migration can remove that fake data from homes
+             * that already saved it.
+             */
+            LEGACY_STARTER_SCHEDULE_IDS: [
 
-                {
-                    id:
-                        "schedule-mon-kids",
+                "schedule-mon-kids",
+                "schedule-tue-towels",
+                "schedule-wed-adults",
+                "schedule-thu-bedding",
+                "schedule-fri-kids",
+                "schedule-sat-delicates",
+                "schedule-sun-linens"
 
-                    day:
-                        "monday",
-
-                    time:
-                        "09:00",
-
-                    name:
-                        "Kids Clothes",
-
-                    completedWeeks:
-                        []
-                },
-
-
-                {
-                    id:
-                        "schedule-tue-towels",
-
-                    day:
-                        "tuesday",
-
-                    time:
-                        "09:00",
-
-                    name:
-                        "Towels + Bath Linens",
-
-                    completedWeeks:
-                        []
-                },
+            ],
 
 
-                {
-                    id:
-                        "schedule-wed-adults",
+            /*
+             * Older dashboard skeletons also shipped with two fake
+             * active loads. They should never survive into real home
+             * memory.
+             */
+            LEGACY_DEMO_LOAD_IDS: [
 
-                    day:
-                        "wednesday",
-
-                    time:
-                        "09:00",
-
-                    name:
-                        "Adult Clothes",
-
-                    completedWeeks:
-                        []
-                },
-
-
-                {
-                    id:
-                        "schedule-thu-bedding",
-
-                    day:
-                        "thursday",
-
-                    time:
-                        "09:00",
-
-                    name:
-                        "Bedding",
-
-                    completedWeeks:
-                        []
-                },
-
-
-                {
-                    id:
-                        "schedule-fri-kids",
-
-                    day:
-                        "friday",
-
-                    time:
-                        "09:00",
-
-                    name:
-                        "Kids Clothes + Catch-Up",
-
-                    completedWeeks:
-                        []
-                },
-
-
-                {
-                    id:
-                        "schedule-sat-delicates",
-
-                    day:
-                        "saturday",
-
-                    time:
-                        "10:00",
-
-                    name:
-                        "Delicates + Special Items",
-
-                    completedWeeks:
-                        []
-                },
-
-
-                {
-                    id:
-                        "schedule-sun-linens",
-
-                    day:
-                        "sunday",
-
-                    time:
-                        "10:00",
-
-                    name:
-                        "House Linens + Weekly Reset",
-
-                    completedWeeks:
-                        []
-                }
+                "load-1",
+                "load-2"
 
             ],
 
@@ -324,25 +226,20 @@ document.addEventListener(
 
 
             /* ====================================================
-               SAFE SETUP
+               SAFE SETUP + LEGACY LAUNDRY MIGRATION
+
+               HomeStore owns the schema.
+               Laundry only cleans old Laundry-specific demo data and
+               normalizes records it actually owns.
+
+               IMPORTANT:
+               An empty weekly schedule stays empty.
             ==================================================== */
 
             ensureLaundrySetup() {
 
                 const state =
                     HomeStore.getState();
-
-
-                if (
-                    !state.laundry ||
-                    typeof state.laundry !==
-                        "object"
-                ) {
-
-                    state.laundry =
-                        {};
-
-                }
 
 
                 const laundry =
@@ -353,29 +250,151 @@ document.addEventListener(
                     false;
 
 
+                /* ------------------------------------------------
+                   REMOVE OLD FAKE WEEKLY SCHEDULE
+                ------------------------------------------------ */
+
+                const cleanedSchedule =
+                    laundry.weeklySchedule
+                        .filter(
+                            item =>
+                                item &&
+                                typeof item ===
+                                    "object"
+                        )
+                        .filter(
+                            item =>
+                                !this.LEGACY_STARTER_SCHEDULE_IDS
+                                    .includes(
+                                        String(
+                                            item.id ||
+                                            ""
+                                        )
+                                    )
+                        )
+                        .map(
+                            (
+                                item,
+                                index
+                            ) => {
+
+                                const day =
+                                    String(
+                                        item.day ||
+                                        ""
+                                    )
+                                        .trim()
+                                        .toLowerCase();
+
+
+                                const name =
+                                    String(
+                                        item.name ||
+                                        ""
+                                    )
+                                        .trim();
+
+
+                                if (
+                                    !this.DAYS
+                                        .includes(
+                                            day
+                                        ) ||
+                                    !name
+                                ) {
+
+                                    return null;
+
+                                }
+
+
+                                const time =
+
+                                    /^([01]\d|2[0-3]):[0-5]\d$/
+                                        .test(
+                                            String(
+                                                item.time ||
+                                                ""
+                                            )
+                                        )
+
+                                        ? String(
+                                            item.time
+                                        )
+
+                                        : "09:00";
+
+
+                                const id =
+                                    String(
+                                        item.id ||
+                                        `schedule-recovered-${Date.now()}-${index}`
+                                    );
+
+
+                                const completedWeeks =
+                                    Array.from(
+                                        new Set(
+
+                                            (
+                                                Array.isArray(
+                                                    item.completedWeeks
+                                                )
+
+                                                    ? item.completedWeeks
+
+                                                    : []
+                                            )
+                                                .map(
+                                                    value =>
+                                                        String(
+                                                            value ||
+                                                            ""
+                                                        )
+                                                )
+                                                .filter(
+                                                    Boolean
+                                                )
+
+                                        )
+                                    );
+
+
+                                return {
+
+                                    ...item,
+
+                                    id,
+
+                                    day,
+
+                                    time,
+
+                                    name,
+
+                                    completedWeeks
+
+                                };
+
+                            }
+                        )
+                        .filter(
+                            Boolean
+                        );
+
+
                 if (
-                    !Array.isArray(
-                        laundry.activeLoads
-                    )
-                ) {
-
-                    laundry.activeLoads =
-                        [];
-
-                    changed =
-                        true;
-
-                }
-
-
-                if (
-                    !Array.isArray(
+                    JSON.stringify(
+                        cleanedSchedule
+                    ) !==
+                    JSON.stringify(
                         laundry.weeklySchedule
                     )
                 ) {
 
                     laundry.weeklySchedule =
-                        [];
+                        cleanedSchedule;
+
 
                     changed =
                         true;
@@ -383,69 +402,125 @@ document.addEventListener(
                 }
 
 
-                if (
-                    !Array.isArray(
-                        laundry.maintenance
-                    )
-                ) {
+                /* ------------------------------------------------
+                   CLEAN OLD DEMO LOADS + NORMALIZE ACTIVE FLOW
+                ------------------------------------------------ */
 
-                    laundry.maintenance =
-                        [];
+                const cleanedLoads =
+                    laundry.activeLoads
+                        .filter(
+                            load =>
+                                load &&
+                                typeof load ===
+                                    "object"
+                        )
+                        .filter(
+                            load =>
+                                !this.LEGACY_DEMO_LOAD_IDS
+                                    .includes(
+                                        String(
+                                            load.id ||
+                                            ""
+                                        )
+                                    )
+                        )
+                        .map(
+                            (
+                                load,
+                                index
+                            ) => {
 
-                    changed =
-                        true;
+                                const stage =
+                                    this.STAGES
+                                        .includes(
+                                            load.stage
+                                        )
 
-                }
+                                        ? load.stage
 
-
-                if (
-                    !Array.isArray(
-                        laundry.history
-                    )
-                ) {
-
-                    laundry.history =
-                        [];
-
-                    changed =
-                        true;
-
-                }
-
-
-                if (
-                    !Array.isArray(
-                        state.activity
-                    )
-                ) {
-
-                    state.activity =
-                        [];
-
-                    changed =
-                        true;
-
-                }
+                                        : "wash";
 
 
-                if (
-                    !laundry.weeklySchedule
-                        .length
-                ) {
+                                const status =
 
-                    laundry.weeklySchedule =
-                        JSON.parse(
-                            JSON.stringify(
-                                this.STARTER_SCHEDULE
-                            )
+                                    stage ===
+                                        "fold" ||
+
+                                    stage ===
+                                        "put-away"
+
+                                        ? "NEEDS YOU"
+
+                                        : "ACTIVE";
+
+
+                                return {
+
+                                    ...load,
+
+                                    id:
+                                        String(
+                                            load.id ||
+                                            `load-recovered-${Date.now()}-${index}`
+                                        ),
+
+                                    name:
+                                        String(
+                                            load.name ||
+                                            "Laundry Load"
+                                        )
+                                            .trim() ||
+                                        "Laundry Load",
+
+                                    scheduleId:
+                                        load.scheduleId ||
+                                        null,
+
+                                    stage,
+
+                                    status,
+
+                                    stageHistory:
+
+                                        load.stageHistory &&
+                                        typeof load.stageHistory ===
+                                            "object"
+
+                                            ? load.stageHistory
+
+                                            : {}
+
+                                };
+
+                            }
                         );
 
 
+                if (
+                    JSON.stringify(
+                        cleanedLoads
+                    ) !==
+                    JSON.stringify(
+                        laundry.activeLoads
+                    )
+                ) {
+
+                    laundry.activeLoads =
+                        cleanedLoads;
+
+
                     changed =
                         true;
 
                 }
 
+
+                /* ------------------------------------------------
+                   MAINTENANCE DEFINITIONS
+
+                   These are care definitions, not fake completed
+                   activity. They start without a baseline date.
+                ------------------------------------------------ */
 
                 if (
                     !laundry.maintenance
@@ -466,8 +541,14 @@ document.addEventListener(
                 }
 
 
+                /*
+                 * setupComplete only means the Laundry controller has
+                 * performed its one-time compatibility cleanup.
+                 */
+
                 if (
-                    !laundry.setupComplete
+                    laundry.setupComplete !==
+                    true
                 ) {
 
                     laundry.setupComplete =
@@ -478,29 +559,6 @@ document.addEventListener(
                         true;
 
                 }
-
-
-                laundry.weeklySchedule
-                    .forEach(
-                        item => {
-
-                            if (
-                                !Array.isArray(
-                                    item.completedWeeks
-                                )
-                            ) {
-
-                                item.completedWeeks =
-                                    [];
-
-
-                                changed =
-                                    true;
-
-                            }
-
-                        }
-                    );
 
 
                 if (
@@ -666,41 +724,28 @@ document.addEventListener(
             ) {
 
                 const health =
-
-                    typeof HomeStore
-                        .getLaundryScore ===
-                        "function"
-
-                        ? HomeStore
-                            .getLaundryScore(
-                                state
-                            )
-
-                        : this.getWeeklyCompletion(
-                            state
-                        );
+                    HomeStore.getLaundryScore(
+                        state
+                    );
 
 
                 const status =
-
-                    typeof HomeApp
-                        .getHomeStatus ===
-                        "function"
-
-                        ? HomeApp
-                            .getHomeStatus(
-                                health
-                            )
-
-                        : this.statusFromScore(
-                            health
-                        );
+                    HomeApp.getHomeStatus(
+                        health
+                    );
 
 
                 const weekly =
                     this.getWeeklyCompletion(
                         state
                     );
+
+
+                const hasSchedule =
+                    state.laundry
+                        .weeklySchedule
+                        .length >
+                    0;
 
 
                 const due =
@@ -736,7 +781,11 @@ document.addEventListener(
 
                     "heroWeekProgress",
 
-                    `${weekly}%`
+                    hasSchedule
+
+                        ? `${weekly}%`
+
+                        : "—"
 
                 );
 
@@ -1088,13 +1137,17 @@ document.addEventListener(
                         .activeLoads;
 
 
+                const schedule =
+                    state.laundry
+                        .weeklySchedule;
+
+
                 const today =
                     this.getTodayDay();
 
 
                 const todaysSchedule =
-                    state.laundry
-                        .weeklySchedule
+                    schedule
                         .filter(
                             item =>
                                 item.day ===
@@ -1120,8 +1173,7 @@ document.addEventListener(
 
 
                 const completedWeek =
-                    state.laundry
-                        .weeklySchedule
+                    schedule
                         .filter(
                             item =>
                                 this.isCompletedThisWeek(
@@ -1168,7 +1220,7 @@ document.addEventListener(
 
                     todaysSchedule.length
 
-                        ? `${completedToday} of ${todaysSchedule.length} complete today.`
+                        ? `${completedToday} of ${todaysSchedule.length} complete for today's rhythm.`
 
                         : "Nothing recurring is scheduled today."
 
@@ -1179,7 +1231,11 @@ document.addEventListener(
 
                     "weekProgressMetric",
 
-                    `${weekProgress}%`
+                    schedule.length
+
+                        ? `${weekProgress}%`
+
+                        : "—"
 
                 );
 
@@ -1188,7 +1244,11 @@ document.addEventListener(
 
                     "weekProgressMetricDetail",
 
-                    `${completedWeek} of ${state.laundry.weeklySchedule.length} recurring loads are complete.`
+                    schedule.length
+
+                        ? `${completedWeek} of ${schedule.length} recurring loads are complete this week.`
+
+                        : "No recurring loads are scheduled yet."
 
                 );
 
@@ -1785,17 +1845,26 @@ document.addEventListener(
                             completedAt;
 
 
-                        load.durationMs =
-
-                            new Date(
-                                completedAt
-                            )
-                                .getTime() -
-
+                        const startedTime =
                             new Date(
                                 load.startedAt
                             )
                                 .getTime();
+
+
+                        load.durationMs =
+
+                            Number.isFinite(
+                                startedTime
+                            )
+
+                                ? new Date(
+                                    completedAt
+                                )
+                                    .getTime() -
+                                  startedTime
+
+                                : null;
 
 
 
@@ -2094,7 +2163,7 @@ document.addEventListener(
                                         </strong>
 
                                         <small>
-                                            ${complete}/${schedule.length}
+                                            ${schedule.length ? complete + "/" + schedule.length : "—"}
                                         </small>
 
                                     </button>
@@ -2924,6 +2993,15 @@ document.addEventListener(
                                     );
 
 
+                                const actionLabel =
+
+                                    status.isBaseline
+
+                                        ? "Complete + Start Tracking"
+
+                                        : "Mark Complete";
+
+
                                 return `
 
                                     <article
@@ -2956,9 +3034,41 @@ document.addEventListener(
                                         </h3>
 
 
-                                        <p>
-                                            ${this.formatFrequency(task.frequencyDays)}
-                                            ·
+                                        <div class="maintenance-care-status">
+
+                                            <span class="maintenance-frequency">
+                                                ${this.formatFrequency(task.frequencyDays)}
+                                            </span>
+
+
+                                            <strong class="maintenance-countdown">
+                                                ${status.countdown}
+                                            </strong>
+
+
+                                            <span class="maintenance-next-date">
+                                                ${status.detail}
+                                            </span>
+
+                                        </div>
+
+
+                                        <div
+                                            class="maintenance-cycle-track"
+                                            aria-hidden="true"
+                                        >
+
+                                            <span
+                                                style="
+                                                    --maintenance-progress:
+                                                    ${status.progressPercent}%;
+                                                "
+                                            ></span>
+
+                                        </div>
+
+
+                                        <p class="maintenance-last-done">
                                             ${this.formatMaintenanceLastDone(task.lastCompletedAt)}
                                         </p>
 
@@ -2970,7 +3080,7 @@ document.addEventListener(
                                                 type="button"
                                                 data-complete-maintenance="${task.id}"
                                             >
-                                                Mark Complete
+                                                ${actionLabel}
                                             </button>
 
 
@@ -2994,7 +3104,6 @@ document.addEventListener(
                         .join("");
 
             },
-
 
 
             saveMaintenance() {
@@ -3073,6 +3182,9 @@ document.addEventListener(
                 let taskName =
                     "";
 
+                let nextCareMessage =
+                    "";
+
 
                 HomeStore.update(
                     state => {
@@ -3104,6 +3216,16 @@ document.addEventListener(
                         taskName =
                             task.name;
 
+
+                        const status =
+                            this.getMaintenanceStatus(
+                                task
+                            );
+
+
+                        nextCareMessage =
+                            status.countdown;
+
                     }
                 );
 
@@ -3114,14 +3236,13 @@ document.addEventListener(
 
                     HomeApp.toast(
 
-                        `${taskName} completed.`
+                        `${taskName} completed. ${nextCareMessage}.`
 
                     );
 
                 }
 
             },
-
 
 
             deleteMaintenance(
@@ -3327,6 +3448,9 @@ document.addEventListener(
 
             /* ====================================================
                WEEK HELPERS
+
+               HomeStore owns local date + week calculations.
+               Laundry only asks for those shared values.
             ==================================================== */
 
             getWeeklyCompletion(
@@ -3334,26 +3458,50 @@ document.addEventListener(
             ) {
 
                 const schedule =
-                    state.laundry
-                        .weeklySchedule;
+                    Array.isArray(
+                        state.laundry
+                            ?.weeklySchedule
+                    )
+
+                        ? state.laundry
+                            .weeklySchedule
+
+                        : [];
 
 
                 if (
                     !schedule.length
                 ) {
 
+                    /*
+                     * No schedule is not failure.
+                     * The UI displays an em dash instead of pretending
+                     * the user completed a nonexistent plan.
+                     *
+                     * Returning 100 keeps health neutral.
+                     */
                     return 100;
 
                 }
+
+
+                const weekKey =
+                    HomeStore.getLaundryWeekKey();
 
 
                 const complete =
                     schedule
                         .filter(
                             item =>
-                                this.isCompletedThisWeek(
-                                    item
-                                )
+
+                                Array.isArray(
+                                    item.completedWeeks
+                                ) &&
+
+                                item.completedWeeks
+                                    .includes(
+                                        weekKey
+                                    )
                         )
                         .length;
 
@@ -3374,36 +3522,8 @@ document.addEventListener(
 
             getTodayDay() {
 
-                if (
-                    typeof HomeStore
-                        .getLaundryToday ===
-                        "function"
-                ) {
-
-                    return HomeStore
-                        .getLaundryToday();
-
-                }
-
-
-                const jsDay =
-                    new Date()
-                        .getDay();
-
-
-                return [
-
-                    "sunday",
-                    "monday",
-                    "tuesday",
-                    "wednesday",
-                    "thursday",
-                    "friday",
-                    "saturday"
-
-                ][
-                    jsDay
-                ];
+                return HomeStore
+                    .getLaundryToday();
 
             },
 
@@ -3411,50 +3531,8 @@ document.addEventListener(
 
             getLocalDateKey() {
 
-                if (
-                    typeof HomeStore
-                        .getLocalDateKey ===
-                        "function"
-                ) {
-
-                    return HomeStore
-                        .getLocalDateKey();
-
-                }
-
-
-                const now =
-                    new Date();
-
-
-                const year =
-                    now.getFullYear();
-
-
-                const month =
-                    String(
-                        now.getMonth() +
-                        1
-                    )
-                        .padStart(
-                            2,
-                            "0"
-                        );
-
-
-                const day =
-                    String(
-                        now.getDate()
-                    )
-                        .padStart(
-                            2,
-                            "0"
-                        );
-
-
-                return (
-                    `${year}-${month}-${day}`
-                );
+                return HomeStore
+                    .getLocalDateKey();
 
             },
 
@@ -3462,64 +3540,8 @@ document.addEventListener(
 
             getWeekKey() {
 
-                if (
-                    typeof HomeStore
-                        .getLaundryWeekKey ===
-                        "function"
-                ) {
-
-                    return HomeStore
-                        .getLaundryWeekKey();
-
-                }
-
-
-                const now =
-                    new Date();
-
-
-                const day =
-                    now.getDay();
-
-
-                const diff =
-
-                    day ===
-                    0
-
-                        ? -6
-
-                        : 1 -
-                          day;
-
-
-                const monday =
-                    new Date(
-                        now
-                    );
-
-
-                monday.setHours(
-                    0,
-                    0,
-                    0,
-                    0
-                );
-
-
-                monday.setDate(
-
-                    now.getDate() +
-                    diff
-
-                );
-
-
-                return (
-
-                    `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, "0")}-${String(monday.getDate()).padStart(2, "0")}`
-
-                );
+                return HomeStore
+                    .getLaundryWeekKey();
 
             },
 
@@ -3537,7 +3559,8 @@ document.addEventListener(
 
                     item.completedWeeks
                         .includes(
-                            this.getWeekKey()
+                            HomeStore
+                                .getLaundryWeekKey()
                         )
 
                 );
@@ -3586,6 +3609,34 @@ document.addEventListener(
                 task
             ) {
 
+                const rawFrequency =
+                    Number(
+                        task.frequencyDays
+                    );
+
+
+                const frequency =
+
+                    Number.isFinite(
+                        rawFrequency
+                    ) &&
+
+                    rawFrequency >
+                    0
+
+                        ? rawFrequency
+
+                        : 30;
+
+
+                /*
+                 * No completion date yet.
+                 *
+                 * This is not a warning.
+                 * HomeOS needs one completion
+                 * to begin the care clock.
+                 */
+
                 if (
                     !task.lastCompletedAt
                 ) {
@@ -3593,7 +3644,279 @@ document.addEventListener(
                     return {
 
                         label:
-                            "BASELINE NEEDED",
+                            "START TRACKING",
+
+                        className:
+                            "baseline",
+
+                        pillClass:
+                            "baseline",
+
+                        symbol:
+                            "○",
+
+                        needsAttention:
+                            false,
+
+                        isBaseline:
+                            true,
+
+                        daysRemaining:
+                            null,
+
+                        overdueDays:
+                            0,
+
+                        progressPercent:
+                            0,
+
+                        countdown:
+                            "Complete once to start tracking",
+
+                        detail:
+                            "HomeOS will begin the care clock from that completion date."
+
+                    };
+
+                }
+
+
+                const completedAt =
+                    new Date(
+                        task.lastCompletedAt
+                    );
+
+
+                /*
+                 * Protect the maintenance clock
+                 * from an invalid saved date.
+                 */
+
+                if (
+                    Number.isNaN(
+                        completedAt.getTime()
+                    )
+                ) {
+
+                    return {
+
+                        label:
+                            "START TRACKING",
+
+                        className:
+                            "baseline",
+
+                        pillClass:
+                            "baseline",
+
+                        symbol:
+                            "○",
+
+                        needsAttention:
+                            false,
+
+                        isBaseline:
+                            true,
+
+                        daysRemaining:
+                            null,
+
+                        overdueDays:
+                            0,
+
+                        progressPercent:
+                            0,
+
+                        countdown:
+                            "Complete once to start tracking",
+
+                        detail:
+                            "HomeOS needs a valid completion date to begin the care clock."
+
+                    };
+
+                }
+
+
+                /*
+                 * Build the next due date from
+                 * the last completion date.
+                 */
+
+                const dueDate =
+                    new Date(
+
+                        completedAt.getFullYear(),
+
+                        completedAt.getMonth(),
+
+                        completedAt.getDate()
+
+                    );
+
+
+                dueDate.setDate(
+
+                    dueDate.getDate() +
+                    frequency
+
+                );
+
+
+                /*
+                 * Compare calendar days rather
+                 * than elapsed hours.
+                 */
+
+                const today =
+                    new Date();
+
+
+                const todayUtc =
+                    Date.UTC(
+
+                        today.getFullYear(),
+
+                        today.getMonth(),
+
+                        today.getDate()
+
+                    );
+
+
+                const dueUtc =
+                    Date.UTC(
+
+                        dueDate.getFullYear(),
+
+                        dueDate.getMonth(),
+
+                        dueDate.getDate()
+
+                    );
+
+
+                const daysRemaining =
+                    Math.round(
+
+                        (
+                            dueUtc -
+                            todayUtc
+                        ) /
+
+                        86400000
+
+                    );
+
+
+                const daysSinceCompleted =
+                    frequency -
+                    daysRemaining;
+
+
+                const progressPercent =
+                    Math.max(
+
+                        0,
+
+                        Math.min(
+
+                            100,
+
+                            Math.round(
+
+                                (
+                                    daysSinceCompleted /
+                                    frequency
+                                ) *
+
+                                100
+
+                            )
+
+                        )
+
+                    );
+
+
+                const dueDateLabel =
+                    this.formatMaintenanceDate(
+                        dueDate
+                    );
+
+
+                /*
+                 * OVERDUE
+                 */
+
+                if (
+                    daysRemaining <
+                    0
+                ) {
+
+                    const overdueDays =
+                        Math.abs(
+                            daysRemaining
+                        );
+
+
+                    return {
+
+                        label:
+                            "OVERDUE",
+
+                        className:
+                            "overdue",
+
+                        pillClass:
+                            "danger",
+
+                        symbol:
+                            "×",
+
+                        needsAttention:
+                            true,
+
+                        isBaseline:
+                            false,
+
+                        daysRemaining,
+
+                        overdueDays,
+
+                        progressPercent:
+                            100,
+
+                        countdown:
+
+                            overdueDays ===
+                            1
+
+                                ? "1 day overdue"
+
+                                : `${overdueDays} days overdue`,
+
+                        detail:
+                            `Was due ${dueDateLabel}`
+
+                    };
+
+                }
+
+
+                /*
+                 * DUE TODAY
+                 */
+
+                if (
+                    daysRemaining ===
+                    0
+                ) {
+
+                    return {
+
+                        label:
+                            "DUE TODAY",
 
                         className:
                             "attention",
@@ -3605,106 +3928,42 @@ document.addEventListener(
                             "!",
 
                         needsAttention:
-                            true
+                            true,
+
+                        isBaseline:
+                            false,
+
+                        daysRemaining:
+                            0,
+
+                        overdueDays:
+                            0,
+
+                        progressPercent:
+                            100,
+
+                        countdown:
+                            "Needs care today",
+
+                        detail:
+                            `Due ${dueDateLabel}`
 
                     };
 
                 }
 
 
-                const days =
-
-                    typeof HomeStore
-                        .daysSince ===
-                        "function"
-
-                        ? HomeStore
-                            .daysSince(
-                                task.lastCompletedAt
-                            )
-
-                        : Math.floor(
-
-                            (
-                                Date.now() -
-
-                                new Date(
-                                    task.lastCompletedAt
-                                )
-                                    .getTime()
-                            ) /
-
-                            86400000
-
-                        );
-
-
-                const frequency =
-                    Number(
-                        task.frequencyDays ||
-                        30
-                    );
-
-
-                if (
-                    days >=
-                    frequency
-                ) {
-
-                    return {
-
-                        label:
-
-                            days >=
-                            frequency *
-                            1.35
-
-                                ? "OVERDUE"
-
-                                : "DUE",
-
-                        className:
-
-                            days >=
-                            frequency *
-                            1.35
-
-                                ? "overdue"
-
-                                : "attention",
-
-                        pillClass:
-
-                            days >=
-                            frequency *
-                            1.35
-
-                                ? "danger"
-
-                                : "warning",
-
-                        symbol:
-
-                            days >=
-                            frequency *
-                            1.35
-
-                                ? "×"
-
-                                : "!",
-
-                        needsAttention:
-                            true
-
-                    };
-
-                }
-
+                /*
+                 * HEALTHY
+                 *
+                 * Upcoming care remains healthy,
+                 * including when it is due tomorrow.
+                 */
 
                 return {
 
                     label:
-                        "CURRENT",
+                        "HEALTHY",
 
                     className:
                         "current",
@@ -3716,20 +3975,85 @@ document.addEventListener(
                         "✓",
 
                     needsAttention:
-                        false
+                        false,
+
+                    isBaseline:
+                        false,
+
+                    daysRemaining,
+
+                    overdueDays:
+                        0,
+
+                    progressPercent,
+
+                    countdown:
+
+                        daysRemaining ===
+                        1
+
+                            ? "Due tomorrow"
+
+                            : `Due in ${daysRemaining} days`,
+
+                    detail:
+                        `Next care ${dueDateLabel}`
 
                 };
 
             },
 
 
-
             getMaintenanceSortValue(
                 task
             ) {
 
+                const status =
+                    this.getMaintenanceStatus(
+                        task
+                    );
+
+
+                /*
+                 * Baseline tasks stay below
+                 * active maintenance clocks.
+                 */
+
                 if (
-                    !task.lastCompletedAt
+                    status.isBaseline
+                ) {
+
+                    return -1;
+
+                }
+
+
+                /*
+                 * Overdue tasks rise to the top.
+                 */
+
+                if (
+                    status.overdueDays >
+                    0
+                ) {
+
+                    return (
+
+                        200000 +
+                        status.overdueDays
+
+                    );
+
+                }
+
+
+                /*
+                 * Due-today tasks come next.
+                 */
+
+                if (
+                    status.daysRemaining ===
+                    0
                 ) {
 
                     return 100000;
@@ -3737,52 +4061,19 @@ document.addEventListener(
                 }
 
 
-                const days =
-
-                    typeof HomeStore
-                        .daysSince ===
-                        "function"
-
-                        ? HomeStore
-                            .daysSince(
-                                task.lastCompletedAt
-                            )
-
-                        : Math.floor(
-
-                            (
-                                Date.now() -
-
-                                new Date(
-                                    task.lastCompletedAt
-                                )
-                                    .getTime()
-                            ) /
-
-                            86400000
-
-                        );
-
+                /*
+                 * Healthy tasks are ordered by
+                 * whichever one is due soonest.
+                 */
 
                 return (
 
-                    days /
-
-                    Math.max(
-
-                        1,
-
-                        Number(
-                            task.frequencyDays ||
-                            30
-                        )
-
-                    )
+                    10000 -
+                    status.daysRemaining
 
                 );
 
             },
-
 
 
             /* ====================================================
@@ -4507,45 +4798,6 @@ document.addEventListener(
                FORMATTERS
             ==================================================== */
 
-            statusFromScore(
-                score
-            ) {
-
-                if (
-                    score >=
-                    90
-                ) {
-
-                    return "EXCELLENT";
-
-                }
-
-
-                if (
-                    score >=
-                    75
-                ) {
-
-                    return "STABLE";
-
-                }
-
-
-                if (
-                    score >=
-                    60
-                ) {
-
-                    return "ACTIVE";
-
-                }
-
-
-                return "ATTENTION";
-
-            },
-
-
 
             titleCase(
                 value
@@ -4880,6 +5132,48 @@ document.addEventListener(
 
 
 
+            formatMaintenanceDate(
+                date
+            ) {
+
+                if (
+                    !(date instanceof Date) ||
+
+                    Number.isNaN(
+                        date.getTime()
+                    )
+                ) {
+
+                    return "Unknown date";
+
+                }
+
+
+                return new Intl.DateTimeFormat(
+
+                    undefined,
+
+                    {
+
+                        month:
+                            "short",
+
+                        day:
+                            "numeric",
+
+                        year:
+                            "numeric"
+
+                    }
+
+                )
+                    .format(
+                        date
+                    );
+
+            },
+
+
             formatMaintenanceLastDone(
                 dateString
             ) {
@@ -4894,30 +5188,19 @@ document.addEventListener(
 
 
                 const days =
+                    HomeStore.daysSince(
+                        dateString
+                    );
 
-                    typeof HomeStore
-                        .daysSince ===
-                        "function"
 
-                        ? HomeStore
-                            .daysSince(
-                                dateString
-                            )
+                if (
+                    days ===
+                    null
+                ) {
 
-                        : Math.floor(
+                    return "Last completion unavailable";
 
-                            (
-                                Date.now() -
-
-                                new Date(
-                                    dateString
-                                )
-                                    .getTime()
-                            ) /
-
-                            86400000
-
-                        );
+                }
 
 
                 if (

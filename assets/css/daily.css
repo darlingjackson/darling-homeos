@@ -1815,535 +1815,567 @@ body.dark[data-page="daily"]
 
 
 /* ================================================================
-   10 // RIGHT TOOLS
+   10 // RIGHT TOOLS // POLISHED HOMEOS UTILITIES
 ================================================================ */
 
 .daily-tools-panel {
-    overflow:
-        hidden;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--rhythm-line);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(39, 207, 232, 0.07), transparent 28%),
+        radial-gradient(circle at 0% 100%, rgba(242, 85, 186, 0.07), transparent 30%),
+        var(--rhythm-panel);
+    box-shadow: var(--rhythm-shadow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.daily-tools-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(var(--rhythm-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--rhythm-grid) 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: linear-gradient(to bottom, black, transparent 92%);
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 92%);
+    opacity: 0.35;
+}
+
+.daily-tool-section,
+.daily-tool-divider {
+    position: relative;
+    z-index: 1;
 }
 
 .daily-tool-section {
-    padding:
-        23px;
+    padding: 24px;
 }
 
 .daily-tool-divider {
-    height:
-        1px;
-
-    margin:
-        0 23px;
-
-    background:
-        var(--rhythm-line);
+    height: 1px;
+    margin: 0 24px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--rhythm-line-strong),
+        var(--rhythm-line),
+        transparent
+    );
 }
 
 .daily-tool-heading {
-    display:
-        flex;
-
-    align-items:
-        flex-start;
-
-    justify-content:
-        space-between;
-
-    gap:
-        15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
 }
 
 .daily-tool-heading > div {
-    min-width:
-        0;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        11px;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .daily-tool-icon {
-    width:
-        38px;
-
-    height:
-        38px;
-
-    flex:
-        0 0 auto;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    border:
-        1px solid
-        rgba(91, 135, 255, 0.28);
-
-    border-radius:
-        10px;
-
-    color:
-        var(--daily-opening);
-
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(91, 135, 255, 0.30);
+    border-radius: 12px;
+    color: var(--daily-opening);
     background:
-        rgba(91, 135, 255, 0.055);
-
-    font-size:
-        18px;
+        linear-gradient(145deg, rgba(91, 135, 255, 0.09), transparent),
+        var(--rhythm-panel-soft);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+    font-size: 18px;
 }
 
 .daily-tool-icon.task-icon {
-    color:
-        var(--daily-closing);
-
-    border-color:
-        rgba(242, 85, 186, 0.27);
-
+    color: var(--daily-closing);
+    border-color: rgba(242, 85, 186, 0.30);
     background:
-        rgba(242, 85, 186, 0.05);
+        linear-gradient(145deg, rgba(242, 85, 186, 0.09), transparent),
+        var(--rhythm-panel-soft);
 }
 
 .daily-tool-heading h2 {
-    margin:
-        4px 0 0;
-
-    color:
-        var(--rhythm-title);
-
-    font-family:
-        var(--font-ui);
-
-    font-size:
-        18px;
-
-    font-weight:
-        800;
+    margin: 4px 0 0;
+    color: var(--rhythm-title);
+    font-family: var(--font-ui);
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
 }
 
 .daily-count-pill {
-    min-height:
-        27px;
-
-    padding:
-        0 9px;
-
-    flex:
-        0 0 auto;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    border:
-        1px solid
-        rgba(39, 207, 232, 0.20);
-
-    border-radius:
-        999px;
-
-    color:
-        var(--daily-cyan);
-
-    background:
-        rgba(39, 207, 232, 0.05);
-
-    font-size:
-        9px;
-
-    font-weight:
-        800;
+    min-height: 29px;
+    padding: 0 10px;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(39, 207, 232, 0.22);
+    border-radius: 999px;
+    color: var(--daily-cyan);
+    background: rgba(39, 207, 232, 0.06);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
 }
 
 .daily-tool-description {
-    margin:
-        14px 0 0;
-
-    color:
-        var(--rhythm-copy);
-
-    font-size:
-        12px;
-
-    line-height:
-        1.6;
+    margin: 15px 0 0;
+    color: var(--rhythm-copy);
+    font-size: 12px;
+    line-height: 1.65;
 }
 
 
 /* ================================================================
-   11 // QUICK SHOPPING
+   11 // SHARED HOMEOS SHOPPING
 ================================================================ */
 
 .daily-shopping-list {
-    max-height:
-        330px;
-
-    margin-top:
-        17px;
-
-    display:
-        grid;
-
-    gap:
-        6px;
-
-    overflow-y:
-        auto;
-
-    scrollbar-width:
-        thin;
+    max-height: 315px;
+    margin-top: 18px;
+    display: grid;
+    gap: 8px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(91, 135, 255, 0.24) transparent;
 }
 
 .daily-shopping-row {
-    min-height:
-        49px;
-
-    padding:
-        8px 9px;
-
-    display:
-        grid;
-
-    grid-template-columns:
-        auto
-        minmax(0, 1fr)
-        auto;
-
-    gap:
-        9px;
-
-    align-items:
-        center;
-
-    border-bottom:
-        1px solid
-        var(--rhythm-line);
+    min-height: 58px;
+    padding: 9px 10px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid var(--rhythm-line);
+    border-radius: 13px;
+    background:
+        linear-gradient(135deg, rgba(91, 135, 255, 0.035), transparent 55%),
+        var(--rhythm-panel-soft);
+    transition: 0.18s ease;
 }
 
-.daily-shopping-row input {
-    width:
-        18px;
+.daily-shopping-row:hover {
+    border-color: rgba(91, 135, 255, 0.25);
+    transform: translateY(-1px);
+}
 
-    height:
-        18px;
-
-    accent-color:
-        var(--daily-closing);
+.daily-shopping-row > input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--daily-closing);
 }
 
 .daily-shopping-row label {
-    min-width:
-        0;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        8px;
-
-    cursor:
-        pointer;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
 }
 
-.daily-shopping-row label strong {
-    overflow:
-        hidden;
-
-    color:
-        var(--rhythm-title);
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    text-overflow:
-        ellipsis;
-
-    white-space:
-        nowrap;
+.daily-shopping-name {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
 }
 
-.daily-shopping-row label span {
-    flex:
-        0 0 auto;
+.daily-shopping-name strong {
+    overflow: hidden;
+    color: var(--rhythm-title);
+    font-size: 12px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-    color:
-        var(--daily-violet);
+.daily-shopping-name small {
+    color: var(--rhythm-faint);
+    font-family: var(--font-ui);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
 
-    font-size:
-        8px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.06em;
+.daily-shopping-ready {
+    flex: 0 0 auto;
+    padding: 4px 6px;
+    border: 1px solid rgba(50, 207, 166, 0.20);
+    border-radius: 999px;
+    color: var(--daily-mint);
+    background: rgba(50, 207, 166, 0.05);
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0.07em;
 }
 
 .daily-shopping-row > button {
-    width:
-        29px;
-
-    height:
-        29px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    border:
-        0;
-
-    border-radius:
-        8px;
-
-    color:
-        var(--daily-closing);
-
-    background:
-        transparent;
-
-    font-size:
-        17px;
+    width: 31px;
+    height: 31px;
+    display: grid;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: var(--rhythm-faint);
+    background: transparent;
+    font-size: 17px;
+    transition: 0.18s ease;
 }
 
 .daily-shopping-row > button:hover {
-    background:
-        rgba(242, 85, 186, 0.07);
+    color: var(--daily-closing);
+    border-color: rgba(242, 85, 186, 0.20);
+    background: rgba(242, 85, 186, 0.06);
 }
 
 .daily-shopping-row.done {
-    opacity:
-        0.55;
+    opacity: 0.66;
+    border-color: rgba(50, 207, 166, 0.18);
+    background:
+        linear-gradient(135deg, rgba(50, 207, 166, 0.045), transparent 55%),
+        var(--rhythm-panel-soft);
 }
 
-.daily-shopping-row.done
-label strong {
-    text-decoration:
-        line-through;
+.daily-shopping-row.done .daily-shopping-name strong {
+    text-decoration: line-through;
 }
 
 .daily-shopping-empty {
-    padding:
-        24px 12px 16px;
-
-    text-align:
-        center;
+    min-height: 145px;
+    padding: 24px 18px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    border: 1px dashed var(--rhythm-line-strong);
+    border-radius: 15px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(39, 207, 232, 0.06), transparent 48%),
+        var(--rhythm-panel-soft);
+    text-align: center;
 }
 
 .daily-shopping-empty > span {
-    display:
-        block;
-
-    color:
-        var(--daily-cyan);
-
-    font-size:
-        27px;
+    display: block;
+    color: var(--daily-cyan);
+    font-size: 28px;
 }
 
 .daily-shopping-empty strong {
-    display:
-        block;
-
-    margin-top:
-        7px;
-
-    color:
-        var(--rhythm-title);
-
-    font-size:
-        13px;
+    display: block;
+    margin-top: 7px;
+    color: var(--rhythm-title);
+    font-size: 13px;
 }
 
 .daily-shopping-empty p {
-    margin:
-        4px 0 0;
+    max-width: 270px;
+    margin: 5px 0 0;
+    color: var(--rhythm-faint);
+    font-size: 10px;
+    line-height: 1.55;
+}
 
-    color:
-        var(--rhythm-faint);
 
-    font-size:
-        11px;
+/* ================================================================
+   12 // TOOL FORM CARDS
+================================================================ */
+
+.daily-tool-form-card {
+    margin-top: 17px;
+    padding: 15px;
+    border: 1px solid var(--rhythm-line);
+    border-radius: 15px;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,0.12), transparent 45%),
+        var(--rhythm-panel-soft);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
+}
+
+.daily-shopping-composer {
+    border-color: rgba(39, 207, 232, 0.19);
+}
+
+.daily-add-task-form {
+    border-color: rgba(242, 85, 186, 0.18);
+    display: grid;
+    gap: 13px;
+}
+
+.daily-form-card-heading {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.daily-form-card-heading > span {
+    color: var(--daily-cyan);
+    font-family: var(--font-ui);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.11em;
+}
+
+.daily-add-task-form .daily-form-card-heading > span {
+    color: var(--daily-closing);
+}
+
+.daily-form-card-heading small {
+    color: var(--rhythm-faint);
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.daily-form-field {
+    display: grid;
+    gap: 7px;
+}
+
+.daily-field-label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--rhythm-title);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.025em;
+}
+
+.daily-form-field .daily-field-label {
+    margin-bottom: 0;
 }
 
 .daily-inline-add {
-    margin-top:
-        15px;
-
-    display:
-        grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto;
-
-    gap:
-        8px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
 }
 
 .daily-inline-add .button {
-    min-width:
-        80px;
+    min-width: 82px;
+    min-height: 48px;
+}
+
+body[data-page="daily"] .daily-tool-input {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    height: 48px;
+    margin: 0;
+    padding: 0 14px;
+    border: 1px solid var(--rhythm-line-strong);
+    border-radius: 12px;
+    outline: none;
+    color: var(--rhythm-title);
+    background: var(--rhythm-panel-strong);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    transition: 0.18s ease;
+}
+
+body[data-page="daily"] .daily-tool-input:hover {
+    border-color: rgba(39, 207, 232, 0.32);
+}
+
+body[data-page="daily"] .daily-add-task-form .daily-tool-input:hover {
+    border-color: rgba(242, 85, 186, 0.28);
+}
+
+body[data-page="daily"] .daily-tool-input:focus {
+    border-color: rgba(39, 207, 232, 0.55);
+    box-shadow:
+        0 0 0 3px rgba(39, 207, 232, 0.07),
+        0 0 20px rgba(39, 207, 232, 0.05);
+}
+
+body[data-page="daily"] .daily-add-task-form .daily-tool-input:focus {
+    border-color: rgba(242, 85, 186, 0.48);
+    box-shadow:
+        0 0 0 3px rgba(242, 85, 186, 0.065),
+        0 0 20px rgba(242, 85, 186, 0.05);
+}
+
+body[data-page="daily"] .daily-tool-input::placeholder {
+    color: var(--rhythm-faint);
+    opacity: 1;
+    font-weight: 500;
+}
+
+.daily-field-help {
+    margin: 8px 0 0;
+    color: var(--rhythm-faint);
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.daily-shopping-open-list {
+    min-height: 39px;
+    margin-top: 12px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--rhythm-copy);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: 0.18s ease;
+}
+
+.daily-shopping-open-list span {
+    color: var(--daily-cyan);
+    font-size: 14px;
+    transition: transform 0.18s ease;
+}
+
+.daily-shopping-open-list:hover {
+    color: var(--daily-cyan);
+}
+
+.daily-shopping-open-list:hover span {
+    transform: translateX(3px);
 }
 
 
 /* ================================================================
-   12 // ADD TASK
+   13 // REPEAT OPTION + DAILY BUTTON TUNING
 ================================================================ */
 
-.daily-add-task-form {
-    margin-top:
-        17px;
-
-    display:
-        grid;
-
-    gap:
-        9px;
-}
-
 .daily-repeat-option {
-    min-height:
-        42px;
-
-    padding:
-        9px 11px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        9px;
-
-    border:
-        1px solid
-        var(--rhythm-line);
-
-    border-radius:
-        10px;
-
-    color:
-        var(--rhythm-copy);
-
-    background:
-        var(--rhythm-panel-soft);
-
-    font-size:
-        11px;
-
-    cursor:
-        pointer;
+    min-height: 58px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    border: 1px solid var(--rhythm-line);
+    border-radius: 12px;
+    color: var(--rhythm-copy);
+    background: var(--rhythm-panel-strong);
+    cursor: pointer;
+    transition: 0.18s ease;
 }
 
-.daily-repeat-option input {
-    width:
-        17px;
+.daily-repeat-option:hover {
+    border-color: rgba(242, 85, 186, 0.25);
+}
 
-    height:
-        17px;
+.daily-repeat-option > input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
 
-    accent-color:
-        var(--daily-closing);
+.daily-repeat-control {
+    width: 38px;
+    height: 22px;
+    padding: 2px;
+    display: block;
+    border: 1px solid var(--rhythm-line-strong);
+    border-radius: 999px;
+    background: rgba(91, 135, 255, 0.055);
+    transition: 0.18s ease;
+}
+
+.daily-repeat-control::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: block;
+    border-radius: 50%;
+    background: var(--rhythm-faint);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+    transition: 0.18s ease;
+}
+
+.daily-repeat-option > input:checked + .daily-repeat-control {
+    border-color: rgba(242, 85, 186, 0.34);
+    background: rgba(242, 85, 186, 0.13);
+}
+
+.daily-repeat-option > input:checked + .daily-repeat-control::after {
+    background: var(--daily-closing);
+    transform: translateX(16px);
+    box-shadow: 0 0 10px rgba(242, 85, 186, 0.30);
+}
+
+.daily-repeat-copy {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.daily-repeat-copy strong {
+    color: var(--rhythm-title);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.daily-repeat-copy small {
+    color: var(--rhythm-faint);
+    font-size: 8px;
+    line-height: 1.4;
 }
 
 .daily-add-task-button {
-    width:
-        100%;
+    width: 100%;
+    min-height: 49px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
 }
 
-
-/* ================================================================
-   13 // DAILY-SPECIFIC INPUT TUNING
-================================================================ */
-
-body[data-page="daily"]
-.app-input,
-body[data-page="daily"]
-.app-select {
-    min-height:
-        44px;
-
-    border-color:
-        var(--rhythm-line);
-
-    color:
-        var(--rhythm-title);
-
-    background:
-        var(--rhythm-panel-soft);
+body[data-page="daily"] .app-input,
+body[data-page="daily"] .app-select {
+    border-color: var(--rhythm-line);
+    color: var(--rhythm-title);
+    background: var(--rhythm-panel-soft);
 }
 
-body[data-page="daily"]
-.app-input::placeholder {
-    color:
-        var(--rhythm-faint);
+body[data-page="daily"] .app-input::placeholder {
+    color: var(--rhythm-faint);
 }
 
-body[data-page="daily"]
-.app-input:focus,
-body[data-page="daily"]
-.app-select:focus {
-    border-color:
-        rgba(39, 207, 232, 0.38);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(39, 207, 232, 0.07);
+body[data-page="daily"] .app-input:focus,
+body[data-page="daily"] .app-select:focus {
+    border-color: rgba(39, 207, 232, 0.38);
+    box-shadow: 0 0 0 3px rgba(39, 207, 232, 0.07);
 }
 
-body[data-page="daily"]
-.button-primary {
-    color:
-        #fff;
-
-    border-color:
-        rgba(255, 255, 255, 0.25);
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--daily-violet),
-            var(--daily-closing)
-        );
-
-    box-shadow:
-        0 10px 28px
-        rgba(188, 79, 221, 0.18);
+body[data-page="daily"] .button-primary {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+    background: linear-gradient(135deg, var(--daily-violet), var(--daily-closing));
+    box-shadow: 0 10px 28px rgba(188, 79, 221, 0.18);
 }
 
-body[data-page="daily"]
-.button-primary:hover {
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        0 14px 34px
-        rgba(188, 79, 221, 0.25);
+body[data-page="daily"] .button-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 34px rgba(188, 79, 221, 0.25);
 }
-
 
 /* ================================================================
    14 // LARGE LAPTOP
@@ -2805,6 +2837,46 @@ body[data-page="daily"]
     }
 }
 
+
+
+
+/* ================================================================
+   DAILY TOOLS RESPONSIVE
+================================================================ */
+
+@media (max-width: 620px) {
+    .daily-tool-section {
+        padding: 20px;
+    }
+
+    .daily-tool-divider {
+        margin: 0 20px;
+    }
+
+    .daily-inline-add {
+        grid-template-columns: 1fr;
+    }
+
+    .daily-inline-add .button {
+        width: 100%;
+    }
+
+    .daily-form-card-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .daily-shopping-row label {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .daily-shopping-ready {
+        align-self: flex-start;
+    }
+}
 
 /* ================================================================
    19 // MOTION

@@ -10,9 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Fall Refresh | DARLING HomeOS
-    </title>
+    <title>Fall Refresh | DARLING HomeOS</title>
 
     <meta
         name="description"
@@ -27,14 +25,16 @@
         rel="stylesheet"
     >
 
+    <!-- SHARED HOMEOS -->
     <link
         rel="stylesheet"
         href="assets/css/app.css"
     >
 
+    <!-- ALL FOUR SEASON DETAIL PAGES SHARE THIS -->
     <link
         rel="stylesheet"
-        href="assets/css/season-detail.css"
+        href="assets/css/season-deatil.css"
     >
 </head>
 
@@ -59,11 +59,24 @@
         aria-live="polite"
     ></div>
 
+    <!--
+        SCRIPT ORDER MATTERS:
+
+        1. store.js            = one HomeOS memory
+        2. app.js              = shared helpers
+        3. shell.js            = shared navigation/theme/footer
+        4. season-detail.js    = builds the seasonal detail HTML
+        5. seasonal.js         = owns tasks/progress/shopping/actions
+        6. season-detail-ui.js = live clock/cycle/guide/telemetry
+
+        season-detail-ui.js MUST load after seasonal.js.
+    -->
     <script src="assets/js/store.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/shell.js"></script>
     <script src="assets/js/season-detail.js"></script>
     <script src="assets/js/seasonal.js"></script>
+    <script src="assets/js/season-detail-ui.js"></script>
 
 </body>
 </html>

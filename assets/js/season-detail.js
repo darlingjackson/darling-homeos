@@ -511,25 +511,153 @@
     }
 
 
-    const particles =
-        Array.from(
-            { length: 16 },
+    const buildAtmosphereMarkup = (
+        seasonId
+    ) => {
 
-            (_, index) => `
-                <span
+        if (
+            seasonId ===
+            "winter"
+        ) {
+
+            return `
+
+                <div
                     class="
-                        season-particle
-                        particle-${String(
-                            index + 1
-                        ).padStart(
-                            2,
-                            "0"
-                        )}
+                        season-snow-field
+                        season-snow-field-one
                     "
-                ></span>
-            `
-        )
-        .join("");
+                ></div>
+
+                <div
+                    class="
+                        season-snow-field
+                        season-snow-field-two
+                    "
+                ></div>
+
+                <div
+                    class="
+                        season-snow-field
+                        season-snow-field-three
+                    "
+                ></div>
+
+            `;
+
+        }
+
+
+        if (
+            seasonId ===
+            "summer"
+        ) {
+
+            return `
+
+                <div class="season-effect-field summer-lemon-rain">
+
+                    ${
+                        Array.from(
+                            { length: 16 },
+
+                            (_, index) => `
+                                <span
+                                    class="
+                                        summer-lemon
+                                        lemon-${String(
+                                            index + 1
+                                        ).padStart(
+                                            2,
+                                            "0"
+                                        )}
+                                    "
+                                ></span>
+                            `
+                        )
+                            .join("")
+                    }
+
+                </div>
+
+            `;
+
+        }
+
+
+        if (
+            seasonId ===
+            "fall"
+        ) {
+
+            return `
+
+                <div class="season-effect-field fall-leaf-rain">
+
+                    ${
+                        Array.from(
+                            { length: 16 },
+
+                            (_, index) => `
+                                <span
+                                    class="
+                                        fall-leaf
+                                        leaf-${String(
+                                            index + 1
+                                        ).padStart(
+                                            2,
+                                            "0"
+                                        )}
+                                    "
+                                ></span>
+                            `
+                        )
+                            .join("")
+                    }
+
+                </div>
+
+            `;
+
+        }
+
+
+        return `
+
+            <div class="season-effect-field spring-petal-field">
+
+                ${
+                    Array.from(
+                        { length: 14 },
+
+                        (_, index) => `
+                            <span
+                                class="
+                                    spring-petal
+                                    petal-${String(
+                                        index + 1
+                                    ).padStart(
+                                        2,
+                                        "0"
+                                    )}
+                                "
+                            ></span>
+                        `
+                    )
+                        .join("")
+                }
+
+            </div>
+
+        `;
+
+    };
+
+
+    const atmosphereMarkup =
+        buildAtmosphereMarkup(
+            season
+        );
 
 
     const palette =
@@ -571,9 +699,7 @@
                 "
             ></div>
 
-            <div class="season-particle-field">
-                ${particles}
-            </div>
+            ${atmosphereMarkup}
 
         </div>
 

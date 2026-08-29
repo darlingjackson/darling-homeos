@@ -3314,18 +3314,45 @@ body[data-page="laundry"]
 }
 
 
-
 /* ================================================================
    DIALOGS
+   LAUNDRY FLOW // HOMEOS SYSTEM WINDOWS
+================================================================ */
+
+
+/* ================================================================
+   DIALOG WINDOW
 ================================================================ */
 
 .laundry-dialog {
 
+    width:
+        min(
+            620px,
+            calc(100vw - 32px)
+        );
+
+    max-width:
+        620px;
+
+    max-height:
+        calc(100vh - 40px);
+
+    padding:
+        0;
+
+    overflow:
+        auto;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.28);
+
+    border-radius:
+        24px;
+
     color:
         var(--laundry-text);
-
-    border-color:
-        rgba(39, 213, 238, 0.22);
 
     background:
         var(--laundry-panel-strong);
@@ -3333,68 +3360,1142 @@ body[data-page="laundry"]
     box-shadow:
 
         0 34px 110px
-        rgba(0, 0, 0, 0.42),
+        rgba(0, 0, 0, 0.38),
 
-        0 0 48px
-        rgba(39, 213, 238, 0.12);
+        0 0 60px
+        rgba(39, 213, 238, 0.10),
+
+        0 0 90px
+        rgba(242, 85, 186, 0.055);
 
 }
-
 
 
 .laundry-dialog::backdrop {
 
     background:
-        rgba(2, 5, 15, 0.74);
+        rgba(7, 11, 24, 0.68);
 
     backdrop-filter:
-        blur(10px);
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
 
 }
 
 
+/* ================================================================
+   INNER SHELL
+================================================================ */
 
-.laundry-dialog
-.app-dialog-header {
+.laundry-dialog-shell {
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(39, 213, 238, 0.075),
-            transparent 55%
-        );
+    width:
+        100%;
 
-}
+    margin:
+        0;
 
+    position:
+        relative;
 
-
-.laundry-dialog
-.app-input,
-.laundry-dialog
-.app-select {
-
-    color:
-        var(--laundry-text);
-
-    border-color:
-        var(--laundry-line);
+    overflow:
+        hidden;
 
     background:
+
+        radial-gradient(
+            circle at 8% 4%,
+            rgba(39, 213, 238, 0.10),
+            transparent 33%
+        ),
+
+        radial-gradient(
+            circle at 96% 94%,
+            rgba(242, 85, 186, 0.09),
+            transparent 36%
+        ),
+
         var(--laundry-panel-strong);
 
 }
 
 
+.laundry-dialog-shell::before {
 
-.laundry-dialog
-.app-input::placeholder {
+    content:
+        "";
 
-    color:
-        var(--laundry-faint);
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        0;
+
+    pointer-events:
+        none;
+
+    background:
+
+        linear-gradient(
+            var(--laundry-grid) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            var(--laundry-grid) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        32px 32px;
+
+    opacity:
+        0.42;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 92%
+        );
+
+    -webkit-mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 92%
+        );
 
 }
 
 
+/* ================================================================
+   HEADER
+================================================================ */
+
+.laundry-dialog-header {
+
+    padding:
+        28px 28px 23px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        24px;
+
+    border-bottom:
+        1px solid
+        var(--laundry-line);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(39, 213, 238, 0.075),
+            transparent 52%
+        );
+
+}
+
+
+.laundry-dialog-heading {
+
+    min-width:
+        0;
+
+}
+
+
+.laundry-dialog-signal {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.12em;
+
+    line-height:
+        1.4;
+
+}
+
+
+.laundry-dialog-signal-dot {
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    flex:
+        0 0 auto;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--laundry-cyan);
+
+    box-shadow:
+        0 0 12px
+        rgba(39, 213, 238, 0.55);
+
+}
+
+
+.laundry-dialog-heading h2 {
+
+    margin:
+        8px 0 0;
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        clamp(
+            27px,
+            4vw,
+            34px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.08;
+
+    letter-spacing:
+        -0.04em;
+
+}
+
+
+.laundry-dialog-heading p {
+
+    max-width:
+        460px;
+
+    margin:
+        10px 0 0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.65;
+
+}
+
+
+/* ================================================================
+   CLOSE BUTTON
+================================================================ */
+
+.laundry-dialog-close {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    padding:
+        0;
+
+    flex:
+        0 0 auto;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        12px;
+
+    color:
+        var(--laundry-copy);
+
+    background:
+        var(--laundry-panel-soft);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        22px;
+
+    font-weight:
+        400;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    transition:
+        0.18s ease;
+
+}
+
+
+.laundry-dialog-close:hover {
+
+    color:
+        var(--laundry-danger);
+
+    border-color:
+        rgba(255, 102, 125, 0.32);
+
+    background:
+        rgba(255, 102, 125, 0.07);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* ================================================================
+   BODY
+================================================================ */
+
+.laundry-dialog-body {
+
+    padding:
+        26px 28px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+.laundry-dialog-form-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        20px;
+
+}
+
+
+.laundry-dialog-field {
+
+    min-width:
+        0;
+
+    display:
+        grid;
+
+    gap:
+        8px;
+
+}
+
+
+.laundry-dialog-field-wide {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+/* ================================================================
+   FIELD LABELS
+================================================================ */
+
+.laundry-dialog-field label {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.025em;
+
+}
+
+
+.laundry-field-code {
+
+    min-width:
+        24px;
+
+    height:
+        20px;
+
+    padding:
+        0 5px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.22);
+
+    border-radius:
+        6px;
+
+    color:
+        var(--laundry-cyan);
+
+    background:
+        rgba(39, 213, 238, 0.055);
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+/* ================================================================
+   INPUTS + SELECTS
+================================================================ */
+
+.laundry-dialog
+.laundry-dialog-control {
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+    height:
+        52px;
+
+    min-height:
+        52px;
+
+    margin:
+        0;
+
+    padding:
+        0 15px;
+
+    display:
+        block;
+
+    border:
+        1px solid
+        var(--laundry-line);
+
+    border-radius:
+        13px;
+
+    outline:
+        none;
+
+    color:
+        var(--laundry-text);
+
+    background:
+        var(--laundry-panel-soft);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        13px;
+
+    font-weight:
+        650;
+
+    line-height:
+        1;
+
+    box-shadow:
+        inset
+        0 1px 0
+        rgba(255, 255, 255, 0.035);
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+
+}
+
+
+.laundry-dialog
+.laundry-dialog-control:hover {
+
+    border-color:
+        rgba(39, 213, 238, 0.28);
+
+}
+
+
+.laundry-dialog
+.laundry-dialog-control:focus {
+
+    border-color:
+        rgba(39, 213, 238, 0.58);
+
+    background:
+        var(--laundry-panel-strong);
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(39, 213, 238, 0.075),
+
+        0 0 22px
+        rgba(39, 213, 238, 0.07);
+
+}
+
+
+.laundry-dialog
+.laundry-dialog-control::placeholder {
+
+    color:
+        var(--laundry-faint);
+
+    font-weight:
+        500;
+
+    opacity:
+        1;
+
+}
+
+
+.laundry-dialog select.laundry-dialog-control {
+
+    cursor:
+        pointer;
+
+}
+
+
+/* ================================================================
+   FIELD HELP TEXT
+================================================================ */
+
+.laundry-field-hint {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-faint);
+
+    font-size:
+        9px;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* ================================================================
+   START LOAD STAGE PREVIEW
+================================================================ */
+
+.laundry-start-stage {
+
+    margin-top:
+        22px;
+
+    padding:
+        14px 15px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    gap:
+        12px;
+
+    align-items:
+        center;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.17);
+
+    border-radius:
+        14px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(39, 213, 238, 0.055),
+            transparent
+        ),
+
+        var(--laundry-panel-soft);
+
+}
+
+
+.laundry-start-stage-icon {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(39, 213, 238, 0.30);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--laundry-cyan);
+
+    background:
+        rgba(39, 213, 238, 0.06);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        12px;
+
+    font-weight:
+        900;
+
+}
+
+
+.laundry-start-stage
+> div:nth-child(2) {
+
+    display:
+        grid;
+
+    gap:
+        2px;
+
+}
+
+
+.laundry-start-stage
+> div:nth-child(2)
+span {
+
+    color:
+        var(--laundry-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.09em;
+
+}
+
+
+.laundry-start-stage
+> div:nth-child(2)
+strong {
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+}
+
+
+.laundry-start-stage-flow {
+
+    color:
+        var(--laundry-cyan);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+/* ================================================================
+   MAINTENANCE EXPLANATION
+================================================================ */
+
+.laundry-care-preview {
+
+    margin-top:
+        22px;
+
+    padding:
+        16px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr);
+
+    gap:
+        13px;
+
+    align-items:
+        flex-start;
+
+    border:
+        1px solid
+        rgba(56, 215, 170, 0.20);
+
+    border-radius:
+        15px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(56, 215, 170, 0.06),
+            transparent 65%
+        ),
+
+        var(--laundry-panel-soft);
+
+}
+
+
+.laundry-care-preview-icon {
+
+    width:
+        39px;
+
+    height:
+        39px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(56, 215, 170, 0.30);
+
+    border-radius:
+        11px;
+
+    color:
+        var(--laundry-mint);
+
+    background:
+        rgba(56, 215, 170, 0.07);
+
+    font-size:
+        14px;
+
+    font-weight:
+        900;
+
+}
+
+
+.laundry-care-preview
+> div:last-child {
+
+    display:
+        grid;
+
+    gap:
+        4px;
+
+}
+
+
+.laundry-care-preview span {
+
+    color:
+        var(--laundry-mint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        0.09em;
+
+}
+
+
+.laundry-care-preview strong {
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.35;
+
+}
+
+
+.laundry-care-preview p {
+
+    margin:
+        0;
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* ================================================================
+   FOOTER
+================================================================ */
+
+.laundry-dialog-footer {
+
+    padding:
+        19px 28px 24px;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        9px;
+
+    border-top:
+        1px solid
+        var(--laundry-line);
+
+    background:
+        rgba(255, 255, 255, 0.012);
+
+}
+
+
+.laundry-dialog-footer
+.button {
+
+    min-height:
+        45px;
+
+    margin:
+        0;
+
+    padding:
+        0 18px;
+
+}
+
+
+.laundry-dialog-cancel {
+
+    min-width:
+        100px;
+
+}
+
+
+.laundry-dialog-primary {
+
+    min-width:
+        170px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        9px;
+
+}
+
+
+.laundry-dialog-primary
+span {
+
+    font-size:
+        14px;
+
+    transition:
+        transform 0.18s ease;
+
+}
+
+
+.laundry-dialog-primary:hover
+span {
+
+    transform:
+        translateX(3px);
+
+}
+
+
+/* ================================================================
+   DIALOG RESPONSIVE
+================================================================ */
+
+@media
+(max-width: 620px) {
+
+    .laundry-dialog {
+
+        width:
+            calc(100vw - 20px);
+
+        max-height:
+            calc(100vh - 20px);
+
+        border-radius:
+            20px;
+
+    }
+
+
+    .laundry-dialog-header {
+
+        padding:
+            22px 20px 19px;
+
+        gap:
+            14px;
+
+    }
+
+
+    .laundry-dialog-heading h2 {
+
+        font-size:
+            27px;
+
+    }
+
+
+    .laundry-dialog-heading p {
+
+        font-size:
+            11px;
+
+    }
+
+
+    .laundry-dialog-body {
+
+        padding:
+            22px 20px;
+
+    }
+
+
+    .laundry-dialog-form-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            18px;
+
+    }
+
+
+    .laundry-dialog-field-wide {
+
+        grid-column:
+            auto;
+
+    }
+
+
+    .laundry-dialog-footer {
+
+        padding:
+            17px 20px 20px;
+
+        align-items:
+            stretch;
+
+        flex-direction:
+            column-reverse;
+
+    }
+
+
+    .laundry-dialog-footer
+    .button {
+
+        width:
+            100%;
+
+    }
+
+
+    .laundry-dialog-cancel,
+    .laundry-dialog-primary {
+
+        min-width:
+            0;
+
+    }
+
+}
 
 /* ================================================================
    RESPONSIVE
@@ -3901,6 +5002,465 @@ laundryScan {
 
         animation:
             none !important;
+
+    }
+
+}
+/* ================================================================
+   LAUNDRY CARE INTELLIGENCE
+   HEALTHY -> DUE -> OVERDUE
+================================================================ */
+
+
+/* ================================================================
+   BASELINE / START TRACKING
+================================================================ */
+
+.maintenance-card.baseline {
+
+    border-color:
+        rgba(39, 213, 238, 0.22);
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(39, 213, 238, 0.045),
+            transparent 55%
+        ),
+
+        var(--laundry-panel-soft);
+
+}
+
+
+.maintenance-card.baseline
+.maintenance-symbol {
+
+    color:
+        var(--laundry-cyan);
+
+    border-color:
+        rgba(39, 213, 238, 0.30);
+
+    background:
+        rgba(39, 213, 238, 0.06);
+
+}
+
+
+.status-pill.baseline {
+
+    color:
+        var(--laundry-cyan);
+
+    border-color:
+        rgba(39, 213, 238, 0.24);
+
+    background:
+        rgba(39, 213, 238, 0.07);
+
+}
+
+
+/* ================================================================
+   HEALTHY
+================================================================ */
+
+.maintenance-card.current {
+
+    border-color:
+        rgba(56, 215, 170, 0.30);
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(56, 215, 170, 0.075),
+            transparent 58%
+        ),
+
+        var(--laundry-panel-soft);
+
+    box-shadow:
+
+        inset
+        0
+        2px
+        0
+        rgba(56, 215, 170, 0.25),
+
+        0
+        12px
+        30px
+        rgba(56, 215, 170, 0.045);
+
+}
+
+
+.maintenance-card.current
+.maintenance-symbol {
+
+    color:
+        var(--laundry-mint);
+
+    border-color:
+        rgba(56, 215, 170, 0.34);
+
+    background:
+        rgba(56, 215, 170, 0.08);
+
+}
+
+
+.maintenance-card.current
+.maintenance-countdown {
+
+    color:
+        var(--laundry-mint);
+
+}
+
+
+/* ================================================================
+   DUE TODAY
+================================================================ */
+
+.maintenance-card.attention {
+
+    border-color:
+        rgba(239, 173, 61, 0.40);
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(239, 173, 61, 0.09),
+            transparent 58%
+        ),
+
+        var(--laundry-panel-soft);
+
+    box-shadow:
+
+        inset
+        0
+        2px
+        0
+        rgba(239, 173, 61, 0.34),
+
+        0
+        12px
+        30px
+        rgba(239, 173, 61, 0.055);
+
+}
+
+
+.maintenance-card.attention
+.maintenance-countdown {
+
+    color:
+        var(--laundry-warn);
+
+}
+
+
+/* ================================================================
+   OVERDUE
+================================================================ */
+
+.maintenance-card.overdue {
+
+    border-color:
+        rgba(255, 102, 125, 0.42);
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255, 102, 125, 0.09),
+            transparent 58%
+        ),
+
+        var(--laundry-panel-soft);
+
+    box-shadow:
+
+        inset
+        0
+        2px
+        0
+        rgba(255, 102, 125, 0.34),
+
+        0
+        12px
+        30px
+        rgba(255, 102, 125, 0.06);
+
+}
+
+
+.maintenance-card.overdue
+.maintenance-countdown {
+
+    color:
+        var(--laundry-danger);
+
+}
+
+
+/* ================================================================
+   CARE STATUS CONTENT
+================================================================ */
+
+.maintenance-care-status {
+
+    margin-top:
+        5px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
+}
+
+
+.maintenance-frequency {
+
+    color:
+        var(--laundry-faint);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.maintenance-countdown {
+
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    color:
+        var(--laundry-text);
+
+    font-family:
+        var(--font-ui);
+
+    font-size:
+        16px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.25;
+
+}
+
+
+.maintenance-next-date {
+
+    color:
+        var(--laundry-copy);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.5;
+
+}
+
+
+/* ================================================================
+   CARE CYCLE PROGRESS
+================================================================ */
+
+.maintenance-cycle-track {
+
+    width:
+        100%;
+
+    height:
+        5px;
+
+    margin-top:
+        14px;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(90, 118, 165, 0.10);
+
+}
+
+
+.maintenance-cycle-track
+> span {
+
+    width:
+        var(
+            --maintenance-progress,
+            0%
+        );
+
+    height:
+        100%;
+
+    display:
+        block;
+
+    border-radius:
+        inherit;
+
+    background:
+        var(--laundry-cyan);
+
+    transition:
+        width
+        0.35s
+        ease;
+
+}
+
+
+.maintenance-card.current
+.maintenance-cycle-track
+> span {
+
+    background:
+        var(--laundry-mint);
+
+}
+
+
+.maintenance-card.attention
+.maintenance-cycle-track
+> span {
+
+    background:
+        var(--laundry-warn);
+
+}
+
+
+.maintenance-card.overdue
+.maintenance-cycle-track
+> span {
+
+    background:
+        var(--laundry-danger);
+
+}
+
+
+.maintenance-card.baseline
+.maintenance-cycle-track
+> span {
+
+    background:
+        var(--laundry-cyan);
+
+}
+
+
+/* ================================================================
+   LAST COMPLETED
+================================================================ */
+
+.maintenance-last-done {
+
+    margin-top:
+        9px !important;
+
+    color:
+        var(--laundry-faint) !important;
+
+    font-size:
+        9px !important;
+
+    font-family:
+        var(--font-ui);
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.03em;
+
+}
+
+
+/* ================================================================
+   HEALTHY BUTTON
+================================================================ */
+
+.maintenance-card.current
+.maintenance-card-footer
+.button {
+
+    border-color:
+        rgba(56, 215, 170, 0.22);
+
+}
+
+
+.maintenance-card.current
+.maintenance-card-footer
+.button:hover {
+
+    border-color:
+        rgba(56, 215, 170, 0.42);
+
+}
+
+
+/* ================================================================
+   MOBILE
+================================================================ */
+
+@media (
+    max-width: 620px
+) {
+
+    .maintenance-countdown {
+
+        font-size:
+            15px;
+
+    }
+
+
+    .maintenance-card {
+
+        min-height:
+            230px;
 
     }
 

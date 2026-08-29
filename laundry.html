@@ -758,393 +758,548 @@
 
 
 
-    <!-- =========================================================
-         START LOAD DIALOG
-    ========================================================== -->
+<!-- =========================================================
+     LAUNDRY FLOW DIALOGS
+========================================================== -->
 
-    <dialog
-        class="app-dialog laundry-dialog"
-        id="loadDialog"
+
+<!-- =========================================================
+     START LOAD DIALOG
+========================================================== -->
+
+<dialog
+    class="app-dialog laundry-dialog"
+    id="loadDialog"
+>
+    <form
+        class="laundry-dialog-shell"
+        method="dialog"
+        id="loadForm"
     >
 
-        <form
-            method="dialog"
-            id="loadForm"
-        >
+        <header class="laundry-dialog-header">
 
-            <div class="app-dialog-header">
+            <div class="laundry-dialog-heading">
 
-                <div>
-
-                    <span class="ui-kicker">
-                        LAUNDRY FLOW // NEW LOAD
-                    </span>
-
-
-                    <h2>
-                        Start a load
-                    </h2>
-
+                <div class="laundry-dialog-signal">
+                    <span class="laundry-dialog-signal-dot"></span>
+                    LAUNDRY FLOW // NEW LOAD
                 </div>
 
+                <h2>
+                    Start a load
+                </h2>
 
-                <button
-                    class="dialog-close"
-                    type="button"
-                    data-close-dialog="loadDialog"
-                >
-                    ×
-                </button>
+                <p>
+                    Tell HomeOS what you're sending through
+                    Laundry Flow.
+                </p>
 
             </div>
 
 
-            <div class="app-dialog-body">
+            <button
+                class="laundry-dialog-close"
+                type="button"
+                data-close-dialog="loadDialog"
+                aria-label="Close Start a Load"
+            >
+                ×
+            </button>
 
-                <div class="app-field">
+        </header>
 
-                    <label for="loadNameInput">
-                        What are you washing?
+
+        <div class="laundry-dialog-body">
+
+            <div class="laundry-dialog-field laundry-dialog-field-wide">
+
+                <label for="loadNameInput">
+                    <span class="laundry-field-code">
+                        01
+                    </span>
+
+                    <span>
+                        Load name
+                    </span>
+                </label>
+
+
+                <input
+                    class="app-input laundry-dialog-control"
+                    id="loadNameInput"
+                    type="text"
+                    placeholder="Kids Darks, Towels, Bedding..."
+                    autocomplete="off"
+                    required
+                >
+
+
+                <p class="laundry-field-hint">
+                    Common loads:
+                    Kids Clothes · Towels · Bedding · Delicates
+                </p>
+
+            </div>
+
+
+            <div class="laundry-start-stage">
+
+                <div class="laundry-start-stage-icon">
+                    W
+                </div>
+
+                <div>
+                    <span>
+                        STARTING STAGE
+                    </span>
+
+                    <strong>
+                        Wash
+                    </strong>
+                </div>
+
+                <div class="laundry-start-stage-flow">
+                    01 / 04
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <footer class="laundry-dialog-footer">
+
+            <button
+                class="button button-secondary laundry-dialog-cancel"
+                type="button"
+                data-close-dialog="loadDialog"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                class="button button-primary laundry-dialog-primary"
+                id="saveQuickLoad"
+                type="submit"
+            >
+                Start In Wash
+                <span aria-hidden="true">
+                    →
+                </span>
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>
+
+
+
+<!-- =========================================================
+     RECURRING LOAD DIALOG
+========================================================== -->
+
+<dialog
+    class="app-dialog laundry-dialog"
+    id="scheduleDialog"
+>
+    <form
+        class="laundry-dialog-shell"
+        method="dialog"
+        id="scheduleForm"
+    >
+
+        <input
+            id="scheduleIdInput"
+            type="hidden"
+        >
+
+
+        <header class="laundry-dialog-header">
+
+            <div class="laundry-dialog-heading">
+
+                <div class="laundry-dialog-signal">
+                    <span class="laundry-dialog-signal-dot"></span>
+                    WEEKLY RHYTHM // LAUNDRY
+                </div>
+
+                <h2 id="scheduleDialogTitle">
+                    Add recurring load
+                </h2>
+
+                <p>
+                    Build a weekly Laundry rhythm around the way
+                    your household actually runs.
+                </p>
+
+            </div>
+
+
+            <button
+                class="laundry-dialog-close"
+                type="button"
+                data-close-dialog="scheduleDialog"
+                aria-label="Close Recurring Load"
+            >
+                ×
+            </button>
+
+        </header>
+
+
+        <div class="laundry-dialog-body">
+
+            <div class="laundry-dialog-form-grid">
+
+
+                <div class="laundry-dialog-field laundry-dialog-field-wide">
+
+                    <label for="scheduleNameInput">
+
+                        <span class="laundry-field-code">
+                            01
+                        </span>
+
+                        <span>
+                            Load name
+                        </span>
+
                     </label>
 
 
                     <input
-                        class="app-input"
-                        id="loadNameInput"
+                        class="app-input laundry-dialog-control"
+                        id="scheduleNameInput"
                         type="text"
-                        placeholder="Example: Kids Darks"
+                        placeholder="Towels + Bath Linens"
                         autocomplete="off"
                         required
+                    >
+
+                    <p class="laundry-field-hint">
+                        Give the load a name you'll recognize
+                        immediately.
+                    </p>
+
+                </div>
+
+
+
+                <div class="laundry-dialog-field">
+
+                    <label for="scheduleDayInput">
+
+                        <span class="laundry-field-code">
+                            02
+                        </span>
+
+                        <span>
+                            Laundry day
+                        </span>
+
+                    </label>
+
+
+                    <select
+                        class="app-select laundry-dialog-control"
+                        id="scheduleDayInput"
+                    >
+
+                        <option value="monday">
+                            Monday
+                        </option>
+
+                        <option value="tuesday">
+                            Tuesday
+                        </option>
+
+                        <option value="wednesday">
+                            Wednesday
+                        </option>
+
+                        <option value="thursday">
+                            Thursday
+                        </option>
+
+                        <option value="friday">
+                            Friday
+                        </option>
+
+                        <option value="saturday">
+                            Saturday
+                        </option>
+
+                        <option value="sunday">
+                            Sunday
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="laundry-dialog-field">
+
+                    <label for="scheduleTimeInput">
+
+                        <span class="laundry-field-code">
+                            03
+                        </span>
+
+                        <span>
+                            Preferred start
+                        </span>
+
+                    </label>
+
+
+                    <input
+                        class="app-input laundry-dialog-control"
+                        id="scheduleTimeInput"
+                        type="time"
+                        value="09:00"
                     >
 
                 </div>
 
             </div>
 
-
-            <div class="app-dialog-footer">
-
-                <button
-                    class="button button-secondary"
-                    type="button"
-                    data-close-dialog="loadDialog"
-                >
-                    Cancel
-                </button>
+        </div>
 
 
-                <button
-                    class="button button-primary"
-                    id="saveQuickLoad"
-                    type="submit"
-                >
-                    Start In Wash
-                </button>
+        <footer class="laundry-dialog-footer">
 
-            </div>
-
-        </form>
-
-    </dialog>
-
-
-
-    <!-- =========================================================
-         SCHEDULE DIALOG
-    ========================================================== -->
-
-    <dialog
-        class="app-dialog laundry-dialog"
-        id="scheduleDialog"
-    >
-
-        <form
-            method="dialog"
-            id="scheduleForm"
-        >
-
-            <input
-                id="scheduleIdInput"
-                type="hidden"
+            <button
+                class="button button-secondary laundry-dialog-cancel"
+                type="button"
+                data-close-dialog="scheduleDialog"
             >
+                Cancel
+            </button>
 
 
-            <div class="app-dialog-header">
+            <button
+                class="button button-primary laundry-dialog-primary"
+                type="submit"
+            >
+                Save Rhythm
+                <span aria-hidden="true">
+                    →
+                </span>
+            </button>
 
-                <div>
+        </footer>
 
-                    <span class="ui-kicker">
-                        WEEKLY RHYTHM // LAUNDRY
-                    </span>
-
-
-                    <h2 id="scheduleDialogTitle">
-                        Add recurring load
-                    </h2>
-
-                </div>
-
-
-                <button
-                    class="dialog-close"
-                    type="button"
-                    data-close-dialog="scheduleDialog"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <div class="app-dialog-body">
-
-                <div class="app-form-grid">
-
-                    <div class="app-field">
-
-                        <label for="scheduleNameInput">
-                            Load name
-                        </label>
-
-
-                        <input
-                            class="app-input"
-                            id="scheduleNameInput"
-                            type="text"
-                            placeholder="Example: Towels + Bath Linens"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="app-field">
-
-                        <label for="scheduleDayInput">
-                            Day
-                        </label>
-
-
-                        <select
-                            class="app-select"
-                            id="scheduleDayInput"
-                        >
-
-                            <option value="monday">
-                                Monday
-                            </option>
-
-                            <option value="tuesday">
-                                Tuesday
-                            </option>
-
-                            <option value="wednesday">
-                                Wednesday
-                            </option>
-
-                            <option value="thursday">
-                                Thursday
-                            </option>
-
-                            <option value="friday">
-                                Friday
-                            </option>
-
-                            <option value="saturday">
-                                Saturday
-                            </option>
-
-                            <option value="sunday">
-                                Sunday
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="app-field">
-
-                        <label for="scheduleTimeInput">
-                            Preferred start time
-                        </label>
-
-
-                        <input
-                            class="app-input"
-                            id="scheduleTimeInput"
-                            type="time"
-                            value="09:00"
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="app-dialog-footer">
-
-                <button
-                    class="button button-secondary"
-                    type="button"
-                    data-close-dialog="scheduleDialog"
-                >
-                    Cancel
-                </button>
-
-
-                <button
-                    class="button button-primary"
-                    type="submit"
-                >
-                    Save Schedule
-                </button>
-
-            </div>
-
-        </form>
-
-    </dialog>
+    </form>
+</dialog>
 
 
 
-    <!-- =========================================================
-         MAINTENANCE DIALOG
-    ========================================================== -->
+<!-- =========================================================
+     MAINTENANCE DIALOG
+========================================================== -->
 
-    <dialog
-        class="app-dialog laundry-dialog"
-        id="maintenanceDialog"
+<dialog
+    class="app-dialog laundry-dialog"
+    id="maintenanceDialog"
+>
+    <form
+        class="laundry-dialog-shell"
+        method="dialog"
+        id="maintenanceForm"
     >
 
-        <form
-            method="dialog"
-            id="maintenanceForm"
-        >
+        <header class="laundry-dialog-header">
 
-            <div class="app-dialog-header">
+            <div class="laundry-dialog-heading">
+
+                <div class="laundry-dialog-signal">
+                    <span class="laundry-dialog-signal-dot"></span>
+                    CARE FOR THE SYSTEM // LAUNDRY
+                </div>
+
+                <h2>
+                    Add system care
+                </h2>
+
+                <p>
+                    Tell HomeOS what needs recurring care and
+                    how often it should come due.
+                </p>
+
+            </div>
+
+
+            <button
+                class="laundry-dialog-close"
+                type="button"
+                data-close-dialog="maintenanceDialog"
+                aria-label="Close Add System Care"
+            >
+                ×
+            </button>
+
+        </header>
+
+
+        <div class="laundry-dialog-body">
+
+            <div class="laundry-dialog-form-grid">
+
+
+                <div class="laundry-dialog-field laundry-dialog-field-wide">
+
+                    <label for="maintenanceNameInput">
+
+                        <span class="laundry-field-code">
+                            01
+                        </span>
+
+                        <span>
+                            Care task
+                        </span>
+
+                    </label>
+
+
+                    <input
+                        class="app-input laundry-dialog-control"
+                        id="maintenanceNameInput"
+                        type="text"
+                        placeholder="Clean washer gasket"
+                        autocomplete="off"
+                        required
+                    >
+
+
+                    <p class="laundry-field-hint">
+                        Example:
+                        Clean washer gasket · Run washer cleaning
+                        cycle · Inspect dryer vent
+                    </p>
+
+                </div>
+
+
+
+                <div class="laundry-dialog-field laundry-dialog-field-wide">
+
+                    <label for="maintenanceFrequencyInput">
+
+                        <span class="laundry-field-code">
+                            02
+                        </span>
+
+                        <span>
+                            Care frequency
+                        </span>
+
+                    </label>
+
+
+                    <select
+                        class="app-select laundry-dialog-control"
+                        id="maintenanceFrequencyInput"
+                    >
+
+                        <option value="7">
+                            Every week
+                        </option>
+
+                        <option value="14">
+                            Every 2 weeks
+                        </option>
+
+                        <option
+                            value="30"
+                            selected
+                        >
+                            Every month
+                        </option>
+
+                        <option value="60">
+                            Every 2 months
+                        </option>
+
+                        <option value="90">
+                            Every 3 months
+                        </option>
+
+                        <option value="180">
+                            Every 6 months
+                        </option>
+
+                    </select>
+
+
+                    <p class="laundry-field-hint">
+                        The first completion starts the HomeOS
+                        care countdown.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="laundry-care-preview">
+
+                <div class="laundry-care-preview-icon">
+                    ✓
+                </div>
 
                 <div>
 
-                    <span class="ui-kicker">
-                        LAUNDRY ROOM // SYSTEM CARE
+                    <span>
+                        HOW TRACKING WORKS
                     </span>
 
+                    <strong>
+                        Healthy until care is actually due.
+                    </strong>
 
-                    <h2>
-                        Add maintenance
-                    </h2>
-
-                </div>
-
-
-                <button
-                    class="dialog-close"
-                    type="button"
-                    data-close-dialog="maintenanceDialog"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <div class="app-dialog-body">
-
-                <div class="app-form-grid">
-
-                    <div class="app-field">
-
-                        <label for="maintenanceNameInput">
-                            Maintenance task
-                        </label>
-
-
-                        <input
-                            class="app-input"
-                            id="maintenanceNameInput"
-                            type="text"
-                            placeholder="Example: Clean washer filter"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="app-field">
-
-                        <label for="maintenanceFrequencyInput">
-                            How often?
-                        </label>
-
-
-                        <select
-                            class="app-select"
-                            id="maintenanceFrequencyInput"
-                        >
-
-                            <option value="7">
-                                Every week
-                            </option>
-
-                            <option value="14">
-                                Every 2 weeks
-                            </option>
-
-                            <option
-                                value="30"
-                                selected
-                            >
-                                Every month
-                            </option>
-
-                            <option value="60">
-                                Every 2 months
-                            </option>
-
-                            <option value="90">
-                                Every 3 months
-                            </option>
-
-                            <option value="180">
-                                Every 6 months
-                            </option>
-
-                        </select>
-
-                    </div>
+                    <p>
+                        HomeOS will count down the days,
+                        warn you when the task is due,
+                        and flag it if it becomes overdue.
+                    </p>
 
                 </div>
 
             </div>
 
-
-            <div class="app-dialog-footer">
-
-                <button
-                    class="button button-secondary"
-                    type="button"
-                    data-close-dialog="maintenanceDialog"
-                >
-                    Cancel
-                </button>
+        </div>
 
 
-                <button
-                    class="button button-primary"
-                    type="submit"
-                >
-                    Add Maintenance
-                </button>
+        <footer class="laundry-dialog-footer">
 
-            </div>
+            <button
+                class="button button-secondary laundry-dialog-cancel"
+                type="button"
+                data-close-dialog="maintenanceDialog"
+            >
+                Cancel
+            </button>
 
-        </form>
 
-    </dialog>
+            <button
+                class="button button-primary laundry-dialog-primary"
+                type="submit"
+            >
+                Add System Care
+                <span aria-hidden="true">
+                    →
+                </span>
+            </button>
 
+        </footer>
+
+    </form>
+</dialog>
 
 
     <!-- SHARED HOMEOS JS -->

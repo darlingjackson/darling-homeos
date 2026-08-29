@@ -430,28 +430,52 @@
 
             <div class="inventory-toolbar">
 
-                <div class="inventory-search-wrap">
+                <label
+                    class="inventory-search-wrap"
+                    for="inventorySearch"
+                >
 
-                    <span aria-hidden="true">
-                        ⌕
+                    <span class="inventory-control-label">
+                        <strong>SEARCH THIS NODE</strong>
+                        <small>Filter by item name or category</small>
                     </span>
 
-                    <input
-                        class="app-input inventory-search"
-                        id="inventorySearch"
-                        type="search"
-                        placeholder="Search this storage node..."
+                    <span class="inventory-search-control">
+
+                        <span
+                            class="inventory-search-icon"
+                            aria-hidden="true"
+                        >
+                            ⌕
+                        </span>
+
+                        <input
+                            class="app-input inventory-search"
+                            id="inventorySearch"
+                            type="search"
+                            placeholder="Search tracked items..."
+                            autocomplete="off"
+                        >
+
+                    </span>
+
+                </label>
+
+                <div class="inventory-toolbar-action">
+
+                    <span>
+                        TRACK SOMETHING NEW
+                    </span>
+
+                    <button
+                        class="button button-primary"
+                        id="addInventoryItemButton"
+                        type="button"
                     >
+                        + Add Item
+                    </button>
 
                 </div>
-
-                <button
-                    class="button button-primary"
-                    id="addInventoryItemButton"
-                    type="button"
-                >
-                    + Add Item
-                </button>
 
             </div>
 
@@ -503,9 +527,9 @@
                 </div>
 
                 <p>
-                    HomeOS already knows what is missing.
-                    Add one shortage, add every shortage,
-                    or let Auto Restock keep the list synchronized.
+                    Tracked Inventory shortages appear on the left.
+                    Manual, Seasonal and one-time shopping items stay on the right,
+                    so you can see exactly where each need came from.
                 </p>
 
             </div>
@@ -529,8 +553,8 @@
                             </h3>
 
                             <p>
-                                Calculated live from Current versus
-                                Preferred quantities.
+                                Calculated only from real items you track:
+                                Current quantity versus Preferred quantity.
                             </p>
 
                         </div>
@@ -606,7 +630,8 @@
 
                             <p>
                                 Inventory shortages, Seasonal Home Care
-                                and anything else you add all meet here.
+                                and manual items all meet here without becoming
+                                fake Inventory stock.
                             </p>
 
                         </div>
@@ -622,29 +647,76 @@
 
                     <div class="quick-shopping-add">
 
-                        <input
-                            class="app-input"
-                            id="customShoppingName"
-                            type="text"
-                            placeholder="Add anything else..."
-                        >
+                        <div class="quick-shopping-heading">
 
-                        <input
-                            class="app-input shopping-qty-input"
-                            id="customShoppingQty"
-                            type="number"
-                            min="1"
-                            value="1"
-                            aria-label="Quantity"
-                        >
+                            <div>
 
-                        <button
-                            class="button button-primary"
-                            id="addCustomShoppingButton"
-                            type="button"
-                        >
-                            Add
-                        </button>
+                                <span class="ui-kicker">
+                                    QUICK ADD // MANUAL ITEM
+                                </span>
+
+                                <strong>
+                                    Add something that is not tied to tracked stock.
+                                </strong>
+
+                            </div>
+
+                            <span class="quick-shopping-note">
+                                Seasonal, one-time or miscellaneous
+                            </span>
+
+                        </div>
+
+                        <div class="quick-shopping-controls">
+
+                            <label
+                                class="quick-shopping-name"
+                                for="customShoppingName"
+                            >
+
+                                <span>
+                                    ITEM
+                                </span>
+
+                                <input
+                                    class="app-input"
+                                    id="customShoppingName"
+                                    type="text"
+                                    placeholder="Example: Cookies, batteries, curtain rod..."
+                                    autocomplete="off"
+                                >
+
+                            </label>
+
+                            <label
+                                class="quick-shopping-quantity"
+                                for="customShoppingQty"
+                            >
+
+                                <span>
+                                    QTY
+                                </span>
+
+                                <input
+                                    class="app-input shopping-qty-input"
+                                    id="customShoppingQty"
+                                    type="number"
+                                    min="1"
+                                    value="1"
+                                    aria-label="Quantity"
+                                >
+
+                            </label>
+
+                            <button
+                                class="button button-primary quick-shopping-button"
+                                id="addCustomShoppingButton"
+                                type="button"
+                            >
+                                Add To List →
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -692,6 +764,7 @@
     >
 
         <form
+            class="inventory-dialog-shell"
             method="dialog"
             id="inventoryItemForm"
         >
@@ -701,124 +774,242 @@
                 type="hidden"
             >
 
-            <div class="app-dialog-header">
 
-                <div>
+            <header class="inventory-dialog-header">
 
-                    <span class="ui-kicker">
+                <div class="inventory-dialog-heading">
+
+                    <div class="inventory-dialog-signal">
+
+                        <span
+                            class="inventory-dialog-signal-dot"
+                            aria-hidden="true"
+                        ></span>
+
                         STOCK NETWORK // INVENTORY NODE
-                    </span>
+
+                    </div>
+
 
                     <h2 id="inventoryDialogTitle">
                         Add inventory item
                     </h2>
 
+
+                    <p>
+                        Track the amount you have now and the amount
+                        you prefer to keep on hand. HomeOS will calculate
+                        the shortage automatically.
+                    </p>
+
                 </div>
 
+
                 <button
-                    class="dialog-close"
+                    class="inventory-dialog-close"
                     type="button"
                     data-close-dialog="inventoryItemDialog"
+                    aria-label="Close inventory item"
                 >
                     ×
                 </button>
 
-            </div>
+            </header>
 
-            <div class="app-dialog-body">
 
-                <div class="app-form-grid">
+            <div class="inventory-dialog-body">
 
-                    <div class="app-field">
+                <div class="inventory-dialog-form-grid">
+
+
+                    <div class="inventory-dialog-field inventory-dialog-field-wide">
 
                         <label for="inventoryNameInput">
-                            Item name
+
+                            <span class="inventory-field-code">
+                                01
+                            </span>
+
+                            <span>
+                                Item name
+                            </span>
+
                         </label>
 
+
                         <input
-                            class="app-input"
+                            class="app-input inventory-dialog-control"
                             id="inventoryNameInput"
                             type="text"
-                            placeholder="Example: Paper Towels"
+                            placeholder="Paper Towels"
+                            autocomplete="off"
                             required
                         >
 
+
+                        <p class="inventory-field-hint">
+                            Use the name you naturally look for when
+                            checking stock or making a shopping list.
+                        </p>
+
                     </div>
 
-                    <div class="app-field">
+
+                    <div class="inventory-dialog-field inventory-dialog-field-wide">
 
                         <label for="inventoryZoneInput">
-                            Storage zone
+
+                            <span class="inventory-field-code">
+                                02
+                            </span>
+
+                            <span>
+                                Storage location
+                            </span>
+
                         </label>
 
+
                         <select
-                            class="app-select"
+                            class="app-select inventory-dialog-control"
                             id="inventoryZoneInput"
                         ></select>
 
                     </div>
 
-                    <div class="app-field">
+
+                    <div class="inventory-dialog-field">
 
                         <label for="inventoryCurrentInput">
-                            Current quantity
+
+                            <span class="inventory-field-code">
+                                03
+                            </span>
+
+                            <span>
+                                Current amount
+                            </span>
+
                         </label>
 
+
                         <input
-                            class="app-input"
+                            class="app-input inventory-dialog-control"
                             id="inventoryCurrentInput"
                             type="number"
                             min="0"
                             value="0"
+                            inputmode="numeric"
                             required
                         >
 
                     </div>
 
-                    <div class="app-field">
+
+                    <div class="inventory-dialog-field">
 
                         <label for="inventoryTargetInput">
-                            Preferred quantity
+
+                            <span class="inventory-field-code">
+                                04
+                            </span>
+
+                            <span>
+                                Preferred amount
+                            </span>
+
                         </label>
 
+
                         <input
-                            class="app-input"
+                            class="app-input inventory-dialog-control"
                             id="inventoryTargetInput"
                             type="number"
                             min="1"
                             value="1"
+                            inputmode="numeric"
                             required
                         >
 
                     </div>
 
-                    <div class="app-field">
+
+                    <div class="inventory-dialog-field">
 
                         <label for="inventoryUnitInput">
-                            Unit
+
+                            <span class="inventory-field-code">
+                                05
+                            </span>
+
+                            <span>
+                                Unit
+                            </span>
+
                         </label>
 
+
                         <input
-                            class="app-input"
+                            class="app-input inventory-dialog-control"
                             id="inventoryUnitInput"
                             type="text"
-                            placeholder="packs, boxes, bottles..."
+                            placeholder="rolls, boxes, bottles..."
+                            autocomplete="off"
                         >
 
                     </div>
 
-                    <div class="app-field">
+
+                    <div class="inventory-dialog-field">
 
                         <label for="inventoryCategoryInput">
-                            Category
+
+                            <span class="inventory-field-code">
+                                06
+                            </span>
+
+                            <span>
+                                Category
+                            </span>
+
                         </label>
 
+
                         <input
-                            class="app-input"
+                            class="app-input inventory-dialog-control"
                             id="inventoryCategoryInput"
                             type="text"
-                            placeholder="Food, paper goods, drinks..."
+                            placeholder="Paper goods, drinks, pantry..."
+                            autocomplete="off"
                         >
+
+                    </div>
+
+                </div>
+
+
+                <div class="inventory-dialog-intelligence">
+
+                    <div class="inventory-dialog-intelligence-icon">
+                        +
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            RESTOCK INTELLIGENCE
+                        </span>
+
+                        <strong>
+                            Current stays separate from Preferred.
+                        </strong>
+
+                        <p>
+                            When Current drops below Preferred, HomeOS
+                            calculates exactly how many you need and can
+                            send that shortage to the shared shopping list.
+                        </p>
 
                     </div>
 
@@ -826,24 +1017,30 @@
 
             </div>
 
-            <div class="app-dialog-footer">
+
+            <footer class="inventory-dialog-footer">
 
                 <button
-                    class="button button-secondary"
+                    class="button button-secondary inventory-dialog-cancel"
                     type="button"
                     data-close-dialog="inventoryItemDialog"
                 >
                     Cancel
                 </button>
 
+
                 <button
-                    class="button button-primary"
+                    class="button button-primary inventory-dialog-primary"
                     type="submit"
                 >
-                    Save Item
+                    Save Inventory Item
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
                 </button>
 
-            </div>
+            </footer>
 
         </form>
 

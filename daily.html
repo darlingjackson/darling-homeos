@@ -334,7 +334,7 @@
             <!-- TODAY TOOLS -->
             <aside class="daily-tools-panel">
 
-                <!-- QUICK SHOPPING -->
+                <!-- SHARED HOMEOS SHOPPING -->
                 <section class="daily-tool-section daily-shopping-section">
                     <div class="daily-tool-heading">
                         <div>
@@ -342,7 +342,7 @@
 
                             <div>
                                 <span class="daily-tool-kicker">
-                                    TODAY // SHOPPING
+                                    HOMEOS SHOPPING // QUICK VIEW
                                 </span>
 
                                 <h2>Quick Shopping List</h2>
@@ -355,28 +355,53 @@
                     </div>
 
                     <p class="daily-tool-description">
-                        Add things as they come up. Anything you do not get today automatically stays for tomorrow.
+                        One shared shopping list for Daily Rhythm, Inventory and Seasonal Home Care.
+                        Anything added here stays on the HomeOS list until it is purchased or removed.
                     </p>
 
                     <div class="daily-shopping-list" id="dailyShoppingList"></div>
 
-                    <div class="daily-inline-add">
-                        <input
-                            class="app-input"
-                            id="newShoppingItem"
-                            type="text"
-                            maxlength="100"
-                            placeholder="What do you need to pick up?"
-                        >
+                    <div class="daily-tool-form-card daily-shopping-composer">
+                        <div class="daily-form-card-heading">
+                            <span>QUICK ADD</span>
+                            <small>Shared HomeOS Shopping</small>
+                        </div>
 
-                        <button
-                            class="button button-primary"
-                            id="addShoppingItemButton"
-                            type="button"
-                        >
-                            + Add
-                        </button>
+                        <label class="daily-field-label" for="newShoppingItem">
+                            What do you need?
+                        </label>
+
+                        <div class="daily-inline-add">
+                            <input
+                                class="app-input daily-tool-input"
+                                id="newShoppingItem"
+                                type="text"
+                                maxlength="100"
+                                placeholder="Paper plates, milk, batteries..."
+                                autocomplete="off"
+                            >
+
+                            <button
+                                class="button button-primary"
+                                id="addShoppingItemButton"
+                                type="button"
+                            >
+                                + Add
+                            </button>
+                        </div>
+
+                        <p class="daily-field-help">
+                            If the item is already on the list, HomeOS will avoid creating a duplicate.
+                        </p>
                     </div>
+
+                    <a
+                        class="daily-shopping-open-list"
+                        href="inventory.html#shoppingSection"
+                    >
+                        Open Full Shopping List
+                        <span aria-hidden="true">→</span>
+                    </a>
                 </section>
 
 
@@ -400,26 +425,44 @@
                     </div>
 
                     <p class="daily-tool-description">
-                        Add something to Upstairs or Downstairs without changing the rest of your system.
+                        Add one task to the shift you are viewing without changing the rest of your HomeOS routine.
                     </p>
 
-                    <div class="daily-add-task-form">
-                        <input
-                            class="app-input"
-                            id="newDailyTask"
-                            type="text"
-                            maxlength="100"
-                            placeholder="What needs to get done?"
-                        >
+                    <div class="daily-tool-form-card daily-add-task-form">
+                        <div class="daily-form-card-heading">
+                            <span>CUSTOM TASK</span>
+                            <small id="dailyTaskFormHint">Opening / Closing aware</small>
+                        </div>
 
-                        <select
-                            class="app-select"
-                            id="newDailyTaskArea"
-                            aria-label="Choose task area"
-                        >
-                            <option value="upstairs">Upstairs</option>
-                            <option value="downstairs">Downstairs</option>
-                        </select>
+                        <div class="daily-form-field">
+                            <label class="daily-field-label" for="newDailyTask">
+                                Task
+                            </label>
+
+                            <input
+                                class="app-input daily-tool-input"
+                                id="newDailyTask"
+                                type="text"
+                                maxlength="100"
+                                placeholder="What needs to get done?"
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <div class="daily-form-field">
+                            <label class="daily-field-label" for="newDailyTaskArea">
+                                Area
+                            </label>
+
+                            <select
+                                class="app-select daily-tool-input"
+                                id="newDailyTaskArea"
+                                aria-label="Choose task area"
+                            >
+                                <option value="upstairs">Upstairs</option>
+                                <option value="downstairs">Downstairs</option>
+                            </select>
+                        </div>
 
                         <label class="daily-repeat-option">
                             <input
@@ -427,8 +470,11 @@
                                 type="checkbox"
                             >
 
-                            <span>
-                                Keep this task in the shift every day
+                            <span class="daily-repeat-control"></span>
+
+                            <span class="daily-repeat-copy">
+                                <strong>Repeat every day</strong>
+                                <small>Keep this task in the same shift tomorrow.</small>
                             </span>
                         </label>
 
@@ -438,6 +484,7 @@
                             type="button"
                         >
                             Add to <span id="addTaskShiftLabel">Opening</span> Shift
+                            <span aria-hidden="true">→</span>
                         </button>
                     </div>
                 </section>

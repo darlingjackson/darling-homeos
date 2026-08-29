@@ -5,67 +5,17 @@
    FILE:
    assets/js/store.js
 
+   RESPONSIBILITY:
+   - One persistent HomeOS state
+   - One localStorage boundary
+   - Shared module state
+   - Daily rollover
+   - Shared health / Home Pulse calculations
 
-   PURPOSE:
-   This is the SINGLE source of truth for DARLING HomeOS.
-
-   ALL modules read and write through HomeStore:
-
-       Dashboard
-       Daily Rhythm
-       Cleaning
-       Laundry
-       Inventory
-       Seasonal Home Care
-
-
-   IMPORTANT ARCHITECTURE RULE:
-
-   Page controllers should NOT use localStorage directly.
-
-   Instead use:
-
-       HomeStore.getState()
-       HomeStore.update()
-       HomeStore.saveState()
-
-
-   WHY:
-
-   Today:
-       HomeStore uses localStorage.
-
-   Later:
-       We can replace the storage layer with a database without
-       rebuilding every HomeOS page.
-
-
-   CURRENT CORE VERSION:
-       2
-
-
-   MAJOR VERSION 2 CHANGES:
-
-   - Daily Rhythm is officially:
-         Opening Shift
-         Closing Shift
-
-   - Old Morning / Day state is migrated safely.
-
-   - Daily Rhythm automatically rolls into a new day.
-
-   - Previous Daily Rhythm progress is archived.
-
-   - Fake starter Laundry loads are removed from fresh state.
-
-   - Daily Rhythm participates in Home Pulse.
-
-   - Older saved HomeOS data is preserved instead of erased.
+   PAGE CONTROLLERS MUST NOT USE localStorage DIRECTLY.
 ================================================================ */
 
-
 (function () {
-
     "use strict";
 
 
@@ -76,1002 +26,44 @@
     const STORAGE_KEY =
         "darling_homeos_core_v1";
 
-
     const CORE_VERSION =
-        2;
-
-
-    const DAILY_VERSION =
-        2;
-
+        4;
 
 
     /* ============================================================
-       DATE HELPERS
-
-       HomeOS uses LOCAL calendar dates.
-
-       Do NOT use:
-           new Date().toISOString().slice(0, 10)
-
-       for daily rollover because ISO dates are UTC.
+       DAILY / LAUNDRY CONSTANTS
     ============================================================ */
 
-    function getLocalDateKey(
-        date = new Date()
-    ) {
+    const LAUNDRY_DAYS = [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+    ];
 
-        const year =
-            date.getFullYear();
-
-
-        const month =
-            String(
-                date.getMonth() + 1
-            )
-                .padStart(
-                    2,
-                    "0"
-                );
-
-
-        const day =
-            String(
-                date.getDate()
-            )
-                .padStart(
-                    2,
-                    "0"
-                );
-
-
-        return (
-            `${year}-${month}-${day}`
-        );
-
-    }
-
-
-
-    /* ============================================================
-       DAILY RHYTHM STARTER TASKS
-
-       These are the canonical HomeOS Daily Rhythm tasks.
-
-       daily.js may add custom tasks, but these provide the shared
-       baseline so Dashboard and Daily Rhythm agree even before the
-       user opens daily.html.
-    ============================================================ */
-
-    const OPENING_TASKS = [
-
-        {
-            id:
-                "opening-make-beds",
-
-            title:
-                "Make beds"
-        },
-
-
-        {
-            id:
-                "opening-blinds",
-
-            title:
-                "Open blinds and curtains"
-        },
-
-
-        {
-            id:
-                "opening-laundry",
-
-            title:
-                "Collect laundry from bedrooms and bathrooms"
-        },
-
-
-        {
-            id:
-                "opening-dishwasher",
-
-            title:
-                "Empty dishwasher and put dishes away"
-        },
-
-
-        {
-            id:
-                "opening-kitchen",
-
-            title:
-                "Reset kitchen after breakfast"
-        },
-
-
-        {
-            id:
-                "opening-bathrooms",
-
-            title:
-                "Quick reset bathroom counters"
-        },
-
-
-        {
-            id:
-                "opening-laundry-flow",
-
-            title:
-                "Start or move the first laundry load"
-        },
-
-
-        {
-            id:
-                "opening-strays",
-
-            title:
-                "Put away visible stray items"
-        },
-
-
-        {
-            id:
-                "opening-living",
-
-            title:
-                "Quick reset of the main living area"
-        },
-
-
-        {
-            id:
-                "opening-plants",
-
-            title:
-                "Check plants and water if needed"
-        }
-
+    const JS_DAY_MAP = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
     ];
 
 
-
-    const CLOSING_TASKS = [
-
-        {
-            id:
-                "closing-dishwasher",
-
-            title:
-                "Load and run dishwasher"
-        },
-
-
-        {
-            id:
-                "closing-sink",
-
-            title:
-                "Leave kitchen sink empty"
-        },
-
-
-        {
-            id:
-                "closing-counters",
-
-            title:
-                "Reset kitchen counters and island"
-        },
-
-
-        {
-            id:
-                "closing-dining",
-
-            title:
-                "Reset dining and breakfast areas"
-        },
-
-
-        {
-            id:
-                "closing-living",
-
-            title:
-                "Reset living room"
-        },
-
-
-        {
-            id:
-                "closing-strays",
-
-            title:
-                "Put away visible stray items downstairs"
-        },
-
-
-        {
-            id:
-                "closing-laundry",
-
-            title:
-                "Check laundry — move, fold or put away"
-        },
-
-
-        {
-            id:
-                "closing-upstairs",
-
-            title:
-                "Complete a five-minute upstairs reset"
-        },
-
-
-        {
-            id:
-                "closing-trash",
-
-            title:
-                "Check kitchen trash and take out if needed"
-        },
-
-
-        {
-            id:
-                "closing-morning",
-
-            title:
-                "Prepare anything needed for tomorrow morning"
-        }
-
-    ];
-
-
-
     /* ============================================================
-       CREATE DAILY TASK
+       BASIC HELPERS
     ============================================================ */
 
-    function createDailyTask(
-        task
-    ) {
-
-        return {
-
-            id:
-                task.id,
-
-            title:
-                task.title,
-
-            done:
-                false,
-
-            completedAt:
-                null,
-
-            custom:
-                false
-
-        };
-
-    }
-
-
-
-    /* ============================================================
-       DEFAULT HOME
-
-       IMPORTANT:
-
-       This is used only when:
-
-       - HomeOS runs for the first time
-       - Saved state cannot be recovered
-       - HomeStore.reset() is deliberately called
-
-       Existing saved state is MERGED with this structure.
-    ============================================================ */
-
-    const DEFAULT_STATE = {
-
-        version:
-            CORE_VERSION,
-
-
-        /* ========================================================
-           SETTINGS
-        ======================================================== */
-
-        settings: {
-
-            theme:
-                "light"
-
-        },
-
-
-
-        /* ========================================================
-           CLEANING
-        ======================================================== */
-
-        cleaning: {
-
-            selectedZone:
-                "z02",
-
-
-            activeSession:
-                null,
-
-
-            rooms:
-                [],
-
-
-            pausedSessions:
-                [],
-
-
-            cleaningMode:
-                "room",
-
-
-            selectedFloor:
-                "upstairs",
-
-
-            zones: [
-
-                {
-                    id:
-                        "z01",
-
-                    code:
-                        "Z-01",
-
-                    name:
-                        "Master Suite",
-
-                    icon:
-                        "MB",
-
-                    color:
-                        "#8e63ff",
-
-                    soft:
-                        "#f1ebff",
-
-                    progress:
-                        87,
-
-                    status:
-                        "SETTLED",
-
-                    description:
-                        "Master bedroom, master bathroom and both walk-in closets.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z02",
-
-                    code:
-                        "Z-02",
-
-                    name:
-                        "Kids Wing + Den",
-
-                    icon:
-                        "KW",
-
-                    color:
-                        "#22c7e9",
-
-                    soft:
-                        "#e7faff",
-
-                    progress:
-                        82,
-
-                    status:
-                        "SETTLED",
-
-                    description:
-                        "Reset the kids' rooms, shared bath, den and upstairs traffic areas.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z03",
-
-                    code:
-                        "Z-03",
-
-                    name:
-                        "Laundry + Linen",
-
-                    icon:
-                        "LL",
-
-                    color:
-                        "#28d4c2",
-
-                    soft:
-                        "#e9fbf8",
-
-                    progress:
-                        72,
-
-                    status:
-                        "ACTIVE",
-
-                    description:
-                        "Laundry room, linen closet, upstairs landing and stairs.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z04",
-
-                    code:
-                        "Z-04",
-
-                    name:
-                        "Main Living",
-
-                    icon:
-                        "ML",
-
-                    color:
-                        "#f0b23f",
-
-                    soft:
-                        "#fff7e6",
-
-                    progress:
-                        91,
-
-                    status:
-                        "SETTLED",
-
-                    description:
-                        "Entryway, formal dining room, living room and breakfast area.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z05",
-
-                    code:
-                        "Z-05",
-
-                    name:
-                        "Kitchen + Pantry",
-
-                    icon:
-                        "KP",
-
-                    color:
-                        "#ff667d",
-
-                    soft:
-                        "#fff0f3",
-
-                    progress:
-                        69,
-
-                    status:
-                        "ATTENTION",
-
-                    description:
-                        "Kitchen, walk-in pantry, refrigerator, freezers and mini fridge.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z06",
-
-                    code:
-                        "Z-06",
-
-                    name:
-                        "Mother-in-Law Suite",
-
-                    icon:
-                        "MI",
-
-                    color:
-                        "#f15fa9",
-
-                    soft:
-                        "#fff0f7",
-
-                    progress:
-                        89,
-
-                    status:
-                        "SETTLED",
-
-                    description:
-                        "Mother-in-law bedroom and private bathroom.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z07",
-
-                    code:
-                        "Z-07",
-
-                    name:
-                        "Basement",
-
-                    icon:
-                        "BS",
-
-                    color:
-                        "#5487ff",
-
-                    soft:
-                        "#edf2ff",
-
-                    progress:
-                        74,
-
-                    status:
-                        "ACTIVE",
-
-                    description:
-                        "Basement bedrooms, bathroom, living room and commons spaces.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z08",
-
-                    code:
-                        "Z-08",
-
-                    name:
-                        "Outdoor Living",
-
-                    icon:
-                        "OL",
-
-                    color:
-                        "#83c940",
-
-                    soft:
-                        "#f0f8e7",
-
-                    progress:
-                        68,
-
-                    status:
-                        "ATTENTION",
-
-                    description:
-                        "Front porch, yard, decks and outdoor family spaces.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                },
-
-
-                {
-                    id:
-                        "z09",
-
-                    code:
-                        "Z-09",
-
-                    name:
-                        "Garage",
-
-                    icon:
-                        "GA",
-
-                    color:
-                        "#ff844d",
-
-                    soft:
-                        "#fff1e9",
-
-                    progress:
-                        81,
-
-                    status:
-                        "SETTLED",
-
-                    description:
-                        "Garage storage, floors and utility areas.",
-
-                    lastQuickAt:
-                        null,
-
-                    lastStandardAt:
-                        null,
-
-                    lastDeepAt:
-                        null
-
-                }
-
-            ],
-
-
-            history:
-                []
-
-        },
-
-
-
-        /* ========================================================
-           DAILY RHYTHM
-
-           CANONICAL MODEL:
-
-               Opening
-               Closing
-
-           Morning / Day are no longer part of the current model.
-        ======================================================== */
-
-        dailyRhythm: {
-
-            version:
-                DAILY_VERSION,
-
-
-            currentDate:
-                getLocalDateKey(),
-
-
-            selectedShift:
-                "opening",
-
-
-            opening:
-                OPENING_TASKS
-                    .map(
-                        createDailyTask
-                    ),
-
-
-            closing:
-                CLOSING_TASKS
-                    .map(
-                        createDailyTask
-                    ),
-
-
-            history:
-                [],
-
-
-            lastResetAt:
-                null
-
-        },
-
-
-
-        /* ========================================================
-           LAUNDRY
-
-           IMPORTANT:
-           NO FAKE ACTIVE LOADS.
-
-           laundry.js is responsible for initializing its recurring
-           schedule and maintenance definitions.
-        ======================================================== */
-
-        laundry: {
-
-            activeLoads:
-                [],
-
-
-            weeklySchedule:
-                [],
-
-
-            maintenance:
-                [],
-
-
-            history:
-                [],
-
-
-            selectedDay:
-                null,
-
-
-            setupComplete:
-                false
-
-        },
-
-
-
-        /* ========================================================
-           INVENTORY
-
-           inventory.js will initialize the six storage zones and
-           starter tracked items if the user has never used Inventory.
-        ======================================================== */
-
-        inventory: {
-
-            health:
-                100,
-
-
-            lowItems:
-                [],
-
-
-            zones:
-                [],
-
-
-            items:
-                [],
-
-
-            shoppingList:
-                [],
-
-
-            autoAddShortages:
-                false,
-
-
-            selectedZone:
-                "pantry",
-
-
-            setupComplete:
-                false
-
-        },
-
-
-
-        /* ========================================================
-           SEASONAL HOME CARE
-
-           seasonal.js owns detailed checklists.
-
-           We keep all four season shells here so Dashboard can
-           safely read them before a detail page is opened.
-        ======================================================== */
-
-        seasonal: {
-
-            activeSeason:
-                "fall",
-
-
-            seasons: {
-
-                spring: {
-
-                    name:
-                        "Spring Renewal",
-
-                    progress:
-                        0,
-
-                    description:
-                        "Fresh air, decluttering and a full spring home refresh.",
-
-                    zones:
-                        [],
-
-                    selectedZone:
-                        "z01",
-
-                    completedAt:
-                        null
-
-                },
-
-
-                summer: {
-
-                    name:
-                        "Summer Reset",
-
-                    progress:
-                        0,
-
-                    description:
-                        "Outdoor living, entertaining and warm-weather home care.",
-
-                    zones:
-                        [],
-
-                    selectedZone:
-                        "z01",
-
-                    completedAt:
-                        null
-
-                },
-
-
-                fall: {
-
-                    name:
-                        "Fall Refresh",
-
-                    progress:
-                        0,
-
-                    description:
-                        "Prepare the home for cooler weather, hosting and fall decorating.",
-
-                    zones:
-                        [],
-
-                    selectedZone:
-                        "z01",
-
-                    completedAt:
-                        null
-
-                },
-
-
-                winter: {
-
-                    name:
-                        "Winter Reset",
-
-                    progress:
-                        0,
-
-                    description:
-                        "Prepare the home for winter comfort, protection and holiday hosting.",
-
-                    zones:
-                        [],
-
-                    selectedZone:
-                        "z01",
-
-                    completedAt:
-                        null
-
-                }
-
-            }
-
-        },
-
-
-
-        /* ========================================================
-           HOME MEMORY ACTIVITY STREAM
-        ======================================================== */
-
-        activity:
-            []
-
-    };
-
-
-
-    /* ============================================================
-       GENERAL UTILITIES
-    ============================================================ */
-
-    function clone(
-        value
-    ) {
-
+    function clone(value) {
         return JSON.parse(
-            JSON.stringify(
-                value
-            )
+            JSON.stringify(value)
         );
-
     }
-
 
 
     function clamp(
@@ -1079,605 +71,642 @@
         minimum = 0,
         maximum = 100
     ) {
-
         const number =
-            Number(
-                value
-            );
-
+            Number(value);
 
         if (
-            !Number.isFinite(
-                number
-            )
+            !Number.isFinite(number)
         ) {
-
             return minimum;
-
         }
-
 
         return Math.min(
             maximum,
-
             Math.max(
                 minimum,
                 number
             )
         );
-
     }
 
+
+    function getLocalDateKey(
+        date = new Date()
+    ) {
+        const year =
+            date.getFullYear();
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(
+                2,
+                "0"
+            );
+
+        return `${year}-${month}-${day}`;
+    }
+
+
+    function getCalendarSeason(
+        date = new Date()
+    ) {
+        const month =
+            date.getMonth() + 1;
+
+        if (
+            month >= 3 &&
+            month <= 5
+        ) {
+            return "spring";
+        }
+
+        if (
+            month >= 6 &&
+            month <= 8
+        ) {
+            return "summer";
+        }
+
+        if (
+            month >= 9 &&
+            month <= 11
+        ) {
+            return "fall";
+        }
+
+        return "winter";
+    }
+
+
+    function daysSince(
+        dateString
+    ) {
+        if (!dateString) {
+            return null;
+        }
+
+        const timestamp =
+            new Date(
+                dateString
+            ).getTime();
+
+        if (
+            !Number.isFinite(timestamp)
+        ) {
+            return null;
+        }
+
+        return Math.max(
+            0,
+            Math.floor(
+                (
+                    Date.now() -
+                    timestamp
+                ) /
+                86400000
+            )
+        );
+    }
+
+
+    function minutesSince(
+        dateString
+    ) {
+        if (!dateString) {
+            return null;
+        }
+
+        const timestamp =
+            new Date(
+                dateString
+            ).getTime();
+
+        if (
+            !Number.isFinite(timestamp)
+        ) {
+            return null;
+        }
+
+        return Math.max(
+            0,
+            Math.floor(
+                (
+                    Date.now() -
+                    timestamp
+                ) /
+                60000
+            )
+        );
+    }
+
+
+    function makeId(prefix) {
+        if (
+            typeof crypto !==
+                "undefined" &&
+            typeof crypto.randomUUID ===
+                "function"
+        ) {
+            return `${prefix}-${crypto.randomUUID()}`;
+        }
+
+        return (
+            `${prefix}-${Date.now()}-` +
+            Math.random()
+                .toString(16)
+                .slice(2)
+        );
+    }
+
+
+    /* ============================================================
+       DEFAULT CLEANING ZONES
+
+       This is the shared nine-zone topology.
+
+       Cleaning owns room/task detail.
+       Seasonal reads these same zones.
+       Dashboard reads these same zones.
+    ============================================================ */
+
+    function createDefaultCleaningZones() {
+        return [
+            {
+                id: "z01",
+                code: "Z-01",
+                name: "Master Suite",
+                icon: "MB",
+                color: "#8e63ff",
+                soft: "#f1ebff",
+                progress: 87,
+                status: "SETTLED",
+                description:
+                    "Master bedroom, master bathroom and both walk-in closets.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z02",
+                code: "Z-02",
+                name: "Kids Wing + Den",
+                icon: "KW",
+                color: "#22c7e9",
+                soft: "#e7faff",
+                progress: 82,
+                status: "SETTLED",
+                description:
+                    "Kids' rooms, shared bathroom, den and upstairs traffic areas.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z03",
+                code: "Z-03",
+                name: "Laundry + Linen",
+                icon: "LL",
+                color: "#28d4c2",
+                soft: "#e9fbf8",
+                progress: 72,
+                status: "ACTIVE",
+                description:
+                    "Laundry room, linen closet, upstairs landing and stairs.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z04",
+                code: "Z-04",
+                name: "Main Living",
+                icon: "ML",
+                color: "#f0b23f",
+                soft: "#fff7e6",
+                progress: 91,
+                status: "SETTLED",
+                description:
+                    "Entryway, formal dining room, living room and breakfast area.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z05",
+                code: "Z-05",
+                name: "Kitchen + Pantry",
+                icon: "KP",
+                color: "#ff667d",
+                soft: "#fff0f3",
+                progress: 69,
+                status: "ATTENTION",
+                description:
+                    "Kitchen, walk-in pantry, refrigerator, freezers and mini fridge.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z06",
+                code: "Z-06",
+                name: "Mother-in-Law Suite",
+                icon: "MI",
+                color: "#f15fa9",
+                soft: "#fff0f7",
+                progress: 89,
+                status: "SETTLED",
+                description:
+                    "Mother-in-law bedroom and private bathroom.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z07",
+                code: "Z-07",
+                name: "Basement",
+                icon: "BS",
+                color: "#5487ff",
+                soft: "#edf2ff",
+                progress: 74,
+                status: "ACTIVE",
+                description:
+                    "Basement bedrooms, bathroom, living room and commons spaces.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z08",
+                code: "Z-08",
+                name: "Outdoor Living",
+                icon: "OL",
+                color: "#83c940",
+                soft: "#f0f8e7",
+                progress: 68,
+                status: "ATTENTION",
+                description:
+                    "Front porch, yard, decks and outdoor family spaces.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            },
+
+            {
+                id: "z09",
+                code: "Z-09",
+                name: "Garage",
+                icon: "GA",
+                color: "#ff844d",
+                soft: "#fff1e9",
+                progress: 81,
+                status: "SETTLED",
+                description:
+                    "Garage storage, floors and utility areas.",
+                lastQuickAt: null,
+                lastStandardAt: null,
+                lastDeepAt: null
+            }
+        ];
+    }
+
+
+    /* ============================================================
+       DEFAULT SEASONS
+    ============================================================ */
+
+    function createDefaultSeasons() {
+        return {
+            spring: {
+                name:
+                    "Spring Renewal",
+
+                progress:
+                    0,
+
+                description:
+                    "Fresh air, decluttering and a full spring home refresh.",
+
+                zones:
+                    [],
+
+                selectedZone:
+                    "z01",
+
+                completedAt:
+                    null
+            },
+
+            summer: {
+                name:
+                    "Summer Reset",
+
+                progress:
+                    0,
+
+                description:
+                    "Outdoor living, entertaining and warm-weather home care.",
+
+                zones:
+                    [],
+
+                selectedZone:
+                    "z01",
+
+                completedAt:
+                    null
+            },
+
+            fall: {
+                name:
+                    "Fall Refresh",
+
+                progress:
+                    0,
+
+                description:
+                    "Prepare the home for cooler weather, hosting and fall decorating.",
+
+                zones:
+                    [],
+
+                selectedZone:
+                    "z01",
+
+                completedAt:
+                    null
+            },
+
+            winter: {
+                name:
+                    "Winter Reset",
+
+                progress:
+                    0,
+
+                description:
+                    "Prepare the home for winter comfort, protection and holiday hosting.",
+
+                zones:
+                    [],
+
+                selectedZone:
+                    "z01",
+
+                completedAt:
+                    null
+            }
+        };
+    }
+
+
+    /* ============================================================
+       DEFAULT HOMEOS STATE
+    ============================================================ */
+
+    function createDefaultState() {
+        return {
+            version:
+                CORE_VERSION,
+
+
+            settings: {
+                theme:
+                    "light"
+            },
+
+
+            cleaning: {
+                selectedZone:
+                    "z02",
+
+                activeSession:
+                    null,
+
+                rooms:
+                    [],
+
+                pausedSessions:
+                    [],
+
+                cleaningMode:
+                    "room",
+
+                selectedFloor:
+                    "upstairs",
+
+                zones:
+                    createDefaultCleaningZones(),
+
+                history:
+                    []
+            },
+
+
+            /*
+               Daily Rhythm task templates are NOT hard-coded here.
+
+               daily.js owns the current real-life checklist.
+               HomeStore owns its saved state and rollover.
+            */
+            dailyRhythm: {
+                currentDate:
+                    getLocalDateKey(),
+
+                selectedShift:
+                    "opening",
+
+                opening:
+                    [],
+
+                closing:
+                    [],
+
+                dailyTemplateVersion:
+                    0,
+
+                sharedShoppingMigrated:
+                    true,
+
+                history:
+                    [],
+
+                lastResetAt:
+                    null
+            },
+
+
+            laundry: {
+                activeLoads:
+                    [],
+
+                weeklySchedule:
+                    [],
+
+                maintenance:
+                    [],
+
+                history:
+                    [],
+
+                selectedDay:
+                    null,
+
+                setupComplete:
+                    false
+            },
+
+
+            inventory: {
+                health:
+                    100,
+
+                lowItems:
+                    [],
+
+                zones:
+                    [],
+
+                items:
+                    [],
+
+                shoppingList:
+                    [],
+
+                autoAddShortages:
+                    false,
+
+                selectedZone:
+                    "pantry",
+
+                setupComplete:
+                    false
+            },
+
+
+            seasonal: {
+                /*
+                   seasonal.js keeps this synchronized with the
+                   actual calendar season.
+                */
+                activeSeason:
+                    getCalendarSeason(),
+
+                seasons:
+                    createDefaultSeasons()
+            },
+
+
+            activity:
+                []
+        };
+    }
 
 
     /* ============================================================
        SAFE STATE MERGE
 
-       RULE:
-
-       - New default fields get added.
-       - Existing saved fields remain.
-       - Unknown module-specific fields remain.
-       - Arrays from saved state are preserved.
-
-       This is what lets us evolve HomeOS without deleting user data.
+       Existing data wins.
+       New schema fields are added.
+       Saved arrays remain intact.
     ============================================================ */
 
     function mergeState(
         defaults,
         saved
     ) {
-
         if (
-            Array.isArray(
-                defaults
-            )
+            Array.isArray(defaults)
         ) {
-
-            return Array.isArray(
-                saved
-            )
+            return Array.isArray(saved)
                 ? saved
-
-                : clone(
-                    defaults
-                );
-
+                : clone(defaults);
         }
 
-
         if (
+            defaults === null ||
             typeof defaults !==
-                "object" ||
-            defaults ===
-                null
+                "object"
         ) {
-
             return saved !==
                 undefined
                 ? saved
-
                 : defaults;
-
         }
 
-
         const merged = {
-
             ...defaults
-
         };
-
 
         if (
             saved &&
             typeof saved ===
-                "object"
+                "object" &&
+            !Array.isArray(saved)
         ) {
-
-            Object
-                .keys(
-                    saved
-                )
+            Object.keys(saved)
                 .forEach(
                     key => {
-
                         if (
-                            key in
-                            defaults
+                            key in defaults
                         ) {
-
-                            merged[
-                                key
-                            ] =
+                            merged[key] =
                                 mergeState(
-
-                                    defaults[
-                                        key
-                                    ],
-
-                                    saved[
-                                        key
-                                    ]
-
+                                    defaults[key],
+                                    saved[key]
                                 );
-
                         }
-
 
                         else {
-
-                            /*
-                               Preserve data belonging to modules
-                               introduced after this store version.
-                            */
-
-                            merged[
-                                key
-                            ] =
-                                saved[
-                                    key
-                                ];
-
+                            merged[key] =
+                                saved[key];
                         }
-
                     }
                 );
-
         }
 
-
         return merged;
-
     }
-
 
 
     /* ============================================================
-       DAILY RHYTHM MIGRATION HELPERS
-    ============================================================ */
-
-    function normalizeTitle(
-        value
-    ) {
-
-        return String(
-            value || ""
-        )
-            .toLowerCase()
-            .replace(
-                /[^a-z0-9]+/g,
-                " "
-            )
-            .trim();
-
-    }
-
-
-
-    function findLegacyTask(
-        tasks,
-        searchTerms
-    ) {
-
-        const safeTasks =
-            Array.isArray(
-                tasks
-            )
-                ? tasks
-
-                : [];
-
-
-        return safeTasks
-            .find(
-                task => {
-
-                    const title =
-                        normalizeTitle(
-                            task.title
-                        );
-
-
-                    return searchTerms
-                        .some(
-                            term =>
-                                title.includes(
-                                    normalizeTitle(
-                                        term
-                                    )
-                                )
-                        );
-
-                }
-            );
-
-    }
-
-
-
-    /* ============================================================
-       MIGRATE OLD MORNING + DAY → OPENING
-
-       This only runs if a saved HomeOS does NOT already contain
-       the new opening array.
-
-       We try to preserve completion from the old checklist.
-    ============================================================ */
-
-    function migrateOpeningTasks(
-        rhythm
-    ) {
-
-        const legacyTasks = [
-
-            ...(
-                Array.isArray(
-                    rhythm.morning
-                )
-                    ? rhythm.morning
-
-                    : []
-            ),
-
-            ...(
-                Array.isArray(
-                    rhythm.day
-                )
-                    ? rhythm.day
-
-                    : []
-            )
-
-        ];
-
-
-        const matchingTerms = {
-
-            "opening-make-beds":
-                [
-                    "make beds"
-                ],
-
-
-            "opening-blinds":
-                [
-                    "open blinds"
-                ],
-
-
-            "opening-laundry":
-                [
-                    "collect laundry"
-                ],
-
-
-            "opening-dishwasher":
-                [
-                    "empty dishwasher"
-                ],
-
-
-            "opening-kitchen":
-                [
-                    "kitchen reset",
-                    "check kitchen"
-                ],
-
-
-            "opening-bathrooms":
-                [
-                    "bathroom counter"
-                ],
-
-
-            "opening-laundry-flow":
-                [
-                    "move laundry"
-                ],
-
-
-            "opening-strays":
-                [
-                    "put away stray"
-                ],
-
-
-            "opening-living":
-                [
-                    "reset main living"
-                ],
-
-
-            "opening-plants":
-                []
-
-        };
-
-
-        const migrated =
-            OPENING_TASKS
-                .map(
-                    starter => {
-
-                        const old =
-                            findLegacyTask(
-
-                                legacyTasks,
-
-                                matchingTerms[
-                                    starter.id
-                                ] || []
-
-                            );
-
-
-                        return {
-
-                            id:
-                                starter.id,
-
-                            title:
-                                starter.title,
-
-                            done:
-                                Boolean(
-                                    old?.done
-                                ),
-
-                            completedAt:
-                                old?.completedAt ||
-                                null,
-
-                            custom:
-                                false
-
-                        };
-
-                    }
-                );
-
-
-
-        /*
-           Preserve any custom tasks that happened to exist in the
-           old Morning / Day model.
-        */
-
-        legacyTasks
-            .filter(
-                task =>
-                    task.custom
-            )
-            .forEach(
-                task => {
-
-                    migrated.push({
-
-                        ...task,
-
-                        id:
-                            task.id ||
-                            `opening-custom-${Date.now()}-${Math.random()}`,
-
-                        custom:
-                            true
-
-                    });
-
-                }
-            );
-
-
-        return migrated;
-
-    }
-
-
-
-    /* ============================================================
-       MIGRATE OLD CLOSING → NEW CLOSING
-    ============================================================ */
-
-    function migrateClosingTasks(
-        rhythm
-    ) {
-
-        const oldClosing =
-            Array.isArray(
-                rhythm.closing
-            )
-                ? rhythm.closing
-
-                : [];
-
-
-        const matchingTerms = {
-
-            "closing-dishwasher":
-                [
-                    "run dishwasher"
-                ],
-
-
-            "closing-sink":
-                [
-                    "sink"
-                ],
-
-
-            "closing-counters":
-                [
-                    "reset counters"
-                ],
-
-
-            "closing-dining":
-                [
-                    "dining"
-                ],
-
-
-            "closing-living":
-                [
-                    "reset living room"
-                ],
-
-
-            "closing-strays":
-                [
-                    "stray"
-                ],
-
-
-            "closing-laundry":
-                [
-                    "check laundry"
-                ],
-
-
-            "closing-upstairs":
-                [
-                    "upstairs reset"
-                ],
-
-
-            "closing-trash":
-                [
-                    "trash"
-                ],
-
-
-            "closing-morning":
-                [
-                    "prepare for morning"
-                ]
-
-        };
-
-
-        const migrated =
-            CLOSING_TASKS
-                .map(
-                    starter => {
-
-                        const exact =
-                            oldClosing
-                                .find(
-                                    task =>
-                                        task.id ===
-                                        starter.id
-                                );
-
-
-                        const old =
-                            exact ||
-                            findLegacyTask(
-
-                                oldClosing,
-
-                                matchingTerms[
-                                    starter.id
-                                ] || []
-
-                            );
-
-
-                        return {
-
-                            id:
-                                starter.id,
-
-                            title:
-                                starter.title,
-
-                            done:
-                                Boolean(
-                                    old?.done
-                                ),
-
-                            completedAt:
-                                old?.completedAt ||
-                                null,
-
-                            custom:
-                                false
-
-                        };
-
-                    }
-                );
-
-
-        oldClosing
-            .filter(
-                task =>
-                    task.custom
-            )
-            .forEach(
-                task => {
-
-                    if (
-                        !migrated.some(
-                            item =>
-                                item.id ===
-                                task.id
-                        )
-                    ) {
-
-                        migrated.push({
-
-                            ...task,
-
-                            custom:
-                                true
-
-                        });
-
-                    }
-
-                }
-            );
-
-
-        return migrated;
-
-    }
-
-
-
-    /* ============================================================
-       DAILY PROGRESS CALCULATOR
+       TASK PROGRESS
     ============================================================ */
 
     function calculateTaskProgress(
         tasks
     ) {
-
         const list =
-            Array.isArray(
-                tasks
-            )
+            Array.isArray(tasks)
                 ? tasks
-
                 : [];
-
 
         const total =
             list.length;
 
-
         const completed =
-            list
-                .filter(
-                    task =>
-                        task.done
-                )
-                .length;
-
+            list.filter(
+                task =>
+                    task.done
+            ).length;
 
         return {
-
             total,
 
             completed,
@@ -1698,879 +727,881 @@
                         ) *
                         100
                     )
-
                     : 100
-
         };
-
     }
 
 
-
     /* ============================================================
-       ARCHIVE DAILY RHYTHM
-
-       HomeOS keeps the last 30 archived days.
-
-       We store summary percentages instead of duplicating the entire
-       checklist every single day.
+       DAILY HISTORY
     ============================================================ */
 
     function archiveDailyRhythm(
         state,
         dateKey
     ) {
+        if (!dateKey) {
+            return;
+        }
 
         const rhythm =
             state.dailyRhythm;
-
-
-        if (
-            !dateKey
-        ) {
-
-            return;
-
-        }
-
 
         if (
             !Array.isArray(
                 rhythm.history
             )
         ) {
-
             rhythm.history =
                 [];
-
         }
 
+        const exists =
+            rhythm.history.some(
+                day =>
+                    day.date ===
+                    dateKey
+            );
 
-        const alreadyArchived =
-            rhythm.history
-                .some(
-                    day =>
-                        day.date ===
-                        dateKey
-                );
-
-
-        if (
-            alreadyArchived
-        ) {
-
+        if (exists) {
             return;
-
         }
-
 
         const opening =
             calculateTaskProgress(
                 rhythm.opening
             );
 
-
         const closing =
             calculateTaskProgress(
                 rhythm.closing
             );
 
-
-        const allTasks = [
-
-            ...(
-                rhythm.opening ||
-                []
-            ),
-
-            ...(
-                rhythm.closing ||
-                []
-            )
-
-        ];
-
-
         const overall =
             calculateTaskProgress(
-                allTasks
+                [
+                    ...(
+                        rhythm.opening ||
+                        []
+                    ),
+
+                    ...(
+                        rhythm.closing ||
+                        []
+                    )
+                ]
             );
 
+        rhythm.history.unshift({
+            id:
+                `daily-history-${dateKey}`,
 
-        rhythm.history
-            .unshift({
+            date:
+                dateKey,
 
-                id:
-                    `daily-history-${dateKey}`,
+            openingProgress:
+                opening.percent,
 
-                date:
-                    dateKey,
+            closingProgress:
+                closing.percent,
 
-                openingProgress:
-                    opening.percent,
+            overallProgress:
+                overall.percent,
 
-                closingProgress:
-                    closing.percent,
+            completed:
+                overall.completed,
 
-                overallProgress:
-                    overall.percent,
+            total:
+                overall.total,
 
-                completed:
-                    overall.completed,
-
-                total:
-                    overall.total,
-
-                archivedAt:
-                    new Date()
-                        .toISOString()
-
-            });
-
+            archivedAt:
+                new Date()
+                    .toISOString()
+        });
 
         rhythm.history =
-            rhythm.history
-                .slice(
-                    0,
-                    30
-                );
-
+            rhythm.history.slice(
+                0,
+                30
+            );
     }
 
 
+    /* ============================================================
+       DAILY NEW-DAY TASK RESET
+    ============================================================ */
+
+    function resetDailyTasksForNewDay(
+        tasks
+    ) {
+        return (
+            Array.isArray(tasks)
+                ? tasks
+                : []
+        )
+            .filter(
+                task =>
+                    !(
+                        task.custom &&
+                        task.recurring ===
+                            false
+                    )
+            )
+            .map(
+                task => ({
+                    ...task,
+
+                    done:
+                        false,
+
+                    completedAt:
+                        null
+                })
+            );
+    }
+
 
     /* ============================================================
-       DAILY NEW-DAY RESET
+       DAILY NEW-DAY ROLLOVER
 
-       This runs centrally through HomeStore.
+       - Archive yesterday
+       - Keep built-ins
+       - Keep repeating custom tasks
+       - Remove today-only custom tasks
 
-       That means Dashboard can trigger the rollover even if the user
-       has NOT opened daily.html yet.
+       Shopping is NOT owned here.
+       All HomeOS shopping lives in state.inventory.shoppingList.
     ============================================================ */
 
     function rollDailyRhythmIfNeeded(
         state
     ) {
-
         const rhythm =
             state.dailyRhythm;
-
 
         const today =
             getLocalDateKey();
 
-
         if (
             !rhythm.currentDate
         ) {
-
             rhythm.currentDate =
                 today;
 
-
             return;
-
         }
-
 
         if (
             rhythm.currentDate ===
             today
         ) {
-
             return;
-
         }
 
-
-
-        /* --------------------------------------------------------
-           SAVE YESTERDAY
-        -------------------------------------------------------- */
+        const previousDate =
+            rhythm.currentDate;
 
         archiveDailyRhythm(
-
             state,
-
-            rhythm.currentDate
-
+            previousDate
         );
 
-
-
-        /* --------------------------------------------------------
-           RESET OPENING
-        -------------------------------------------------------- */
-
-        (
-            rhythm.opening ||
-            []
-        )
-            .forEach(
-                task => {
-
-                    task.done =
-                        false;
-
-
-                    task.completedAt =
-                        null;
-
-                }
+        rhythm.opening =
+            resetDailyTasksForNewDay(
+                rhythm.opening
             );
 
-
-
-        /* --------------------------------------------------------
-           RESET CLOSING
-        -------------------------------------------------------- */
-
-        (
-            rhythm.closing ||
-            []
-        )
-            .forEach(
-                task => {
-
-                    task.done =
-                        false;
-
-
-                    task.completedAt =
-                        null;
-
-                }
+        rhythm.closing =
+            resetDailyTasksForNewDay(
+                rhythm.closing
             );
-
 
         rhythm.currentDate =
             today;
 
-
         rhythm.selectedShift =
             "opening";
-
 
         rhythm.lastResetAt =
             new Date()
                 .toISOString();
-
     }
 
 
-
     /* ============================================================
-       NORMALIZE / UPGRADE SAVED HOMEOS STATE
+       LEGACY DAILY SHOPPING MIGRATION
 
-       This lets old saved versions survive architecture changes.
+       Daily Rhythm used to own a separate shoppingList.
+       HomeOS now has ONE shared shopping list:
+
+           state.inventory.shoppingList
+
+       Migrate unfinished legacy Daily items once, then remove the
+       obsolete Daily shopping fields so they cannot come back.
     ============================================================ */
 
-    function normalizeState(
+    function migrateLegacyDailyShopping(
         state
     ) {
-
-        state.version =
-            CORE_VERSION;
-
-
-
-        /* ========================================================
-           SHARED ARRAYS
-        ======================================================== */
-
-        if (
-            !Array.isArray(
-                state.activity
-            )
-        ) {
-
-            state.activity =
-                [];
-
-        }
-
-
-
-        /* ========================================================
-           DAILY RHYTHM
-        ======================================================== */
-
-        if (
-            !state.dailyRhythm ||
-            typeof state.dailyRhythm !==
-                "object"
-        ) {
-
-            state.dailyRhythm =
-                clone(
-                    DEFAULT_STATE.dailyRhythm
-                );
-
-        }
-
-
         const rhythm =
-            state.dailyRhythm;
-
-
-        /*
-           Only migrate if Opening does not already exist.
-
-           This protects the Daily Rhythm page the user has already
-           configured.
-        */
-
-        if (
-            !Array.isArray(
-                rhythm.opening
-            )
-        ) {
-
-            rhythm.opening =
-                migrateOpeningTasks(
-                    rhythm
-                );
-
-        }
-
-
-        /*
-           Old Closing arrays can still exist.
-
-           If this store has never been upgraded to version 2,
-           convert them to the new canonical Closing tasks.
-        */
-
-        if (
-            rhythm.version !==
-                DAILY_VERSION
-        ) {
-
-            rhythm.closing =
-                migrateClosingTasks(
-                    rhythm
-                );
-
-        }
-
-
-        else if (
-            !Array.isArray(
-                rhythm.closing
-            )
-        ) {
-
-            rhythm.closing =
-                CLOSING_TASKS
-                    .map(
-                        createDailyTask
-                    );
-
-        }
-
-
-        if (
-            !Array.isArray(
-                rhythm.history
-            )
-        ) {
-
-            rhythm.history =
-                [];
-
-        }
-
-
-
-        /*
-           Transitional compatibility:
-
-           Old Dashboard code may still have stored:
-               morning
-               day
-
-           Both are now treated as Opening.
-        */
-
-        if (
-            ![
-                "opening",
-                "closing"
-            ]
-                .includes(
-                    rhythm.selectedShift
-                )
-        ) {
-
-            rhythm.selectedShift =
-                rhythm.selectedShift ===
-                    "closing"
-
-                    ? "closing"
-
-                    : "opening";
-
-        }
-
-
-        rhythm.version =
-            DAILY_VERSION;
-
-
-        rollDailyRhythmIfNeeded(
-            state
-        );
-
-
-
-        /* ========================================================
-           LAUNDRY
-        ======================================================== */
-
-        if (
-            !state.laundry ||
-            typeof state.laundry !==
-                "object"
-        ) {
-
-            state.laundry =
-                clone(
-                    DEFAULT_STATE.laundry
-                );
-
-        }
-
-
-        if (
-            !Array.isArray(
-                state.laundry.activeLoads
-            )
-        ) {
-
-            state.laundry.activeLoads =
-                [];
-
-        }
-
-
-        if (
-            !Array.isArray(
-                state.laundry.weeklySchedule
-            )
-        ) {
-
-            state.laundry.weeklySchedule =
-                [];
-
-        }
-
-
-        if (
-            !Array.isArray(
-                state.laundry.maintenance
-            )
-        ) {
-
-            state.laundry.maintenance =
-                [];
-
-        }
-
-
-        if (
-            !Array.isArray(
-                state.laundry.history
-            )
-        ) {
-
-            state.laundry.history =
-                [];
-
-        }
-
-
-
-        /* ========================================================
-           INVENTORY
-        ======================================================== */
+            state.dailyRhythm ||
+            {};
 
         if (
             !state.inventory ||
             typeof state.inventory !==
                 "object"
         ) {
-
-            state.inventory =
-                clone(
-                    DEFAULT_STATE.inventory
-                );
-
+            state.inventory = {
+                health: 100,
+                lowItems: [],
+                zones: [],
+                items: [],
+                shoppingList: [],
+                autoAddShortages: false,
+                selectedZone: "pantry",
+                setupComplete: false
+            };
         }
-
-
-        if (
-            !Array.isArray(
-                state.inventory.zones
-            )
-        ) {
-
-            state.inventory.zones =
-                [];
-
-        }
-
-
-        if (
-            !Array.isArray(
-                state.inventory.items
-            )
-        ) {
-
-            state.inventory.items =
-                [];
-
-        }
-
-
-        if (
-            !Array.isArray(
-                state.inventory.lowItems
-            )
-        ) {
-
-            state.inventory.lowItems =
-                [];
-
-        }
-
 
         if (
             !Array.isArray(
                 state.inventory.shoppingList
             )
         ) {
-
             state.inventory.shoppingList =
                 [];
+        }
 
+        const legacyShopping =
+            Array.isArray(
+                rhythm.shoppingList
+            )
+                ? rhythm.shoppingList
+                : [];
+
+        legacyShopping
+            .filter(
+                item =>
+                    !item?.done
+            )
+            .forEach(
+                item => {
+                    const name =
+                        String(
+                            item?.name ||
+                            item?.title ||
+                            ""
+                        )
+                            .trim();
+
+                    if (!name) {
+                        return;
+                    }
+
+                    const normalizedName =
+                        name
+                            .toLowerCase()
+                            .replace(
+                                /[^a-z0-9]+/g,
+                                " "
+                            )
+                            .trim();
+
+                    const alreadyExists =
+                        state.inventory
+                            .shoppingList
+                            .some(
+                                entry =>
+                                    String(
+                                        entry?.name ||
+                                        entry?.title ||
+                                        ""
+                                    )
+                                        .toLowerCase()
+                                        .replace(
+                                            /[^a-z0-9]+/g,
+                                            " "
+                                        )
+                                        .trim() ===
+                                    normalizedName
+                            );
+
+                    if (alreadyExists) {
+                        return;
+                    }
+
+                    state.inventory
+                        .shoppingList
+                        .push({
+                            id:
+                                item.id ||
+                                makeId(
+                                    "daily-shopping"
+                                ),
+
+                            sourceType:
+                                "custom",
+
+                            origin:
+                                "daily",
+
+                            sourceLabel:
+                                "Daily Rhythm",
+
+                            inventoryItemId:
+                                null,
+
+                            name,
+
+                            quantity:
+                                Math.max(
+                                    1,
+                                    Number(
+                                        item.quantity
+                                    ) ||
+                                    1
+                                ),
+
+                            quantityMode:
+                                "manual",
+
+                            unit:
+                                item.unit ||
+                                "",
+
+                            checked:
+                                false,
+
+                            addedAt:
+                                item.createdAt ||
+                                item.dayDate ||
+                                new Date()
+                                    .toISOString()
+                        });
+                }
+            );
+
+        delete rhythm.shoppingList;
+        delete rhythm.shoppingDate;
+
+        rhythm.sharedShoppingMigrated =
+            true;
+    }
+
+
+    /* ============================================================
+       STATE NORMALIZATION
+    ============================================================ */
+
+    function normalizeState(
+        state
+    ) {
+        state.version =
+            CORE_VERSION;
+
+
+        /* --------------------------------------------------------
+           SETTINGS
+        -------------------------------------------------------- */
+
+        if (
+            !state.settings ||
+            typeof state.settings !==
+                "object"
+        ) {
+            state.settings = {
+                theme:
+                    "light"
+            };
+        }
+
+        state.settings.theme =
+            state.settings.theme ===
+                "dark"
+                ? "dark"
+                : "light";
+
+
+        /* --------------------------------------------------------
+           ACTIVITY
+        -------------------------------------------------------- */
+
+        if (
+            !Array.isArray(
+                state.activity
+            )
+        ) {
+            state.activity =
+                [];
         }
 
 
+        /* --------------------------------------------------------
+           CLEANING
+        -------------------------------------------------------- */
 
-        /* ========================================================
+        if (
+            !state.cleaning ||
+            typeof state.cleaning !==
+                "object"
+        ) {
+            state.cleaning =
+                createDefaultState()
+                    .cleaning;
+        }
+
+        if (
+            !Array.isArray(
+                state.cleaning.zones
+            ) ||
+            !state.cleaning.zones.length
+        ) {
+            state.cleaning.zones =
+                createDefaultCleaningZones();
+        }
+
+        if (
+            !Array.isArray(
+                state.cleaning.rooms
+            )
+        ) {
+            state.cleaning.rooms =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.cleaning.pausedSessions
+            )
+        ) {
+            state.cleaning.pausedSessions =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.cleaning.history
+            )
+        ) {
+            state.cleaning.history =
+                [];
+        }
+
+
+        /* --------------------------------------------------------
+           DAILY RHYTHM
+        -------------------------------------------------------- */
+
+        if (
+            !state.dailyRhythm ||
+            typeof state.dailyRhythm !==
+                "object"
+        ) {
+            state.dailyRhythm =
+                createDefaultState()
+                    .dailyRhythm;
+        }
+
+        const rhythm =
+            state.dailyRhythm;
+
+        if (
+            !Array.isArray(
+                rhythm.opening
+            )
+        ) {
+            rhythm.opening =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                rhythm.closing
+            )
+        ) {
+            rhythm.closing =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                rhythm.history
+            )
+        ) {
+            rhythm.history =
+                [];
+        }
+
+        if (
+            ![
+                "opening",
+                "closing"
+            ].includes(
+                rhythm.selectedShift
+            )
+        ) {
+            rhythm.selectedShift =
+                "opening";
+        }
+
+        if (
+            !Number.isFinite(
+                Number(
+                    rhythm.dailyTemplateVersion
+                )
+            )
+        ) {
+            rhythm.dailyTemplateVersion =
+                0;
+        }
+
+        /* --------------------------------------------------------
+           LAUNDRY
+        -------------------------------------------------------- */
+
+        if (
+            !state.laundry ||
+            typeof state.laundry !==
+                "object"
+        ) {
+            state.laundry =
+                createDefaultState()
+                    .laundry;
+        }
+
+        if (
+            !Array.isArray(
+                state.laundry.activeLoads
+            )
+        ) {
+            state.laundry.activeLoads =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.laundry.weeklySchedule
+            )
+        ) {
+            state.laundry.weeklySchedule =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.laundry.maintenance
+            )
+        ) {
+            state.laundry.maintenance =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.laundry.history
+            )
+        ) {
+            state.laundry.history =
+                [];
+        }
+
+
+        /* --------------------------------------------------------
+           INVENTORY
+        -------------------------------------------------------- */
+
+        if (
+            !state.inventory ||
+            typeof state.inventory !==
+                "object"
+        ) {
+            state.inventory =
+                createDefaultState()
+                    .inventory;
+        }
+
+        if (
+            !Array.isArray(
+                state.inventory.zones
+            )
+        ) {
+            state.inventory.zones =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.inventory.items
+            )
+        ) {
+            state.inventory.items =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.inventory.lowItems
+            )
+        ) {
+            state.inventory.lowItems =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                state.inventory.shoppingList
+            )
+        ) {
+            state.inventory.shoppingList =
+                [];
+        }
+
+
+        /*
+           Finish cross-module Daily normalization only after
+           Inventory is guaranteed to exist, because legacy Daily
+           shopping belongs in the shared Inventory shopping list.
+        */
+        migrateLegacyDailyShopping(
+            state
+        );
+
+        rollDailyRhythmIfNeeded(
+            state
+        );
+
+
+        /* --------------------------------------------------------
            SEASONAL
-        ======================================================== */
+        -------------------------------------------------------- */
 
         if (
             !state.seasonal ||
             typeof state.seasonal !==
                 "object"
         ) {
-
             state.seasonal =
-                clone(
-                    DEFAULT_STATE.seasonal
-                );
-
+                createDefaultState()
+                    .seasonal;
         }
-
 
         if (
             !state.seasonal.seasons ||
             typeof state.seasonal.seasons !==
                 "object"
         ) {
-
             state.seasonal.seasons =
-                clone(
-                    DEFAULT_STATE
-                        .seasonal
-                        .seasons
-                );
+                createDefaultSeasons();
+        }
 
+        const defaultSeasons =
+            createDefaultSeasons();
+
+        [
+            "spring",
+            "summer",
+            "fall",
+            "winter"
+        ].forEach(
+            seasonKey => {
+                if (
+                    !state.seasonal
+                        .seasons[
+                            seasonKey
+                        ]
+                ) {
+                    state.seasonal
+                        .seasons[
+                            seasonKey
+                        ] =
+                        defaultSeasons[
+                            seasonKey
+                        ];
+                }
+            }
+        );
+
+        if (
+            !state.seasonal
+                .seasons[
+                    state.seasonal
+                        .activeSeason
+                ]
+        ) {
+            state.seasonal.activeSeason =
+                getCalendarSeason();
         }
 
 
         return state;
-
     }
 
 
-
     /* ============================================================
-       STORAGE — READ
-
-       getState():
-
-       1. Reads localStorage.
-       2. Merges new schema fields.
-       3. Runs migrations.
-       4. Handles Daily Rhythm rollover.
-       5. Silently saves upgraded structure if necessary.
-
-       IMPORTANT:
-       Silent normalization does NOT fire homeos:statechange.
+       STORAGE READ
     ============================================================ */
 
     function getState() {
-
         const saved =
-            localStorage
-                .getItem(
-                    STORAGE_KEY
-                );
+            localStorage.getItem(
+                STORAGE_KEY
+            );
 
-
-        if (
-            !saved
-        ) {
-
+        if (!saved) {
             const initial =
                 normalizeState(
-                    clone(
-                        DEFAULT_STATE
-                    )
+                    createDefaultState()
                 );
 
-
-            localStorage
-                .setItem(
-
-                    STORAGE_KEY,
-
-                    JSON.stringify(
-                        initial
-                    )
-
-                );
-
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(
+                    initial
+                )
+            );
 
             return initial;
-
         }
 
-
         try {
-
             const parsed =
                 JSON.parse(
                     saved
                 );
 
-
             const merged =
                 mergeState(
-
-                    DEFAULT_STATE,
-
+                    createDefaultState(),
                     parsed
-
                 );
-
 
             const normalized =
                 normalizeState(
                     merged
                 );
 
-
             const normalizedJson =
                 JSON.stringify(
                     normalized
                 );
 
-
             /*
-               Upgrade storage quietly if schema changed.
+               Quietly save schema upgrades.
 
-               We deliberately do not dispatch an event here because
-               getState() is a read operation and can be called while
-               rendering.
+               A read does not broadcast a state-change event.
             */
-
             if (
                 normalizedJson !==
                 saved
             ) {
-
-                localStorage
-                    .setItem(
-
-                        STORAGE_KEY,
-
-                        normalizedJson
-
-                    );
-
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    normalizedJson
+                );
             }
 
-
             return normalized;
-
         }
 
-
-        catch (
-            error
-        ) {
-
+        catch (error) {
             console.error(
                 "DARLING HomeOS storage error:",
                 error
             );
 
-
             const resetState =
                 normalizeState(
-                    clone(
-                        DEFAULT_STATE
-                    )
+                    createDefaultState()
                 );
 
-
-            localStorage
-                .setItem(
-
-                    STORAGE_KEY,
-
-                    JSON.stringify(
-                        resetState
-                    )
-
-                );
-
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(
+                    resetState
+                )
+            );
 
             return resetState;
-
         }
-
     }
 
 
-
     /* ============================================================
-       STORAGE — SAVE
-
-       saveState() is the official write point.
-
-       After saving, HomeOS broadcasts:
-
-           homeos:statechange
-
-       Page controllers listen to this event and redraw themselves.
+       STORAGE SAVE
     ============================================================ */
 
     function saveState(
         state
     ) {
-
         const normalized =
             normalizeState(
                 state
             );
 
-
-        localStorage
-            .setItem(
-
-                STORAGE_KEY,
-
-                JSON.stringify(
-                    normalized
-                )
-
-            );
-
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(
+                normalized
+            )
+        );
 
         window.dispatchEvent(
-
             new CustomEvent(
                 "homeos:statechange",
                 {
-
                     detail:
                         normalized
-
                 }
             )
-
         );
 
-
         return normalized;
-
     }
 
 
-
     /* ============================================================
-       STORAGE — UPDATE
-
-       Preferred state-changing pattern:
-
-           HomeStore.update(state => {
-               state.inventory...
-           });
-
-       The updated state is automatically saved and broadcast.
+       STORAGE UPDATE
     ============================================================ */
 
     function update(
         callback
     ) {
-
         const state =
             getState();
 
-
         if (
             typeof callback ===
-            "function"
+                "function"
         ) {
-
             callback(
                 state
             );
-
         }
-
 
         return saveState(
             state
         );
-
     }
 
 
-
     /* ============================================================
-       THEME
+       SETTINGS
     ============================================================ */
 
     function setTheme(
         theme
     ) {
-
-        const safeTheme =
-            theme ===
-                "dark"
-
-                ? "dark"
-
-                : "light";
-
-
         return update(
             state => {
-
                 state.settings.theme =
-                    safeTheme;
-
+                    theme ===
+                        "dark"
+                        ? "dark"
+                        : "light";
             }
         );
-
     }
-
 
 
     /* ============================================================
@@ -2581,32 +1612,23 @@
         zoneId,
         state = getState()
     ) {
-
-        const zones =
+        return (
             state.cleaning
                 ?.zones ||
-            [];
-
-
-        return zones
-            .find(
-                zone =>
-                    zone.id ===
-                    zoneId
-            ) ||
-            null;
-
+            []
+        ).find(
+            zone =>
+                zone.id ===
+                zoneId
+        ) || null;
     }
-
 
 
     function setSelectedZone(
         zoneId
     ) {
-
         return update(
             state => {
-
                 const exists =
                     state.cleaning
                         .zones
@@ -2616,193 +1638,118 @@
                                 zoneId
                         );
 
-
-                if (
-                    exists
-                ) {
-
+                if (exists) {
                     state.cleaning
                         .selectedZone =
                         zoneId;
-
                 }
-
             }
         );
-
     }
-
 
 
     function getCleaningScore(
         state = getState()
     ) {
-
         const zones =
             state.cleaning
                 ?.zones ||
             [];
 
-
-        if (
-            !zones.length
-        ) {
-
+        if (!zones.length) {
             return 100;
-
         }
-
 
         const total =
             zones.reduce(
                 (
                     sum,
                     zone
-                ) => {
-
-                    return (
-                        sum +
-                        clamp(
-                            zone.progress
-                        )
-                    );
-
-                },
+                ) =>
+                    sum +
+                    clamp(
+                        zone.progress
+                    ),
                 0
             );
-
 
         return Math.round(
             total /
             zones.length
         );
-
     }
 
 
-
     /* ============================================================
-       DAILY RHYTHM — COMPATIBILITY
-
-       During cleanup some older Dashboard code may still request:
-
-           morning
-           day
-
-       Both are temporarily mapped to:
-
-           opening
-
-       This prevents the main page from breaking while we replace
-       dashboard.js and index.html next.
+       DAILY RHYTHM
     ============================================================ */
 
     function normalizeRhythmShift(
         shift
     ) {
-
-        if (
-            shift ===
-                "closing"
-        ) {
-
-            return "closing";
-
-        }
-
-
-        return "opening";
-
+        return shift ===
+            "closing"
+            ? "closing"
+            : "opening";
     }
 
-
-
-    /* ============================================================
-       SCORE ONE DAILY SHIFT
-    ============================================================ */
 
     function getRhythmScore(
         shift,
         state = getState()
     ) {
-
         const safeShift =
             normalizeRhythmShift(
                 shift
             );
 
-
-        const tasks =
+        return calculateTaskProgress(
             state.dailyRhythm[
                 safeShift
-            ] || [];
-
-
-        return calculateTaskProgress(
-            tasks
+            ] || []
         ).percent;
-
     }
 
-
-
-    /* ============================================================
-       SCORE WHOLE DAILY RHYTHM
-
-       TIME-AWARE:
-
-       Before 3 PM:
-           Opening is the responsibility currently being measured.
-
-       3 PM and later:
-           Opening + Closing count together.
-
-       This avoids lowering Home Pulse for an untouched Closing Shift
-       early in the morning.
-    ============================================================ */
 
     function getDailyRhythmScore(
         state = getState()
     ) {
-
         const rhythm =
             state.dailyRhythm ||
             {};
-
 
         const opening =
             Array.isArray(
                 rhythm.opening
             )
                 ? rhythm.opening
-
                 : [];
-
 
         const closing =
             Array.isArray(
                 rhythm.closing
             )
                 ? rhythm.closing
-
                 : [];
-
 
         const hour =
             new Date()
                 .getHours();
 
+        /*
+           Before 3 PM:
+           Closing Shift does not lower Home Pulse yet.
 
+           At 3 PM and later:
+           both shifts contribute.
+        */
         if (
             hour < 15
         ) {
-
             return calculateTaskProgress(
                 opening
             ).percent;
-
         }
-
 
         return calculateTaskProgress(
             [
@@ -2810,192 +1757,112 @@
                 ...closing
             ]
         ).percent;
-
     }
 
-
-
-    /* ============================================================
-       TOGGLE DAILY TASK
-    ============================================================ */
 
     function toggleRhythmTask(
         shift,
         taskId
     ) {
-
         const safeShift =
             normalizeRhythmShift(
                 shift
             );
 
-
         return update(
             state => {
-
-                const tasks =
-                    state.dailyRhythm[
-                        safeShift
-                    ] || [];
-
-
                 const task =
-                    tasks
-                        .find(
-                            item =>
-                                item.id ===
-                                taskId
-                        );
+                    (
+                        state.dailyRhythm[
+                            safeShift
+                        ] ||
+                        []
+                    ).find(
+                        item =>
+                            item.id ===
+                            taskId
+                    );
 
-
-                if (
-                    !task
-                ) {
-
+                if (!task) {
                     return;
-
                 }
-
 
                 task.done =
                     !task.done;
 
-
                 task.completedAt =
                     task.done
-
                         ? new Date()
                             .toISOString()
-
                         : null;
-
             }
         );
-
     }
 
-
-
-    /* ============================================================
-       SELECT DAILY SHIFT
-    ============================================================ */
 
     function setRhythmShift(
         shift
     ) {
-
         const safeShift =
             normalizeRhythmShift(
                 shift
             );
 
-
         return update(
             state => {
-
                 state.dailyRhythm
                     .selectedShift =
                     safeShift;
-
             }
         );
-
     }
 
 
-
     /* ============================================================
-       LAUNDRY HELPERS
+       LAUNDRY
     ============================================================ */
-
-    const LAUNDRY_DAYS = [
-
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday"
-
-    ];
-
-
-
-    const JS_DAY_MAP = [
-
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-
-    ];
-
-
 
     function normalizeDayName(
         value
     ) {
-
         return String(
-            value || ""
+            value ||
+            ""
         )
             .trim()
             .toLowerCase();
-
     }
 
 
-
     function getLaundryToday() {
-
         return JS_DAY_MAP[
             new Date()
                 .getDay()
         ];
-
     }
 
-
-
-    /* ============================================================
-       MONDAY-BASED WEEK KEY
-
-       Used by recurring Laundry schedules.
-    ============================================================ */
 
     function getLaundryWeekKey(
         date = new Date()
     ) {
-
         const current =
             new Date(
                 date
             );
 
-
         const day =
             current.getDay();
 
-
         const difference =
-            day ===
-                0
-
+            day === 0
                 ? -6
-
                 : 1 -
                     day;
-
 
         current.setDate(
             current.getDate() +
             difference
         );
-
 
         current.setHours(
             0,
@@ -3004,113 +1871,66 @@
             0
         );
 
-
         return [
-
-            current
-                .getFullYear(),
+            current.getFullYear(),
 
             String(
-                current.getMonth() +
-                1
-            )
-                .padStart(
-                    2,
-                    "0"
-                ),
+                current.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            ),
 
             String(
                 current.getDate()
+            ).padStart(
+                2,
+                "0"
             )
-                .padStart(
-                    2,
-                    "0"
-                )
-
-        ]
-            .join(
-                "-"
-            );
-
+        ].join("-");
     }
 
-
-
-    /* ============================================================
-       LAUNDRY HEALTH
-
-       WEIGHTING:
-
-           Weekly Schedule     50%
-           Active Loads        30%
-           Room Maintenance    20%
-
-       NOTE:
-
-       This calculates health only.
-
-       laundry.js still controls which weekday tab is selected and
-       how load cards redraw. We will repair that page separately.
-    ============================================================ */
 
     function getLaundryScore(
         state = getState()
     ) {
-
         const laundry =
             state.laundry ||
             {};
-
 
         const schedule =
             Array.isArray(
                 laundry.weeklySchedule
             )
                 ? laundry.weeklySchedule
-
                 : [];
-
 
         const activeLoads =
             Array.isArray(
                 laundry.activeLoads
             )
                 ? laundry.activeLoads
-
                 : [];
-
 
         const maintenance =
             Array.isArray(
                 laundry.maintenance
             )
                 ? laundry.maintenance
-
                 : [];
-
 
         const today =
             getLaundryToday();
 
-
         const todayIndex =
-            LAUNDRY_DAYS
-                .indexOf(
-                    today
-                );
-
+            LAUNDRY_DAYS.indexOf(
+                today
+            );
 
         const weekKey =
             getLaundryWeekKey();
 
-
-
-        /* ========================================================
-           LOAD STAGE SCORES
-        ======================================================== */
-
         const stageScores = {
-
             wash:
                 35,
 
@@ -3122,130 +1942,91 @@
 
             "put-away":
                 95
-
         };
 
 
-
-        /* ========================================================
-           WEEKLY SCHEDULE SCORE
-        ======================================================== */
+        /* --------------------------------------------------------
+           WEEKLY SCHEDULE
+        -------------------------------------------------------- */
 
         const dueItems =
-            schedule
-                .filter(
-                    item => {
-
-                        const day =
-                            normalizeDayName(
-                                item.day
-                            );
-
-
-                        const index =
-                            LAUNDRY_DAYS
-                                .indexOf(
-                                    day
-                                );
-
-
-                        return (
-                            index !==
-                                -1 &&
-                            index <=
-                                todayIndex
+            schedule.filter(
+                item => {
+                    const day =
+                        normalizeDayName(
+                            item.day
                         );
 
-                    }
-                );
+                    const index =
+                        LAUNDRY_DAYS
+                            .indexOf(
+                                day
+                            );
 
+                    return (
+                        index !== -1 &&
+                        index <=
+                            todayIndex
+                    );
+                }
+            );
 
         let scheduleScore =
             100;
 
-
         if (
             dueItems.length
         ) {
-
             const values =
-                dueItems
-                    .map(
-                        item => {
+                dueItems.map(
+                    item => {
+                        const itemDay =
+                            normalizeDayName(
+                                item.day
+                            );
 
-                            const itemDay =
-                                normalizeDayName(
-                                    item.day
-                                );
-
-
-                            const complete =
-                                Array.isArray(
-                                    item.completedWeeks
-                                ) &&
+                        const complete =
+                            Array.isArray(
                                 item.completedWeeks
-                                    .includes(
-                                        weekKey
-                                    );
-
-
-                            if (
-                                complete
-                            ) {
-
-                                return 100;
-
-                            }
-
-
-                            const active =
-                                activeLoads
-                                    .find(
-                                        load =>
-                                            load.scheduleId ===
-                                            item.id
-                                    );
-
-
-                            if (
-                                active
-                            ) {
-
-                                return (
-                                    stageScores[
-                                        active.stage
-                                    ] ||
-                                    35
+                            ) &&
+                            item.completedWeeks
+                                .includes(
+                                    weekKey
                                 );
 
-                            }
-
-
-                            /*
-                               Today's unstarted load is less urgent
-                               than a load left behind from an earlier
-                               day this week.
-                            */
-
-                            if (
-                                itemDay ===
-                                today
-                            ) {
-
-                                return 70;
-
-                            }
-
-
-                            return 45;
-
+                        if (complete) {
+                            return 100;
                         }
-                    );
 
+                        const active =
+                            activeLoads.find(
+                                load =>
+                                    load.scheduleId ===
+                                    item.id
+                            );
+
+                        if (active) {
+                            return (
+                                stageScores[
+                                    active.stage
+                                ] ||
+                                35
+                            );
+                        }
+
+                        if (
+                            itemDay ===
+                            today
+                        ) {
+                            return 70;
+                        }
+
+                        return 45;
+                    }
+                );
 
             scheduleScore =
                 Math.round(
-
                     values.reduce(
                         (
                             total,
@@ -3255,150 +2036,103 @@
                             value,
                         0
                     ) /
-
                     values.length
-
                 );
-
         }
 
 
-
-        /* ========================================================
-           ACTIVE FLOW SCORE
-        ======================================================== */
+        /* --------------------------------------------------------
+           ACTIVE FLOW
+        -------------------------------------------------------- */
 
         let activeScore =
             100;
 
-
         if (
             activeLoads.length
         ) {
-
             activeScore =
                 Math.round(
-
-                    activeLoads
-                        .reduce(
+                    activeLoads.reduce(
+                        (
+                            total,
+                            load
+                        ) =>
+                            total +
                             (
-                                total,
-                                load
-                            ) => {
-
-                                return (
-                                    total +
-                                    (
-                                        stageScores[
-                                            load.stage
-                                        ] ||
-                                        35
-                                    )
-                                );
-
-                            },
-                            0
-                        ) /
-
+                                stageScores[
+                                    load.stage
+                                ] ||
+                                35
+                            ),
+                        0
+                    ) /
                     activeLoads.length
-
                 );
-
         }
 
 
-
-        /* ========================================================
-           MAINTENANCE SCORE
-        ======================================================== */
+        /* --------------------------------------------------------
+           ROOM MAINTENANCE
+        -------------------------------------------------------- */
 
         let maintenanceScore =
             100;
 
-
         if (
             maintenance.length
         ) {
-
             const values =
-                maintenance
-                    .map(
-                        task => {
-
-                            const frequency =
-                                Math.max(
-                                    1,
-
-                                    Number(
-                                        task.frequencyDays
-                                    ) ||
-                                    30
-                                );
-
-
-                            if (
-                                !task.lastCompletedAt
-                            ) {
-
-                                /*
-                                   New maintenance tasks start at a
-                                   neutral baseline instead of ruining
-                                   Home Pulse immediately.
-                                */
-
-                                return 80;
-
-                            }
-
-
-                            const age =
-                                daysSince(
-                                    task.lastCompletedAt
-                                );
-
-
-                            if (
-                                age ===
-                                    null
-                            ) {
-
-                                return 80;
-
-                            }
-
-
-                            if (
-                                age <=
-                                frequency
-                            ) {
-
-                                return 100;
-
-                            }
-
-
-                            const overdue =
-                                age -
-                                frequency;
-
-
-                            return Math.max(
-
-                                20,
-
-                                100 -
-                                overdue *
-                                6
-
+                maintenance.map(
+                    task => {
+                        const frequency =
+                            Math.max(
+                                1,
+                                Number(
+                                    task.frequencyDays
+                                ) ||
+                                30
                             );
 
+                        if (
+                            !task.lastCompletedAt
+                        ) {
+                            return 80;
                         }
-                    );
 
+                        const age =
+                            daysSince(
+                                task.lastCompletedAt
+                            );
+
+                        if (
+                            age === null
+                        ) {
+                            return 80;
+                        }
+
+                        if (
+                            age <=
+                            frequency
+                        ) {
+                            return 100;
+                        }
+
+                        const overdue =
+                            age -
+                            frequency;
+
+                        return Math.max(
+                            20,
+                            100 -
+                            overdue *
+                            6
+                        );
+                    }
+                );
 
             maintenanceScore =
                 Math.round(
-
                     values.reduce(
                         (
                             total,
@@ -3408,21 +2142,12 @@
                             value,
                         0
                     ) /
-
                     values.length
-
                 );
-
         }
 
 
-
-        /* ========================================================
-           FINAL LAUNDRY HEALTH
-        ======================================================== */
-
         return Math.round(
-
             scheduleScore *
             0.50 +
 
@@ -3431,96 +2156,74 @@
 
             maintenanceScore *
             0.20
-
         );
-
     }
 
 
-
     /* ============================================================
-       INVENTORY HEALTH
-
-       If tracked Inventory items exist we calculate from the actual
-       items so Home Pulse never depends on a stale stored percentage.
-
-       inventory.js also keeps state.inventory.health synchronized.
+       INVENTORY
     ============================================================ */
 
     function getInventoryScore(
         state = getState()
     ) {
-
         const inventory =
             state.inventory ||
             {};
-
 
         const items =
             Array.isArray(
                 inventory.items
             )
                 ? inventory.items
-
                 : [];
 
-
         const tracked =
-            items
-                .filter(
-                    item =>
-                        Number(
-                            item.target
-                        ) > 0
-                );
-
+            items.filter(
+                item =>
+                    Number(
+                        item.target
+                    ) > 0
+            );
 
         if (
             tracked.length
         ) {
-
             const total =
-                tracked
-                    .reduce(
-                        (
-                            sum,
-                            item
-                        ) => {
-
-                            const target =
-                                Math.max(
-                                    1,
-
-                                    Number(
-                                        item.target
-                                    ) || 1
-                                );
-
-
-                            const current =
-                                Math.max(
-                                    0,
-
-                                    Number(
-                                        item.current
-                                    ) || 0
-                                );
-
-
-                            return (
-                                sum +
-                                Math.min(
-                                    current /
-                                    target,
-
-                                    1
-                                )
+                tracked.reduce(
+                    (
+                        sum,
+                        item
+                    ) => {
+                        const target =
+                            Math.max(
+                                1,
+                                Number(
+                                    item.target
+                                ) ||
+                                1
                             );
 
-                        },
-                        0
-                    );
+                        const current =
+                            Math.max(
+                                0,
+                                Number(
+                                    item.current
+                                ) ||
+                                0
+                            );
 
+                        return (
+                            sum +
+                            Math.min(
+                                current /
+                                target,
+                                1
+                            )
+                        );
+                    },
+                    0
+                );
 
             return Math.round(
                 (
@@ -3529,17 +2232,13 @@
                 ) *
                 100
             );
-
         }
-
 
         return clamp(
             inventory.health ??
             100
         );
-
     }
-
 
 
     /* ============================================================
@@ -3549,148 +2248,103 @@
     function getSeasonScore(
         state = getState()
     ) {
-
-        const seasonal =
-            state.seasonal ||
-            {};
-
-
-        const selected =
-            seasonal.activeSeason ||
-            "fall";
-
+        const seasonKey =
+            state.seasonal
+                ?.activeSeason ||
+            getCalendarSeason();
 
         const season =
-            seasonal.seasons?.[
-                selected
-            ];
+            state.seasonal
+                ?.seasons?.[
+                    seasonKey
+                ];
 
-
-        if (
-            !season
-        ) {
-
+        if (!season) {
             return 100;
-
         }
-
 
         return clamp(
             season.progress ??
             0
         );
-
     }
 
 
+    /*
+       TEMPORARY COMPATIBILITY:
 
+       The current Dashboard still calls this while we clean it.
+
+       Seasonal detail pages should not use this to redefine
+       the real calendar season.
+
+       Remove this function during Dashboard cleanup.
+    */
     function setActiveSeason(
         season
     ) {
-
         return update(
             state => {
-
                 if (
                     state.seasonal
-                        .seasons?.[
+                        ?.seasons?.[
                             season
                         ]
                 ) {
-
                     state.seasonal
                         .activeSeason =
                         season;
-
                 }
-
             }
         );
-
     }
 
 
-
     /* ============================================================
-       HOME PULSE — SYSTEM SCORES
-
-       The five live systems are now:
-
-           Cleaning
-           Daily Rhythm
-           Laundry
-           Inventory
-           Seasonal
+       HOME INTELLIGENCE
     ============================================================ */
 
     function getSystemScores(
         state = getState()
     ) {
-
         return {
-
             cleaning:
                 getCleaningScore(
                     state
                 ),
-
 
             rhythm:
                 getDailyRhythmScore(
                     state
                 ),
 
-
             laundry:
                 getLaundryScore(
                     state
                 ),
-
 
             inventory:
                 getInventoryScore(
                     state
                 ),
 
-
             seasonal:
                 getSeasonScore(
                     state
                 )
-
         };
-
     }
 
-
-
-    /* ============================================================
-       HOME PULSE
-
-       WEIGHTS:
-
-           Cleaning       30%
-           Daily Rhythm   20%
-           Laundry        20%
-           Inventory      17%
-           Seasonal       13%
-
-       TOTAL:
-           100%
-    ============================================================ */
 
     function getHomePulse(
         state = getState()
     ) {
-
         const scores =
             getSystemScores(
                 state
             );
 
-
         return Math.round(
-
             scores.cleaning *
             0.30 +
 
@@ -3705,68 +2359,44 @@
 
             scores.seasonal *
             0.13
-
         );
-
     }
 
 
+    /*
+       Daily Rhythm is already part of Home Pulse.
 
-    /* ============================================================
-       HOME PRIORITY
+       It is temporarily excluded from the Dashboard's top
+       priority label because the existing Dashboard does not
+       yet have a Rhythm priority treatment.
 
-       IMPORTANT TRANSITION NOTE:
-
-       Daily Rhythm affects Home Pulse now.
-
-       However, until we replace the current Dashboard controller,
-       Priority remains limited to:
-
-           Cleaning
-           Laundry
-           Inventory
-           Seasonal
-
-       Your current dashboard only has labels for these four systems.
-
-       Once dashboard.js is cleaned, we can safely decide whether
-       Daily Rhythm should also become a top-level Home Priority.
-    ============================================================ */
-
+       We can revisit this when dashboard.js is cleaned.
+    */
     function getPriority(
         state = getState()
     ) {
-
         const scores =
             getSystemScores(
                 state
             );
 
-
         const priorityScores = {
-
             cleaning:
                 scores.cleaning,
-
 
             laundry:
                 scores.laundry,
 
-
             inventory:
                 scores.inventory,
 
-
             seasonal:
                 scores.seasonal
-
         };
 
-
-        return Object
-            .entries(
-                priorityScores
-            )
+        return Object.entries(
+            priorityScores
+        )
             .sort(
                 (
                     first,
@@ -3775,277 +2405,149 @@
                     first[1] -
                     second[1]
             )[0][0];
-
     }
-
 
 
     /* ============================================================
-       TIME — DAYS SINCE
+       ACTIVITY / HOME MEMORY
     ============================================================ */
 
-    function daysSince(
-        dateString
+    function addActivity(
+        activity
     ) {
-
-        if (
-            !dateString
-        ) {
-
-            return null;
-
+        if (!activity) {
+            return getState();
         }
 
+        return update(
+            state => {
+                if (
+                    !Array.isArray(
+                        state.activity
+                    )
+                ) {
+                    state.activity =
+                        [];
+                }
 
-        const date =
-            new Date(
-                dateString
-            );
+                state.activity.unshift({
+                    id:
+                        activity.id ||
+                        makeId(
+                            "activity"
+                        ),
 
+                    type:
+                        activity.type ||
+                        "home",
 
-        const timestamp =
-            date.getTime();
+                    title:
+                        activity.title ||
+                        "HomeOS update",
 
+                    description:
+                        activity.description ||
+                        "",
 
-        if (
-            !Number.isFinite(
-                timestamp
-            )
-        ) {
+                    createdAt:
+                        activity.createdAt ||
+                        new Date()
+                            .toISOString(),
 
-            return null;
+                    ...activity
+                });
 
-        }
-
-
-        return Math.max(
-
-            0,
-
-            Math.floor(
-                (
-                    Date.now() -
-                    timestamp
-                ) /
-                86400000
-            )
-
+                state.activity =
+                    state.activity.slice(
+                        0,
+                        200
+                    );
+            }
         );
-
     }
-
-
-
-    /* ============================================================
-       TIME — MINUTES SINCE
-    ============================================================ */
-
-    function minutesSince(
-        dateString
-    ) {
-
-        if (
-            !dateString
-        ) {
-
-            return null;
-
-        }
-
-
-        const date =
-            new Date(
-                dateString
-            );
-
-
-        const timestamp =
-            date.getTime();
-
-
-        if (
-            !Number.isFinite(
-                timestamp
-            )
-        ) {
-
-            return null;
-
-        }
-
-
-        return Math.max(
-
-            0,
-
-            Math.floor(
-                (
-                    Date.now() -
-                    timestamp
-                ) /
-                60000
-            )
-
-        );
-
-    }
-
 
 
     /* ============================================================
        RESET HOMEOS
-
-       WARNING:
-
-       This intentionally clears saved HomeOS state and returns the
-       application to DEFAULT_STATE.
-
-       It should only be called from a deliberate future Reset HomeOS
-       control.
-
-       Normal page loading NEVER calls reset().
     ============================================================ */
 
     function reset() {
-
         const state =
             normalizeState(
-                clone(
-                    DEFAULT_STATE
-                )
+                createDefaultState()
             );
-
 
         saveState(
             state
         );
 
-
         return state;
-
     }
-
 
 
     /* ============================================================
        PUBLIC HOMEOS API
-
-       Keep this centralized.
-
-       Pages should call these functions instead of reaching into
-       localStorage themselves.
     ============================================================ */
 
     window.HomeStore = {
 
-
-        /* --------------------------------------------------------
-           CORE STATE
-        -------------------------------------------------------- */
-
+        /* CORE */
         getState,
-
         saveState,
-
         update,
 
 
-
-        /* --------------------------------------------------------
-           SETTINGS
-        -------------------------------------------------------- */
-
+        /* SETTINGS */
         setTheme,
 
 
-
-        /* --------------------------------------------------------
-           CLEANING
-        -------------------------------------------------------- */
-
+        /* CLEANING */
         getZone,
-
         setSelectedZone,
-
         getCleaningScore,
 
 
-
-        /* --------------------------------------------------------
-           DAILY RHYTHM
-        -------------------------------------------------------- */
-
+        /* DAILY RHYTHM */
         getRhythmScore,
-
         getDailyRhythmScore,
-
         toggleRhythmTask,
-
         setRhythmShift,
 
 
-
-        /* --------------------------------------------------------
-           LAUNDRY
-        -------------------------------------------------------- */
-
+        /* LAUNDRY */
         getLaundryScore,
-
         getLaundryToday,
-
         getLaundryWeekKey,
 
 
-
-        /* --------------------------------------------------------
-           INVENTORY
-        -------------------------------------------------------- */
-
+        /* INVENTORY */
         getInventoryScore,
 
 
-
-        /* --------------------------------------------------------
-           SEASONAL
-        -------------------------------------------------------- */
-
+        /* SEASONAL */
         getSeasonScore,
-
         setActiveSeason,
 
 
-
-        /* --------------------------------------------------------
-           HOME INTELLIGENCE
-        -------------------------------------------------------- */
-
+        /* HOME INTELLIGENCE */
         getSystemScores,
-
         getHomePulse,
-
         getPriority,
 
 
+        /* HOME MEMORY */
+        addActivity,
 
-        /* --------------------------------------------------------
-           TIME
-        -------------------------------------------------------- */
 
+        /* TIME */
         daysSince,
-
         minutesSince,
-
         getLocalDateKey,
+        getCalendarSeason,
 
 
-
-        /* --------------------------------------------------------
-           RESET
-        -------------------------------------------------------- */
-
+        /* RESET */
         reset
-
     };
-
 
 })();
